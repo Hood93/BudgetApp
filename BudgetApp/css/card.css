@@ -1,0 +1,47 @@
+.immcat{
+    margin: auto;
+    /*width: 50%;*/
+    max-width: 140px;
+    padding: 10px;
+}
+
+.bottcard{
+    margin: auto;
+    max-width: 100px;
+    /*width: 50%;*/
+    padding: 10px;
+}
+
+.insertamex{
+    margin: auto;
+    /*width: 50%;*/
+    max-width: 140px;
+    padding: 10px;
+}
+
+.valorecard{
+    margin: auto;
+    width: 50%;
+    padding: 10px;
+}
+
+.desccard{
+    font-size: 10px;
+    height: 10px;
+}
+
+.icocard{
+    /*height:auto;*/
+font-size:50px;
+/*max-width:100%;*/
+/*width:400px;*/
+}
+
+.catecard{
+    font-size: 30px;
+}
+
+.scroll{
+    height: 50px;
+    overflow-y: scroll;
+}

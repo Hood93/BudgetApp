@@ -1,0 +1,256 @@
+function getresocontoannualecategorie() {
+    $.ajax({
+        type: 'GET',
+        url: './php/json/preleva_dati_reportannualecategoriejson.php',
+        dataType: 'JSON',
+        data: {
+            ajax: 1,
+        },
+
+        success: function(response) {
+            creaGraficoCategorie(response)
+            //creaGraficoCategorie()
+        }
+    });
+}    
+    
+    
+    
+    
+    function creaGraficoCategorie(label) {
+        
+        //var mesi = label.map(function(e) {
+         //   return e.mese;
+        //});
+        var categorie = label.map(function(e) {
+            return e.categoria;
+        });
+        var ris = label.map(function(e) {
+            return e.ris;
+        });
+        //console.log("labels è" + mesi)
+        //console.log("categoria è" + categorie)
+        console.log("data è" + categorie[12])
+
+        //Controllo se è gia presente un Grafico
+        let chartStatus = Chart.getChart("CategorieChart"); // <canvas> id
+        if (chartStatus != undefined) {
+            chartStatus.destroy();
+        }
+
+        //Dopo aver eliminato il vecchio grafico, genero il secondo
+        const ctx = document.getElementById('CategorieChart');
+        const report = new Chart(ctx, {
+            type: 'line',
+            data : {
+                labels: ['Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'],
+                datasets: [{
+                    label: categorie[0],
+                    data: [ris[0],ris[1],ris[2],ris[3],ris[4],ris[5],ris[6],ris[7],ris[8],ris[9],ris[10],ris[11]],
+                    fill: false,
+                    borderColor: '#236387',
+                    tension: 0.1
+                },{
+                    label: categorie[12],
+                    data: [ris[12],ris[13],ris[14],ris[15],ris[16],ris[17],ris[18],ris[19],ris[20],ris[21],ris[22],ris[23]],
+                    fill: false,
+                    borderColor: '#C6EF44',
+                    tension: 0.1
+                },{
+                    label: categorie[24],
+                    data: [ris[24],ris[25],ris[26],ris[27],ris[28],ris[29],ris[30],ris[31],ris[32],ris[33],ris[34],ris[35]],
+                    fill: false,
+                    borderColor: '#256806',
+                    tension: 0.1
+                },{
+                    label: categorie[36],
+                    data: [ris[36],ris[37],ris[38],ris[39],ris[40],ris[41],ris[42],ris[43],ris[44],ris[45],ris[46],ris[47]],
+                    fill: false,
+                    borderColor: '#DA82C1',
+                    tension: 0.1
+                },{
+                    label: categorie[48],
+                    data: [ris[48],ris[49],ris[50],ris[51],ris[52],ris[53],ris[54],ris[55],ris[56],ris[57],ris[58],ris[59]],
+                    fill: false,
+                    borderColor: '#199566',
+                    tension: 0.1
+                },{
+                    label: categorie[61],
+                    data: [ris[60],ris[61],ris[62],ris[63],ris[64],ris[65],ris[66],ris[67],ris[68],ris[69],ris[70],ris[71]],
+                    fill: false,
+                    borderColor: 'rgb(90, 50, 192)',
+                    tension: 0.1
+                },{
+                    label: categorie[72],
+                    data: [ris[72],ris[73],ris[74],ris[75],ris[76],ris[77],ris[78],ris[79],ris[80],ris[81],ris[82],ris[83]],
+                    fill: false,
+                    borderColor: '#825F86',
+                    tension: 0.1
+                },{
+                    label: categorie[84],
+                    data: [ris[84],ris[85],ris[86],ris[87],ris[88],ris[89],ris[90],ris[91],ris[92],ris[93],ris[94],ris[95]],
+                    fill: false,
+                    borderColor: '#1695A3',
+                    tension: 0.1
+                },{
+                    label: categorie[96],
+                    data: [ris[96],ris[97],ris[98],ris[99],ris[100],ris[101],ris[102],ris[103],ris[104],ris[105],ris[106],ris[107]],
+                    fill: false,
+                    borderColor: '#1080B5',
+                    tension: 0.1
+                },{
+                    label: categorie[108],
+                    data: [ris[108],ris[109],ris[110],ris[111],ris[112],ris[113],ris[114],ris[115],ris[116],ris[117],ris[118],ris[119]],
+                    fill: false,
+                    borderColor: '#441E8A',
+                    tension: 0.1
+                },{
+                    label: categorie[120],
+                    data: [ris[120],ris[121],ris[122],ris[123],ris[124],ris[125],ris[126],ris[127],ris[128],ris[129],ris[130],ris[131]],
+                    fill: false,
+                    borderColor: '#56A32F',
+                    tension: 0.1
+                },{
+                    label: categorie[132],
+                    data: [ris[132],ris[133],ris[134],ris[135],ris[136],ris[137],ris[138],ris[139],ris[140],ris[141],ris[142],ris[143]],
+                    fill: false,
+                    borderColor: '#0224E2',
+                    tension: 0.1
+                },{
+                    label: categorie[144],
+                    data: [ris[144],ris[145],ris[146],ris[147],ris[148],ris[149],ris[150],ris[151],ris[152],ris[153],ris[154],ris[155]],
+                    fill: false,
+                    borderColor: '#A11E82',
+                    tension: 0.1
+                },{
+                    label: categorie[156],
+                    data: [ris[156],ris[157],ris[158],ris[159],ris[160],ris[161],ris[162],ris[163],ris[164],ris[165],ris[166],ris[167]],
+                    fill: false,
+                    borderColor: '#A03F46',
+                    tension: 0.1
+                },{
+                    label: categorie[168],
+                    data: [ris[168],ris[169],ris[170],ris[171],ris[172],ris[173],ris[174],ris[175],ris[176],ris[177],ris[178],ris[179]],
+                    fill: false,
+                    borderColor: '#B467F4',
+                    tension: 0.1
+                },{
+                    label: categorie[180],
+                    data: [ris[180],ris[181],ris[182],ris[183],ris[184],ris[185],ris[186],ris[187],ris[188],ris[189],ris[190],ris[191]],
+                    fill: false,
+                    borderColor: '#319D94',
+                    tension: 0.1
+                },{
+                    label: categorie[192],
+                    data: [ris[192],ris[193],ris[194],ris[195],ris[196],ris[197],ris[198],ris[199],ris[200],ris[201],ris[202],ris[203]],
+                    fill: false,
+                    borderColor: '#64EAE8',
+                    tension: 0.1
+                },{
+                    label: categorie[204],
+                    data: [ris[204],ris[205],ris[206],ris[207],ris[208],ris[209],ris[210],ris[211],ris[212],ris[213],ris[214],ris[215]],
+                    fill: false,
+                    borderColor: '#C80268',
+                    tension: 0.1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+        console.log(report)
+    }
+
+
+//Messaggio Modal
+    function messaggio(){
+        var newmesepartopric = $('#newmesepartopric').val();
+        var newdurataopric = $('#newdurataopric').val();
+        switch (newmesepartopric) {
+              case "Gennaio":
+                var newordinemeseopric = "1";
+                break;
+              case "Febbraio":
+                var newordinemeseopric = "2";
+                break;
+              case "Marzo":
+                var newordinemeseopric = "3";
+                break;
+              case "Aprile":
+                var newordinemeseopric = "4";
+                break;
+              case "Maggio":
+                var newordinemeseopric = "5";
+                break;
+              case "Giugno":
+                var newordinemeseopric = "6";
+                break;
+              case "Luglio":
+                var newordinemeseopric = "7";
+                break;
+              case "Agosto":
+                var newordinemeseopric = "8";
+                break;
+              case "Settembre":
+                var newordinemeseopric = "9";
+                break;
+              case "Ottobre":
+                var newordinemeseopric = "10";
+                break;
+              case "Novembre":
+                var newordinemeseopric = "11";
+                break;
+              case "Dicembre":
+                var newordinemeseopric = "12";
+                break;
+              default:
+                var newdataopric = "";
+            }
+        var mesefinale = newordinemeseopric - 1 + newdurataopric;
+        switch (mesefinale) {
+              case "01":
+                var mesefinale = "Gennaio";
+                break;
+              case "02":
+                var mesefinale = "Febbraio";
+                break;
+              case "03":
+                var mesefinale = "Marzo";
+                break;
+              case "04":
+                var mesefinale = "Aprile";
+                break;
+              case "05":
+                var mesefinale = "Maggio";
+                break;
+              case "06":
+                var mesefinale = "Giugno";
+                break;
+              case "07":
+                var mesefinale = "Luglio";
+                break;
+              case "08":
+                var mesefinale = "Agosto";
+                break;
+              case "09":
+                var mesefinale = "Settembre";
+                break;
+              case "010":
+                var mesefinale = "Ottobre";
+                break;
+              case "011":
+                var mesefinale = "Novembre";
+                break;
+              case "012":
+                var mesefinale = "Dicembre";
+                break;
+              default:
+                var mesefinale = "";
+            }
+        messaggiotext = "Verrà Inserita una transazione da " + newmesepartopric + " a " + mesefinale
+        $('#messaggiodurata').text(messaggiotext);
+        }
