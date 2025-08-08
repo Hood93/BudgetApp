@@ -142,7 +142,7 @@ if(isset($_POST['submit'])){
                    $newtargetfile = $target_file;
                    if (file_exists($newtargetfile)) {
                         unlink($newtargetfile);
-                        //header("location: ../Gestione.php");
+                        header("location: ../Gestione.php");
                    }
               }
               
