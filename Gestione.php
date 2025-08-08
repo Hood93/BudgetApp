@@ -31,7 +31,12 @@
     include "componenti/Modal/ModalFormFile.php"; //File Modal Upload File
     include "componenti/Modal/ModalTabelleAssociative.php"; //File Modal Dettaglio Tabelle Associative
     include "componenti/Modal/ModalInsertCreditore.php"; //File Modal Inserimento Dettaglio Amex
+    include "componenti/Modal/ModalEditDescrizioneAssociativa.php"; //File Modal Edit Des Associativa
+    include "componenti/Modal/ModalInsertDescrizioneAssociativa.php"; //File Modal Inserimento Des Associativa
+    include "componenti/Modal/ModalEditCategoriaAssociativa.php"; //File Modal Edit Cat Associativa
+    include "componenti/Modal/ModalInsertCategoriaAssociativa.php"; //File Modal Inserimento Cat Associativa
     
+
     ?>
     <div class="container text-center">
         <h1>prova</h1>
@@ -115,6 +120,8 @@
         getresocontomensile();
         getresocontotranricorrenti();
         getcrediti();
+        gettabassdescrizione();
+        gettabasscategoria();
 
         //Funzione Upload
         $('#uploadfile').click(function() {

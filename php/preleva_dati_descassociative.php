@@ -30,9 +30,10 @@ while ($row = mysqli_fetch_assoc($result)) {
     echo "<td style='display:none;'>" . $row["iddescrizioneassociativa"] . "</td>";
     echo "<td class='text-start'>" . $row['olddescrizione']. "</td>";
     echo "<td class='text-start'>" . $row['nuovadescrizione'] . "</td>";
-    echo "<td>" . "<button type='button' data-bs-toggle='modal' data-bs-target='#ModalEditCategoria' class='btn btn-success btn-sm editbtn'><i class='fa-solid fa-pen-to-square fa-sm' style='color: #ffffff;'></i></button>" . "</td>";
+    echo "<td>" . "<button type='button' data-bs-toggle='modal' data-bs-target='#ModalEditDesAssociativa' class='btn btn-success btn-sm editbtndesass'><i class='fa-solid fa-pen-to-square fa-sm' style='color: #ffffff;'></i></button>" . "</td>";
     echo "</tr>";
 }
+echo "<button type='button' data-bs-toggle='modal' data-bs-target='#ModalNewDesAssociativa' class='btn btn-success btn-sm addbtndesass'><i class='fa-solid fa-pen-to-square fa-sm' style='color: #ffffff;'></i></button>";
 echo "</tbody>";
 echo "</table>";
 echo "</div>";
@@ -44,9 +45,9 @@ echo "</div>";
     $(document).ready(function() {
         //Modal Edit
 
-        $('.editbtn').on('click', function() {
-
-            $('#editmodal').modal('show');
+        $('.editbtndesass').on('click', function() {
+            console.log ("descrizione associativa")
+            //$('#editmodal').modal('show');
 
             $tr = $(this).closest('tr');
 
@@ -54,12 +55,35 @@ echo "</div>";
                 return $(this).text();
             }).get();
             console.log(data);
-            editidcategoria = data[0];
-            editcategoria = data[2];
+            editiddesassociativa = data[0];
+            editolddescrizione = data[1];
+            editnewdescrizione = data[2];
 
-            $('#editidcategoria').val(editidcategoria);
-            $('#editcategoria').val(editcategoria);
-            //$('#editiconacategoria').val(editiconacategoria);
+            $('#editiddesassociativa').val(editiddesassociativa);
+            $('#editolddescrizione').val(editolddescrizione);
+            $('#editnewdescrizione').val(editnewdescrizione);
+
+        });
+
+
+        //Modal Add
+
+        $('.addbtndesass').on('click', function() {
+            //$('#editmodal').modal('show');
+
+            $tr = $(this).closest('tr');
+
+            var data = $tr.children("td").map(function() {
+                return $(this).text();
+            }).get();
+            console.log(data);
+            editiddesassociativa = data[0];
+            editolddescrizione = data[1];
+            editnewdescrizione = data[2];
+
+            $('#editiddesassociativa').val(editiddesassociativa);
+            $('#editolddescrizione').val(editolddescrizione);
+            $('#editnewdescrizione').val(editnewdescrizione);
 
         });
 

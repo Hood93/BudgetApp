@@ -30,9 +30,10 @@ while ($row = mysqli_fetch_assoc($result)) {
     echo "<td style='display:none;'>" . $row["idcategoriaassociativa"] . "</td>";
     echo "<td class='text-start'>" . $row['descrizione']. "</td>";
     echo "<td class='text-start'>" . $row['categoria'] . "</td>";
-    echo "<td>" . "<button type='button' data-bs-toggle='modal' data-bs-target='#ModalEditCategoria' class='btn btn-success btn-sm editbtn'><i class='fa-solid fa-pen-to-square fa-sm' style='color: #ffffff;'></i></button>" . "</td>";
+    echo "<td>" . "<button type='button' data-bs-toggle='modal' data-bs-target='#ModalEditCatAssociativa' class='btn btn-success btn-sm editbtncatassociativa'><i class='fa-solid fa-pen-to-square fa-sm' style='color: #ffffff;'></i></button>" . "</td>";
     echo "</tr>";
 }
+echo "<button type='button' data-bs-toggle='modal' data-bs-target='#ModalNewCatAssociativa' class='btn btn-success btn-sm addbtndcatass'><i class='fa-solid fa-pen-to-square fa-sm' style='color: #ffffff;'></i></button>";
 echo "</tbody>";
 echo "</table>";
 echo "</div>";
@@ -44,9 +45,8 @@ echo "</div>";
     $(document).ready(function() {
         //Modal Edit
 
-        $('.editbtn').on('click', function() {
+        $('.editbtncatassociativa').on('click', function() {
 
-            $('#editmodal').modal('show');
 
             $tr = $(this).closest('tr');
 
@@ -54,12 +54,13 @@ echo "</div>";
                 return $(this).text();
             }).get();
             console.log(data);
-            editidcategoria = data[0];
-            editcategoria = data[2];
+            editidcatassociativa = data[0];
+            editdescrizione = data[1];
+            editcatassociativa = data[2];
 
-            $('#editidcategoria').val(editidcategoria);
-            $('#editcategoria').val(editcategoria);
-            //$('#editiconacategoria').val(editiconacategoria);
+            $('#editidcatassociativa').val(editidcatassociativa);
+            $('#editdescrizione').val(editdescrizione);
+            $('#editcatassociativa').val(editcatassociativa);
 
         });
 
