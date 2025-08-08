@@ -47,7 +47,7 @@
                     },
                     success: function(response) {
                       console.log ("inserito");
-                      document.getElementById('closebtn').click();
+                      document.getElementById('closebtnnewdesass').click();
                       gettabassdescrizione()
                     }
 
@@ -61,4 +61,5 @@
 
                 });
               });
+
             </script>
