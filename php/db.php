@@ -1,6 +1,6 @@
 <?php
 ini_set('display_errors', 1);
-$servername = "localhost";
+$servername = "10.147.1.249";
 $username = "root";
 $password = "root";
 $dbname = "budget";
