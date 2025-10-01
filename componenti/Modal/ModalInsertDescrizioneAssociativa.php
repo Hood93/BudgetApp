@@ -18,7 +18,7 @@
                       </div>
                     </div>
                     <div class="modal-footer">
-                      <button type="button" id="closebtnnewdesass" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                      <button type="button" id="closebtnnewinsdesass" class="btn btn-secondary closebtnnewinsdesass" data-bs-dismiss="modal">Close</button>
                       <button type="button" class="btn btn-primary savebtnnewdesass">Save changes</button>
                     </div>
                 </div>
@@ -46,9 +46,8 @@
                       newnewdescrizione: newnewdescrizione
                     },
                     success: function(response) {
-                      console.log ("inserito");
-                      document.getElementById('closebtnnewdesass').click();
-                      gettabassdescrizione()
+                      document.getElementById('closebtnnewinsdesass').click();
+                      $('#ModalTabAssociative').modal('show');
                     }
 
 

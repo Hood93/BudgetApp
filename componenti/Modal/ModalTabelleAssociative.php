@@ -20,7 +20,8 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" id="closebtn" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>                        </div>
+                            <button type="button" id="closebtn" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -31,40 +32,42 @@
             <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
             <!-- End of Jquery CDN -->
             <script>
+
                 $(document).ready(function() {
-                gettabassdescrizione();
-                gettabasscategoria();
-            
+                const myModalEl = document.getElementById('ModalTabAssociative')
+                myModalEl.addEventListener('shown.bs.modal', event => {
+                    gettabassdescrizione()
+                    gettabasscategoria()
+                })
 
-                function gettabassdescrizione() {
-                    console.log("ass")
-                    $.ajax({
-                        type: 'POST',
-                        url: './php/preleva_dati_descassociative.php',
-                        data: {
-                            ajax: 1,
+                    function gettabassdescrizione() {
+                        $.ajax({
+                            type: 'POST',
+                            url: './php/preleva_dati_descassociative.php',
+                            data: {
+                                ajax: 1,
 
-                        },
-                        success: function(response) {
-                            $("#tabelladescassociative").html(response);
-                        }
-                    });
+                            },
+                            success: function(response) {
+                                $("#tabelladescassociative").html(response);
+                            }
+                        });
 
-                }
+                    }
 
-                function gettabasscategoria() {
-                    $.ajax({
-                        type: 'POST',
-                        url: './php/preleva_dati_catassociative.php',
-                        data: {
-                            ajax: 1,
+                    function gettabasscategoria() {
+                        $.ajax({
+                            type: 'POST',
+                            url: './php/preleva_dati_catassociative.php',
+                            data: {
+                                ajax: 1,
 
-                        },
-                        success: function(response) {
-                            $("#tabellacatassociative").html(response);
-                        }
-                    });
+                            },
+                            success: function(response) {
+                                $("#tabellacatassociative").html(response);
+                            }
+                        });
 
-                }
-            })
+                    }
+                })
             </script>
