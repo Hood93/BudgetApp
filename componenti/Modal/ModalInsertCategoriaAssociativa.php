@@ -18,7 +18,7 @@
                       </div>
                     </div>
                     <div class="modal-footer">
-                      <button type="button" id="closebtnnewcatass" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                      <button type="button" id="closebtninsnewcatass" class="btn btn-secondary closebtninsnewcatass" data-bs-dismiss="modal">Close</button>
                       <button type="button" class="btn btn-primary savebtnnewcatass">Save changes</button>
                     </div>
                 </div>
@@ -47,7 +47,7 @@
                     },
                     success: function(response) {
                       console.log ("inserito");
-                      document.getElementById('closebtnnewcatass').click();
+                      document.getElementById('closebtninsnewcatass').click();
                     }
 
 
