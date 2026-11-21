@@ -25,3 +25,28 @@ body table{background:#fff}body .table-responsive{border-radius:14px}
 
 body>.container-fluid>.ba-topbar{margin-left:0;margin-top:-26px;margin-right:-32px;margin-bottom:24px}
 @media(max-width:991px){body>.container-fluid>.ba-topbar{margin-top:-18px;margin-right:-18px;margin-bottom:18px}}
+
+/* Dashboard and shared content surfaces */
+.ba-dashboard{max-width:1560px;margin:auto}
+.ba-welcome{padding:8px 0 12px}.ba-welcome h2{font-size:clamp(1.45rem,2.2vw,2rem);font-weight:750;letter-spacing:-.035em;margin:7px 0}.ba-welcome p{color:var(--ba-muted);margin:0}
+.ba-eyebrow{font-size:.7rem;font-weight:800;letter-spacing:.13em;color:#7787a1}
+.ba-year-control{min-width:190px}.ba-year-control label{font-size:.78rem;color:var(--ba-muted);font-weight:650}
+.ba-stat,.ba-panel{background:#fff;border:1px solid var(--ba-border);border-radius:19px;box-shadow:0 8px 26px #182d5008}
+.ba-stat{padding:24px;display:flex;align-items:center;gap:18px;min-height:145px}
+.ba-stat-icon{height:48px;width:48px;flex:0 0 48px;display:grid;place-items:center;border-radius:14px;font-size:1.2rem}
+.ba-positive{background:#e6f9f1;color:#159e71}.ba-negative{background:#fff0f1;color:#e45b6c}.ba-neutral{background:#ebf0ff;color:#4e6eeb}
+.ba-stat-label{color:var(--ba-muted);font-size:.85rem;font-weight:650}.ba-stat-value{font-size:clamp(1.25rem,2vw,1.75rem);font-weight:780;letter-spacing:-.04em;font-variant-numeric:tabular-nums}.ba-stat-caption{font-size:.74rem;color:#8a96aa}
+.ba-panel{padding:24px}.ba-panel-heading{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}.ba-panel h3{font-size:1.1rem;font-weight:750;margin:6px 0 0}
+.ba-chart-wrap{height:320px;position:relative}.ba-chart-wrap canvas{width:100%!important;height:100%!important;max-height:none!important}.ba-summary-content{min-height:50px;color:var(--ba-muted)}
+/* Nested Bootstrap containers are layout wrappers, not independent pages. */
+body>.container-fluid .container-fluid{max-width:100%;width:100%}
+body>.container-fluid .row[style*="padding-top: 80px"],body>.container-fluid .col[style*="padding-top: 80px"]{padding-top:12px!important}
+body>.container-fluid [style*="padding-top: 90px"],body>.container-fluid [style*="padding-top: 70px"]{padding-top:12px!important}
+body>.container-fluid [style*="width: 420px"]{max-width:100%;width:100%!important}
+body .table{--bs-table-bg:transparent}body .table thead th{background:#f1f5fb;color:#5a6981;font-size:.78rem;font-weight:750;border-bottom:0;padding:14px}
+body .table td{vertical-align:middle;padding:12px;border-color:#edf1f6}
+body .btn-dark{background:#263c61;border-color:#263c61}body .btn-dark:hover{background:#182b49}
+body .modal-content{border:0;border-radius:18px;box-shadow:0 24px 70px #15243d30}body .modal-header{border-color:var(--ba-border)}
+/* Gestione has a top-level container after the shared navigation. */
+body>.container.text-center{margin-top:24px!important;text-align:left!important}
+@media(max-width:767px){.ba-stat{min-height:110px;padding:18px}.ba-panel{padding:18px}.ba-chart-wrap{height:270px}.ba-welcome{align-items:stretch!important}.ba-year-control{width:100%}}
