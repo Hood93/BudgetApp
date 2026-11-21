@@ -118,3 +118,36 @@ body>.container-fluid,body>.container{min-width:0}
 .ba-management table.table td:first-child i{max-width:100%}
 .ba-management-reports,.ba-management-month{overflow-x:auto}
 @media(max-width:767px){.ba-panel table.table,.ba-management table.table,.ba-results-panel table.table{font-size:.85rem}.ba-panel table.table thead th,.ba-management table.table thead th,.ba-results-panel table.table thead th,.ba-panel table.table tbody td,.ba-management table.table tbody td,.ba-results-panel table.table tbody td{padding:10px 11px}}
+
+
+/* Management: recurring series and monthly category matrix */
+.ba-management #restransazioniricorrenti{margin-top:30px}
+.ba-management #resannualecategorie{margin-top:34px;margin-bottom:28px}
+.ba-recurring-section,.ba-category-report{background:#fff;border:1px solid var(--ba-border);border-radius:18px;padding:20px;box-shadow:0 8px 26px #182d5008;min-width:0}
+.ba-report-heading{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:18px}
+.ba-report-heading h3{font-size:1.08rem;font-weight:750;margin:0 0 5px;color:#1d304d}
+.ba-report-heading p,.ba-report-hint{font-size:.82rem;color:#667992;margin:0}
+.ba-recurring-scroll,.ba-category-scroll{max-width:100%;overflow-x:auto;border:1px solid #e2e9f3;border-radius:13px}
+.ba-recurring-section table.table{min-width:850px;margin:0;border-collapse:separate;border-spacing:0}
+.ba-recurring-section table.table tbody tr.ba-recurring-expired{--bs-table-bg:#e9edf2;background:#e9edf2!important;color:#526075}
+.ba-recurring-section table.table tbody tr.ba-recurring-active{--bs-table-bg:#ddf6e5;background:#ddf6e5!important;color:#1e4934}
+.ba-recurring-section table.table tbody tr.ba-recurring-expired td{background:#e9edf2!important}
+.ba-recurring-section table.table tbody tr.ba-recurring-active td{background:#ddf6e5!important}
+.ba-recurring-section table.table tbody tr.ba-recurring-expired:hover td{background:#dce3eb!important}
+.ba-recurring-section table.table tbody tr.ba-recurring-active:hover td{background:#c9efd5!important}
+.ba-recurring-section table.table td,.ba-recurring-section table.table th{padding:14px 13px;white-space:nowrap}
+.ba-recurring-section table.table td:first-of-type{font-weight:650}
+.ba-recurring-section .viewbtn,.ba-recurring-section .delbtn{min-width:35px;min-height:35px;padding:6px;border:1px solid #ccd7e2;border-radius:9px;background:#ffffffa8}
+.ba-recurring-section .viewbtn:hover,.ba-recurring-section .delbtn:hover{background:white}
+.ba-category-table{border-collapse:separate;border-spacing:0;min-width:max-content;width:100%;margin:0;font-size:.86rem}
+.ba-category-table thead th{position:sticky;top:0;z-index:2;background:#edf2fa!important;white-space:nowrap;padding:14px 15px}
+.ba-category-table th:first-child{position:sticky;left:0;z-index:3;background:#f3f6fb!important;min-width:115px}
+.ba-category-table thead th:first-child{z-index:4;background:#e7eef8!important}
+.ba-category-table tbody th{font-weight:700;color:#344861}
+.ba-category-table td{padding:4px 6px!important;text-align:right;white-space:nowrap;border-bottom:1px solid #edf1f6}
+.ba-category-cell{border:0;background:transparent;padding:9px 10px;border-radius:8px;width:100%;text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;font-weight:600;cursor:pointer}
+.ba-category-cell:hover,.ba-category-cell:focus-visible{background:#e5edff;outline:2px solid #a9bdf8;outline-offset:-2px}
+.ba-money-negative{color:#bf4c60}.ba-money-positive{color:#168363}.ba-money-zero{color:#98a3b2}
+.ba-category-total{font-weight:750!important;color:#344861;background:#f4f7fc!important;font-variant-numeric:tabular-nums}
+.ba-category-table tfoot td,.ba-category-table tfoot th{background:#eaf0fa!important;font-weight:800;white-space:nowrap;padding:14px 15px!important;font-variant-numeric:tabular-nums}
+@media(max-width:767px){.ba-recurring-section,.ba-category-report{padding:14px}.ba-management #restransazioniricorrenti{margin-top:22px}.ba-management #resannualecategorie{margin-top:26px}.ba-report-hint{display:none}}
