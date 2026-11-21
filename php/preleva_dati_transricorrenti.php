@@ -14,7 +14,7 @@ if (!$result) {
   exit;
 }
 echo "<div class='table-responsive'>";
-echo "<table class='table table-responsive table-bordered border-black'>
+echo "<table class='table table-hover align-middle'>
 <thead>
 <tr>";
 echo "<th scope='col'>Descrizione</th>";
@@ -40,12 +40,12 @@ while ($row = mysqli_fetch_assoc($result)) {
       break;
   }
   echo "<td style='display:none;'>" . $row["idtransazioniricorrenti"] . "</td>";
-  echo "<td class='text-start'>" . $row['descrizione'] . "</td>";
+  echo "<td class='text-start'>" . htmlspecialchars((string)$row['descrizione'], ENT_QUOTES, 'UTF-8') . "</td>";
   echo "<td class='text-start'>" . $mesi[$row['meseiniziale']] . "</td>";
   echo "<td class='text-start'>" . $row['annoiniziale'] . "</td>";
   echo "<td class='text-start'>" . $mesi[$row['mesefinale']] . "</td>";
   echo "<td class='text-start'>" . $row['annofinale'] . "</td>";
-  echo "<td class='text-start'>" . $row['categoria'] . "</td>";
+  echo "<td class='text-start'>" . htmlspecialchars((string)$row['categoria'], ENT_QUOTES, 'UTF-8') . "</td>";
   echo "<td class='text-start'>" . $row['entrata'] . "</td>";
   echo "<td class='text-start'>" . $row['uscita'] . "</td>";
   switch($row['stato']){
@@ -62,9 +62,6 @@ echo "</tbody>";
 echo "</table>";
 echo "</div>";
 ?>
-</tbody>
-</table>
-
 <script>
     $(document).ready(function() {
         $('.viewbtn').click(function() {
@@ -106,7 +103,7 @@ echo "</div>";
             var risp = confirm("Verranno eliminate le transazioni ricorrenti successive e uguali alla data di oggi")
 
             
-            if (risp = true){
+            if (risp === true){
             $.ajax({
                     type: 'POST',
                     url: 'php/updoperazioneric.php',
