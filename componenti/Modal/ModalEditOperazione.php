@@ -48,7 +48,7 @@
                                         echo "<option value='" . htmlspecialchars((string)$cate, ENT_QUOTES, 'UTF-8') . "'>" . htmlspecialchars((string)$cate, ENT_QUOTES, 'UTF-8') . "</option>";
                                     }
                                     echo "</select>"; ?>
-                                </div></div></div>
+                                </div></div>
                                 <!--<div class="form-group ba-form-field">
                                     <label>Tag3</label>
                                     <input type="text" name="edittag3" id="edittag3" class="form-control" placeholder="Inserire Tag3">
@@ -62,9 +62,9 @@
                                 <button type="button" id="closebtn" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
                                 <button type="button" class="btn btn-primary savebtnedit">Salva modifiche</button>
                             </div>
-                    </div>
                     </form>
                 </div>
+              </div>
             </div>
 
             <!-- Modal -->
