@@ -11,7 +11,7 @@
 
                                 <input type="hidden" name="editidoperazione" id="editidoperazione">
 
-                                <div class="ba-form-grid"><div class="ba-form-grid"><div class="form-group ba-form-field">
+                                <div class="form-group ba-form-field">
                                     <label for="editdataoperazione" class="form-label">Data Operazione</label>
                                     <input type="date" name="editdataoperazione" id="editdataoperazione"  class="form-control">
                                 </div>
