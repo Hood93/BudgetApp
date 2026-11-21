@@ -368,3 +368,16 @@ body .modal .modal-header,body .modal .modal-footer{border-color:var(--ba-border
 .ba-dashboard .ba-chart-wrap{position:relative;height:340px;min-height:280px}
 .ba-dashboard .ba-chart-wrap canvas{width:100%!important;height:100%!important}
 @media(max-width:575px){.ba-dashboard .ba-chart-wrap{height:280px}#VistaDettaglioCategorieMese .modal-body{max-height:60vh}}
+
+
+/* Management shortcuts: compact touch-friendly layout on mobile */
+.ba-management .ba-management-action-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:8px}
+.ba-management .ba-management-action-grid .ba-action-tile{display:flex!important;align-items:center;justify-content:flex-start;gap:11px;min-width:0;min-height:58px;padding:13px 16px!important;border-radius:13px!important;text-align:left!important;white-space:normal;line-height:1.3;font-weight:650;overflow-wrap:break-word}
+.ba-management .ba-management-action-grid .ba-action-tile i{flex:0 0 auto;font-size:1rem}
+@media(min-width:768px) and (max-width:1199px){.ba-management .ba-management-action-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:767px){
+ .ba-management .ba-management-action-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:0}
+ .ba-management .ba-management-action-grid .ba-action-tile{min-height:88px;flex-direction:column;align-items:flex-start;justify-content:center;gap:10px;padding:13px!important;font-size:.83rem!important;letter-spacing:0;line-height:1.28}
+ .ba-management .ba-management-action-grid .ba-action-tile i{font-size:1.1rem}
+}
+@media(max-width:360px){.ba-management .ba-management-action-grid .ba-action-tile{font-size:.78rem!important;padding:10px!important;min-height:94px}}
