@@ -66,3 +66,41 @@ body>.container.text-center{margin-top:24px!important;text-align:left!important}
 .ba-management .row>.col{min-width:170px}
 .ba-management #resannuale,.ba-management #categorie,.ba-management #restransazioniricorrenti,.ba-management #resannualecategorie,.ba-management #rescrediti{min-width:0}
 @media(max-width:767px){.ba-filter-panel{padding:16px}.ba-results-panel{border-radius:12px}.ba-management .row>.col{min-width:100%}}
+
+
+/* Responsive shell fixes */
+html,body{max-width:100%;overflow-x:hidden}
+.ba-topbar{min-width:0}
+.ba-topbar>div{min-width:0}
+.ba-page-title{overflow-wrap:anywhere}
+body>.container-fluid,body>.container{min-width:0}
+.ba-management{width:calc(100% - 252px)!important;max-width:none!important;margin:0 0 0 252px!important;padding:26px 32px!important}
+.ba-management-toolbar>.row{align-items:start!important}
+.ba-management-toolbar .ba-management-year{min-width:0}
+.ba-management-toolbar .ba-management-month{min-width:0;overflow-x:auto}
+.ba-management-month>table,.ba-management-month .table{width:100%;min-width:400px}
+.ba-management-month .table-responsive{max-width:100%}
+.ba-management-toolbar .ba-management-actions{min-width:0}
+.ba-management-actions .btn{min-height:44px;white-space:normal;line-height:1.3}
+.ba-management-reports>div{min-width:0;overflow-x:auto}
+.ba-management-reports table{width:100%;max-width:100%}
+.ba-management-reports .table-responsive{max-width:100%;overflow-x:auto}
+.ba-management .row:not(.ba-management-toolbar .row)>div[id^="res"]{min-width:0}
+.ba-transaction-list{display:grid;gap:12px}
+.ba-transaction-item{display:flex;align-items:center;gap:18px;background:#fff;border:1px solid var(--ba-border);border-radius:16px;padding:18px 22px;min-width:0;box-shadow:0 5px 18px #182d5008}
+.ba-transaction-icon{display:grid;place-items:center;flex:0 0 52px;width:52px;height:52px;border-radius:14px;background:#eef2ff;color:#4c66bc;font-size:1.45rem}
+.ba-transaction-icon i{color:inherit!important}
+.ba-transaction-details{min-width:0;flex:1}
+.ba-transaction-category{font-size:1rem;font-weight:750;color:var(--ba-ink)}
+.ba-transaction-description{font-size:.9rem;color:#60718a;overflow-wrap:anywhere;margin:3px 0}
+.ba-transaction-date{font-size:.77rem;color:#8490a3}
+.ba-transaction-actions{display:flex;align-items:center;gap:18px;flex-shrink:0}
+.ba-transaction-amount{font-weight:800;font-size:1.08rem;font-variant-numeric:tabular-nums;white-space:nowrap}
+.ba-expense .ba-transaction-amount{color:#d94b60}
+.ba-income .ba-transaction-amount{color:#148a65}
+.ba-transaction-actions .btn{width:40px;height:40px;display:grid;place-items:center}
+.ba-empty-state{text-align:center;padding:45px 16px;color:var(--ba-muted)}
+.ba-empty-state i{font-size:1.7rem;margin-bottom:12px}
+@media(min-width:992px){.ba-management-toolbar .ba-management-actions{flex:0 0 33.3333%;max-width:33.3333%}}
+@media(max-width:991px){.ba-management{margin-left:0!important;width:100%!important;padding:18px!important}}
+@media(max-width:767px){.ba-transaction-item{padding:14px;gap:12px;align-items:flex-start}.ba-transaction-icon{width:42px;height:42px;flex-basis:42px;font-size:1.15rem}.ba-transaction-actions{flex-direction:column;align-items:flex-end;gap:8px}.ba-transaction-amount{font-size:.95rem}.ba-management-toolbar .ba-management-month{overflow-x:auto}}
