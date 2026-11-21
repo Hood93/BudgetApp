@@ -1,89 +1,43 @@
 <?php
-//ini_set('display_errors', 1);
-include "db.php";
+require_once __DIR__ . '/db.php';
 
-$mese = $_POST['mese'];
-$mese = $mese + 1;
-$anno = $_POST['anno'];
-
-
-$query = "SELECT round(sum(entrate),2) as Entrate,round(sum(uscite),2) as Uscite FROM budget.budgettable WHERE ordinemese = '" . $mese . "' and anno = '" . $anno . "'";
-
-switch ($mese) {
-  case "1":
-    $mesetext = "Gennaio";
-    break;
-  case "2":
-    $mesetext = "Febbraio";
-    break;
-  case "3":
-    $mesetext = "Marzo";
-    break;
-  case "4":
-    $mesetext = "Aprile";
-    break;
-  case "5":
-    $mesetext = "Maggio";
-    break;
-  case "6":
-    $mesetext = "Giugno";
-    break;
-  case "7":
-    $mesetext = "Luglio";
-    break;
-  case "8":
-    $mesetext = "Agosto";
-    break;
-  case "9":
-    $mesetext = "Settembre";
-    break;
-  case "10":
-    $mesetext = "Ottobre";
-    break;
-  case "11":
-    $mesetext = "Novembre";
-    break;
-  case "12":
-    $mesetext = "Dicembre";
-    break;
-  default:
-    $mesetext = "";
+// Existing callers send zero-based month indexes (January = 0).
+$monthIndex = filter_var($_POST['mese'] ?? null, FILTER_VALIDATE_INT);
+$year = trim((string)($_POST['anno'] ?? date('Y')));
+if ($monthIndex === false || $monthIndex === null || $monthIndex < 0 || $monthIndex > 11 || !preg_match('/^[0-9]{4}$/', $year)) {
+    http_response_code(400);
+    exit('<p class="text-danger">Periodo non valido.</p>');
 }
-
-
-
-
-//Ciclo il risultato
-$result = mysqli_query($conn, $query);
-
-if (!$result) {
-  echo "An error occurred.\n";
-  exit;
+$month = $monthIndex + 1;
+$names = ['Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'];
+$stmt = mysqli_prepare($conn, 'SELECT COALESCE(ROUND(SUM(entrate),2),0) AS Entrate, COALESCE(ROUND(SUM(uscite),2),0) AS Uscite FROM budgettable WHERE ordinemese = ? AND anno = ?');
+if (!$stmt) { http_response_code(500); exit('<p class="text-danger">Report non disponibile.</p>'); }
+mysqli_stmt_bind_param($stmt, 'is', $month, $year);
+if (!mysqli_stmt_execute($stmt)) {
+    mysqli_stmt_close($stmt);
+    http_response_code(500);
+    exit('<p class="text-danger">Report non disponibile.</p>');
 }
-echo "<div class='table'>";
-echo "<table class= 'table table-bordered border-black'>
-<thead>
-<tr>";
-echo "<i class='fa-solid fa-chart-line fa-xl' style='color: #000000;'></i> " . $mesetext . " " . $anno;
-echo "</tr>";
-echo "<tr>";
-echo "<th scope='col'>Entrate</th>";
-echo "<th scope='col'>Uscite</th>";
-echo "<th scope='col'>Differenza</th>";
-echo "</tr>";
-echo "</thead>";
-echo "<tbody>";
-while ($row = mysqli_fetch_assoc($result)) {
-  echo "<tr>";
-  $ris = $row['Entrate'] - $row['Uscite'];
-  echo "<td class='text-start'>" . $row['Entrate'] . " " . "<i class='fa-solid fa-euro-sign fa-xs' style='color: #000000;'></i></td>";
-  echo "<td class='text-start'>" . $row['Uscite'] . " " . "<i class='fa-solid fa-euro-sign fa-xs' style='color: #000000;'></i></td>";
-  echo "<td class='text-start'>" . round($ris,2) . " " . "<i class='fa-solid fa-euro-sign fa-xs' style='color: #000000;'></i></td>";
-  echo "</tr>";
-}
-echo "</tbody>";
-echo "</table>";
-echo "</div>";
+$result = mysqli_stmt_get_result($stmt);
+$row = $result ? mysqli_fetch_assoc($result) : null;
+mysqli_stmt_close($stmt);
+if (!$row) { http_response_code(500); exit('<p class="text-danger">Report non disponibile.</p>'); }
+$income = (float)$row['Entrate'];
+$expense = (float)$row['Uscite'];
+$balance = $income - $expense;
+$money = static fn(float $value): string => number_format($value, 2, ',', '.') . ' €';
+$balanceClass = $balance < 0 ? 'ba-amount-negative' : 'ba-amount-positive';
 ?>
-</tbody>
-</table>
+<section aria-label="Riepilogo mensile">
+  <h3 class="ba-month-report-title"><i class="fa-solid fa-chart-line" aria-hidden="true"></i><?php echo htmlspecialchars($names[$monthIndex] . ' ' . $year, ENT_QUOTES, 'UTF-8'); ?></h3>
+  <div class="ba-month-report table-responsive">
+    <table class="table align-middle">
+      <thead><tr><th scope="col">Entrate</th><th scope="col">Uscite</th><th scope="col">Differenza</th></tr></thead>
+      <tbody><tr>
+        <td><?php echo $money($income); ?></td>
+        <td><?php echo $money($expense); ?></td>
+        <td class="<?php echo $balanceClass; ?>"><?php echo $money($balance); ?></td>
+      </tr></tbody>
+    </table>
+  </div>
+</section>
