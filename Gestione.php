@@ -106,6 +106,8 @@
 
 <script>
     $(document).ready(function() {
+        const currentYear = String(new Date().getFullYear());
+        if ($('#anno option[value="' + currentYear + '"]').length) $('#anno').val(currentYear);
         getcategorie();
         getresocontoannuale();
         getresocontoannualecategorie();
@@ -198,7 +200,7 @@
             url: './php/preleva_dati_reportannuale.php',
             data: {
                 ajax: 1,
-
+                cerca: $('#anno').val() || String(new Date().getFullYear())
             },
             success: function(response) {
                 $("#resannuale").html(response);
