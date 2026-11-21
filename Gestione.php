@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 
 <head>
     <meta charset="UTF-8">
@@ -40,9 +40,9 @@
     ?>
     <main class="container ba-management">
         <section class="ba-welcome"><div class="ba-eyebrow">CENTRO DI CONTROLLO</div><h2>Gestione del budget</h2><p>Amministra categorie, operazioni ricorrenti, crediti e importazioni.</p></section>
-        <section class="ba-panel mb-4"><div class="row g-3 align-items-end" style="padding-top: 12px !important; padding-bottom: 12px !important;">
-            <div class="col">
-                Selezione Anno Report
+        <section class="ba-panel ba-management-toolbar mb-4"><div class="row g-3 align-items-stretch" style="padding-top: 12px !important; padding-bottom: 12px !important;">
+            <div class="col-12 col-md-6 col-xl-3 ba-management-year">
+                <label class="form-label" for="anno">Selezione Anno Report</label>
                 <?php echo "<select class='form-select' onchange='selanno(this)' name='anno' id='anno'>";
                 echo "<option value=''></option>";
                 foreach ($tableanno as $anno) {
@@ -50,9 +50,9 @@
                 }
                 echo "</select>"; ?>
             </div>
-            <div class="col" id="resmensile">
+            <div class="col-12 col-xl-9 ba-management-month" id="resmensile">
             </div>
-            <div class="col">
+            <div class="col-12 col-md-4 ba-management-actions">
                 <div class="d-grid gap-2">
                     <button class="btn btn-dark py-2 btn-sm text-start" name="addtranric" id="addtranric"><i class="fa-solid fa-circle-plus fa-sm" style="color: #77bb41;"></i>
                         Aggiungi Transazione Ricorrente
@@ -62,7 +62,7 @@
                     </button>
                 </div>
             </div>
-            <div class="col">
+            <div class="col-12 col-md-4 ba-management-actions">
                 <div class="d-grid gap-2">
                     <button class="btn btn-dark py-2 btn-sm text-start" name="addcat" id="addcat"><i class="fa-solid fa-circle-plus fa-sm" style="color: #77bb41;"></i>
                         Aggiungi Categoria
@@ -72,7 +72,7 @@
                     </button>
                 </div>
             </div>
-            <div class="col">
+            <div class="col-12 col-md-4 ba-management-actions">
                 <div class="d-grid gap-2">
                     <button class="btn btn-dark py-2 btn-sm text-start" name="addcredito" id="addcredito"><i class="fa-solid fa-circle-plus fa-sm" style="color: #77bb41;"></i>
                         Aggiungi Credito
@@ -84,7 +84,7 @@
             </div>
         </div>
         </section>
-        <div class="row g-4">
+        <div class="row g-4 ba-management-reports">
             <div class="col-12 col-xl-8" id="resannuale">
             </div>
 
