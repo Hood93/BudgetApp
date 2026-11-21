@@ -132,9 +132,22 @@
                     data: {
                         ajax: 1,
                     },
+                    dataType: 'json',
                     success: function(response) {
-                        alert('Nuovo Anno Inserito');
-                    }
+                        if (!response || !response.ok) {
+                            alert('Impossibile inizializzare l’anno.');
+                            return;
+                        }
+                        alert(response.inserite > 0
+                            ? 'Anno ' + response.anno + ': ' + response.inserite + ' righe iniziali create.'
+                            : 'Anno ' + response.anno + ': dati iniziali già presenti, nessun duplicato creato.');
+                        getresocontomensile();
+                        const currentYear = String(response.anno);
+                        if (!$('#anno option[value="' + currentYear + '"]').length) {
+                            $('#anno').append($('<option></option>').val(currentYear).text(currentYear));
+                        }
+                    },
+                    error: function() { alert('Impossibile inizializzare l’anno. Riprova.'); }
                 });
             }
         })
