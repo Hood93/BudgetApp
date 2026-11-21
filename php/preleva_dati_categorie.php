@@ -28,7 +28,7 @@ echo "<tbody>";
 while ($row = mysqli_fetch_assoc($result)) {
     echo "<tr>";
     echo "<td style='display:none;'>" . (int)$row["idcategoria"] . "</td>";
-    echo "<td class='text-start'>" . (preg_match('/^<i\\s+class=[\\"\\'][a-zA-Z0-9 _-]+[\\"\\']\\s*><\\/i>$/', trim((string)$row['icona'])) ? $row['icona'] : '<i class=\\"fa-solid fa-folder\\"></i>') . "</td>";
+    echo "<td class='text-start'><i class='fa-solid fa-folder text-secondary' aria-hidden='true'></i></td>";
     echo "<td class='text-start'>" . htmlspecialchars((string)$row['categoria'], ENT_QUOTES, 'UTF-8') . "</td>";
     echo "<td>" . "<button type='button' data-bs-toggle='modal' data-bs-target='#ModalEditCategoria' class='btn btn-success btn-sm editbtn'><i class='fa-solid fa-pen-to-square fa-sm' style='color: #ffffff;'></i></button>" . "</td>";
     echo "</tr>";
