@@ -38,9 +38,9 @@
     
 
     ?>
-    <div class="container text-center">
-        <h1>prova</h1>
-        <div class="row" style="padding-top: 20px !important; padding-bottom: 20px !important;">
+    <main class="container ba-management">
+        <section class="ba-welcome"><div class="ba-eyebrow">CENTRO DI CONTROLLO</div><h2>Gestione del budget</h2><p>Amministra categorie, operazioni ricorrenti, crediti e importazioni.</p></section>
+        <section class="ba-panel mb-4"><div class="row g-3 align-items-end" style="padding-top: 12px !important; padding-bottom: 12px !important;">
             <div class="col">
                 Selezione Anno Report
                 <?php echo "<select class='form-select' onchange='selanno(this)' name='anno' id='anno'>";
@@ -83,11 +83,12 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-8" id="resannuale">
+        </section>
+        <div class="row g-4">
+            <div class="col-12 col-xl-8" id="resannuale">
             </div>
 
-            <div class="col-4" id="categorie" style="width: 420px; height: 574px; overflow-y: scroll;">
+            <div class="col-12 col-xl-4" id="categorie" style="max-height: 574px; overflow-y: auto;">
             </div>
         </div>
         <div class="row">
@@ -102,8 +103,7 @@
             <div class="col-xxl" id="rescrediti">
             </div>
         </div>
-    </div>
-    </div>
+    </main>
     <!-- Jquery CDN -->
     <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
     <!-- End of Jquery CDN -->
