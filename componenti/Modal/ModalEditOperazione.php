@@ -23,7 +23,7 @@
                                     <label for="editdescrizione" class="form-label">Descrizione</label>
                                     <input type="text" name="editdescrizione" id="editdescrizione" class="form-control" placeholder="Inserire Descrizione">
                                 </div>
-                                <div class="form-group ba-form-field">
+                                <div class="ba-form-grid"><div class="form-group ba-form-field">
                                     <label for="editentrate" class="form-label">Entrata</label>
                                     <input type="number" step="0.01" min="0" name="editentrate" id="editentrate" class="form-control" placeholder="Inserire Entrata" value="0">
                                 </div>
@@ -31,7 +31,7 @@
                                     <label for="edituscite" class="form-label">Uscita</label>
                                     <input type="number" step="0.01" min="0" name="edituscite" id="edituscite" class="form-control" placeholder="Inserire Uscita" value="0">
                                 </div></div>
-                                <div class="form-group ba-form-field">
+                                <div class="ba-form-grid"><div class="form-group ba-form-field">
                                     <label for="edittag1" class="form-label">Tipologia</label>
                                     <select name="edittag1" id="edittag1" class="form-control form-select" required>
                                         <option value="">Seleziona...</option>
@@ -48,7 +48,7 @@
                                         echo "<option value='" . htmlspecialchars((string)$cate, ENT_QUOTES, 'UTF-8') . "'>" . htmlspecialchars((string)$cate, ENT_QUOTES, 'UTF-8') . "</option>";
                                     }
                                     echo "</select>"; ?>
-                                </div></div>
+                                </div></div></div>
                                 <!--<div class="form-group ba-form-field">
                                     <label>Tag3</label>
                                     <input type="text" name="edittag3" id="edittag3" class="form-control" placeholder="Inserire Tag3">
