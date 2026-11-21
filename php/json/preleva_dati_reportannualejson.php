@@ -1,45 +1,40 @@
 <?php
-//ini_set('display_errors', 1);
 include "../db.php";
+header('Content-Type: application/json; charset=utf-8');
 
-
-
-
-$query = "SELECT ordinemese,mese, ROUND(SUM(uscite),2) as Uscite,ROUND(SUM(entrate),2) as Entrate FROM budget.budgettable";
-$querytotann = "SELECT ROUND(SUM(uscite),2) as Uscite,ROUND(SUM(entrate),2) as Entrate FROM budget.budgettable";
-
-if ((isset($_POST["cerca"]))) {
-    $query .=
-    " WHERE anno LIKE '%" . $_POST["cerca"] . "%' ";
-$querytotann .=
-    " WHERE anno LIKE '%" . $_POST["cerca"] . "%' ";
-} else {
-    $annoatt = date('Y');
-    $query .=
-        " WHERE anno LIKE '%" . $annoatt . "%' ";
-    $querytotann .=
-        " WHERE anno LIKE '%" . $annoatt . "%' ";
-
+// The dashboard uses POST for the year filter. An empty selection means all years.
+$year = trim((string)($_POST['cerca'] ?? date('Y')));
+$sql = "SELECT ordinemese, mese, ROUND(SUM(CAST(uscite AS DECIMAL(15,2))),2) AS uscite, ROUND(SUM(CAST(entrate AS DECIMAL(15,2))),2) AS entrate FROM budget.budgettable";
+$params = [];
+if ($year !== '') {
+    if (!preg_match('/^[0-9]{4}$/', $year)) {
+        http_response_code(400);
+        echo json_encode(['error' => 'Anno non valido']);
+        exit;
+    }
+    $sql .= " WHERE anno = ?";
+    $params[] = $year;
 }
-
-
-$query .= " group by mese, ordinemese order by ordinemese asc";
-
-//Ciclo il risultato
-$result = mysqli_query($conn, $query);
-$resulttotann = mysqli_query($conn, $querytotann);
-if (!$result) {
-    echo "An error occurred.\n";
+$sql .= " GROUP BY ordinemese, mese ORDER BY ordinemese ASC";
+$stmt = mysqli_prepare($conn, $sql);
+if (!$stmt) {
+    http_response_code(500);
+    echo json_encode(['error' => 'Impossibile caricare il report']);
     exit;
 }
-
-while ($row = mysqli_fetch_assoc($result)) {
-    $ris = $row["Entrate"] - $row["Uscite"];
-    $arraygrafico[] = array('mese' => $row['mese'],'entrate' => $row['Entrate'],'uscite' => $row['Uscite'],'ris' => $ris);
-    
+if ($params) {
+    mysqli_stmt_bind_param($stmt, "s", $params[0]);
 }
-
-echo json_encode($arraygrafico);
-
-?>
-
+if (!mysqli_stmt_execute($stmt)) {
+    http_response_code(500);
+    echo json_encode(['error' => 'Impossibile caricare il report']);
+    exit;
+}
+$result = mysqli_stmt_get_result($stmt);
+$rows = [];
+while ($row = mysqli_fetch_assoc($result)) {
+    $income = (float)$row['entrate'];
+    $expense = (float)$row['uscite'];
+    $rows[] = ['mese' => $row['mese'], 'entrate' => $income, 'uscite' => $expense, 'ris' => $income - $expense];
+}
+echo json_encode($rows, JSON_UNESCAPED_UNICODE);
