@@ -194,51 +194,50 @@
         });
     }
 
-    //Funzione Grafico Residui Mensili
-
-    function ResiduiMensiliGrafico(label) {
-        var mesi = label.map(function(e) {
-            return e.mese;
-        });
-        var entrate = label.map(function(e) {
-            return Number(e.entrate) || 0;
-        });
-        var uscite = label.map(function(e) {
-            return Number(e.uscite) || 0;
-        });
-        var ris = label.map(function(e) {
-            return Number(e.ris) || 0;
-        });
-
-        //Controllo se è gia presente un Grafico
-        let chartStatus = Chart.getChart("ResiduoChart"); // <canvas> id
-        if (chartStatus != undefined) {
-            chartStatus.destroy();
-        }
-
-        const ctx = document.getElementById('ResiduoChart');
-        //Dopo aver eliminato il vecchio grafico, genero il secondo
+    // Grafico residuo mensile: contrasto adattivo e tooltip in euro.
+    function ResiduiMensiliGrafico(rows) {
+        const mesi = rows.map(row => row.mese);
+        const saldi = rows.map(row => Number(row.ris) || 0);
+        const old = Chart.getChart('ResiduoChart');
+        if (old) old.destroy();
+        const dark = document.documentElement.getAttribute('data-ba-theme') === 'dark';
+        const ink = dark ? '#c6d4e9' : '#60718b';
+        const grid = dark ? 'rgba(180,198,227,.12)' : 'rgba(78,101,139,.10)';
+        const euro = new Intl.NumberFormat('it-IT', {style:'currency',currency:'EUR'});
+        const canvas = document.getElementById('ResiduoChart');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        const fill = ctx.createLinearGradient(0,0,0,360);
+        fill.addColorStop(0, dark ? 'rgba(112,145,255,.23)' : 'rgba(82,115,236,.19)');
+        fill.addColorStop(1,'rgba(82,115,236,0)');
         new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: mesi,
-                datasets: [{
-                    label: 'Residuo Mensile',
-                    data: ris,
-                    pointRadius:4,
-                    pointHoverRadius:7,
-                    borderColor: '#5273ec',
-                    backgroundColor: 'rgba(82,115,236,.10)',
-                    tension: .35,
-                    borderWidth: 3,
-                    fill:true
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
+            type:'line',
+            data:{labels:mesi,datasets:[{
+                label:'Residuo mensile',data:saldi,
+                borderColor:'#7191ff',backgroundColor:fill,
+                pointBackgroundColor:saldi.map(v => v < 0 ? '#f07883' : '#7191ff'),
+                pointBorderColor:dark?'#192538':'#ffffff',
+                pointBorderWidth:2,pointRadius:3,pointHoverRadius:7,
+                pointHitRadius:18,borderWidth:3,tension:.3,fill:'origin'
+            }]},
+            options:{
+                responsive:true,maintainAspectRatio:false,
+                interaction:{mode:'index',intersect:false},
+                plugins:{
+                    legend:{display:false},
+                    tooltip:{
+                        enabled:true,displayColors:false,
+                        backgroundColor:dark?'#101827':'#18253a',
+                        titleColor:'#ffffff',bodyColor:'#ffffff',
+                        padding:12,cornerRadius:10,
+                        callbacks:{label:context => 'Residuo: '+euro.format(context.parsed.y)}
                     }
+                },
+                scales:{
+                    x:{grid:{display:false},border:{display:false},
+                       ticks:{color:ink,maxRotation:0,minRotation:0,autoSkip:true,maxTicksLimit:6,font:{size:11}}},
+                    y:{beginAtZero:false,grid:{color:grid},border:{display:false},
+                       ticks:{color:ink,maxTicksLimit:6,callback:value => new Intl.NumberFormat('it-IT',{notation:'compact',maximumFractionDigits:1}).format(value)+' €'}}
                 }
             }
         });
