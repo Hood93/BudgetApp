@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 
 <head>
     <meta charset="UTF-8">
@@ -30,28 +30,19 @@
             <?php include "componenti/Modal/ModalEditTransazioniPending.php"; // File Modal Edit 
             ?>
         </div>
-        <div class="container-fluid" style="padding-top: 70px !important;">
-            <input class="form-check-input" type="checkbox" id="ablemod" onclick=AbilitaModifica(this)>
-            <label class="form-check-label" for="ablemod">
-                Abilita Modifica
-            </label>
-            <button type="button" class="btn btn-dark savebtn" id="blocksave" disabled><i class="fa-solid fa-check fa-sm"></i> Salva</button>
-            <button type="button" class="btn btn-dark delbtn" id="blockdel" disabled><i class="fa-solid fa-trash fa-sm"></i> Elimina</button>
-            <button type="button" class="btn btn-dark checkallbtn" id="checkall" disabled><i class="fa-solid fa-check-double fa-sm"></i> Seleziona Tutto</button>
-        </div>
-        <div class="row mt-5">
-            <div class="col">
-                Filtro Per Categoria <select name="filtrcategoria" id="filtrcategoria" onchange='filtracategoria(this)'>
-                    <?php
-                    echo "<option value=''></option>";
-                    foreach ($catarray as $cat) {
-                        echo "<option value='" . $cat . "'>" . $cat . "</option>";
-                    }
-                    ?>
-                </select>
+        <section class="ba-welcome"><div class="ba-eyebrow">DA VERIFICARE</div><h2>Transazioni in sospeso</h2><p>Filtra i movimenti e abilita la modifica per le operazioni in blocco.</p></section>
+        <section class="ba-panel ba-filter-panel mb-4">
+          <div class="d-flex flex-wrap gap-3 align-items-center justify-content-between mb-3">
+            <div class="form-check form-switch"><input class="form-check-input" type="checkbox" id="ablemod" onclick="AbilitaModifica(this)"><label class="form-check-label fw-semibold" for="ablemod">Abilita modifica in blocco</label></div>
+            <div class="d-flex flex-wrap gap-2">
+              <button type="button" class="btn btn-primary savebtn" id="blocksave" disabled><i class="fa-solid fa-check me-1"></i> Salva</button>
+              <button type="button" class="btn btn-outline-danger delbtn" id="blockdel" disabled><i class="fa-solid fa-trash me-1"></i> Elimina</button>
+              <button type="button" class="btn btn-outline-secondary checkallbtn" id="checkall" disabled><i class="fa-solid fa-check-double me-1"></i> Seleziona tutto</button>
             </div>
-        </div>
-        <div class="container-fluid" id="transazionipending" style="padding-top: 30px !important;">
+          </div>
+          <div class="row"><div class="col-12 col-md-5"><label class="form-label" for="filtrcategoria">Filtra per categoria</label><select class="form-select" name="filtrcategoria" id="filtrcategoria" onchange="filtracategoria(this)"><option value="">Tutte le categorie</option><?php foreach ($catarray as $cat): ?><option value="<?php echo htmlspecialchars((string)$cat, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars((string)$cat, ENT_QUOTES, 'UTF-8'); ?></option><?php endforeach; ?></select></div></div>
+        </section>
+        <div class="ba-results-panel" id="transazionipending" aria-live="polite">
         </div>
     </div>
 
