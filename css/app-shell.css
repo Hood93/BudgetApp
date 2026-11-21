@@ -290,3 +290,59 @@ body .modal .modal-header,body .modal .modal-footer{border-color:var(--ba-border
 }
 :root[data-ba-theme="dark"] .ba-management-reports>#categorie>.table-responsive{background:var(--ba-surface);border-color:var(--ba-border)}
 :root[data-ba-theme="dark"] .ba-management-reports>#categorie table.table thead th{background:#273750!important;color:#d5e2f6!important}
+
+
+/* Regression: the previous height:0 rule collapsed the categories column. */
+@media(min-width:1200px){
+  .ba-management-reports>#categorie{
+    height:auto!important;
+    min-height:0!important;
+    max-height:none!important;
+    position:relative;
+    display:block;
+    overflow:hidden!important;
+    border:1px solid var(--ba-border);
+    border-radius:18px!important;
+    background:var(--ba-surface);
+  }
+  .ba-management-reports>#categorie>.table-responsive{
+    position:absolute;
+    inset:0;
+    height:100%!important;
+    max-height:none!important;
+    border:0!important;
+    border-radius:inherit!important;
+    overflow-y:auto!important;
+    overflow-x:auto!important;
+    scrollbar-gutter:stable;
+  }
+}
+@media(max-width:1199px){
+  .ba-management-reports>#categorie{height:auto!important;min-height:0!important;max-height:none!important;display:block!important;overflow:visible!important}
+  .ba-management-reports>#categorie>.table-responsive{position:static!important;height:auto!important;max-height:480px!important;overflow-y:auto!important}
+}
+.ba-recurring-section table.table td:last-child{
+  white-space:nowrap;
+  min-width:112px;
+}
+.ba-recurring-section table.table td:last-child .viewbtn,
+.ba-recurring-section table.table td:last-child .delbtn{
+  display:inline-flex!important;
+  align-items:center;
+  justify-content:center;
+  width:38px!important;
+  min-width:38px!important;
+  height:38px!important;
+  min-height:38px!important;
+  margin:0 5px 0 0!important;
+  padding:0!important;
+  vertical-align:middle;
+  box-sizing:border-box;
+}
+.ba-recurring-section table.table td:last-child .viewbtn i,
+.ba-recurring-section table.table td:last-child .delbtn i{
+  padding:0!important;
+  margin:0!important;
+  font-size:1rem;
+}
+.ba-recurring-section table.table td:last-child .delbtn{margin-right:0!important}
