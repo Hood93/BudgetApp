@@ -463,3 +463,55 @@ body .modal .modal-header,body .modal .modal-footer{border-color:var(--ba-border
  .ba-management-toolbar .ba-management-month th,.ba-management-toolbar .ba-management-month td{padding:8px 5px}
  .ba-recurring-section tbody tr{gap:8px}
 }
+
+
+/* Fix iPhone recurring cards: neutralize legacy table widths/striping */
+@media(max-width:767px){
+  .ba-management #restransazioniricorrenti,
+  .ba-management #restransazioniricorrenti .ba-recurring-section,
+  .ba-management #restransazioniricorrenti .ba-recurring-scroll{
+    width:100%!important;max-width:100%!important;min-width:0!important;
+    box-sizing:border-box!important;overflow-x:clip!important;
+  }
+  .ba-management #restransazioniricorrenti table.table{
+    display:block!important;width:100%!important;min-width:0!important;
+    max-width:100%!important;table-layout:auto!important;margin:0!important;
+    background:transparent!important;border:0!important;
+  }
+  .ba-management #restransazioniricorrenti table.table tbody{
+    display:grid!important;grid-template-columns:minmax(0,1fr)!important;
+    width:100%!important;min-width:0!important;gap:12px;
+  }
+  .ba-management #restransazioniricorrenti table.table tbody tr{
+    display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    width:100%!important;min-width:0!important;max-width:100%!important;
+    margin:0!important;box-sizing:border-box!important;
+    padding:14px!important;gap:10px 12px!important;
+    border-radius:15px!important;overflow:hidden!important;
+    box-shadow:none!important;
+  }
+  .ba-management #restransazioniricorrenti table.table tbody tr>td{
+    display:block!important;width:auto!important;min-width:0!important;
+    max-width:100%!important;box-sizing:border-box!important;
+    background:transparent!important;box-shadow:none!important;
+    padding:0!important;margin:0!important;border:0!important;
+    white-space:normal!important;overflow-wrap:anywhere!important;
+  }
+  .ba-management #restransazioniricorrenti table.table tbody tr>td:first-child{
+    display:none!important;
+  }
+  .ba-management #restransazioniricorrenti table.table tbody tr>td:nth-child(2){
+    grid-column:1/-1!important;padding-bottom:10px!important;
+    border-bottom:1px solid #ffffff25!important;
+  }
+  .ba-management #restransazioniricorrenti table.table tbody tr>td:last-child{
+    grid-column:1/-1!important;padding-top:10px!important;
+    border-top:1px solid #ffffff25!important;
+  }
+  .ba-management #restransazioniricorrenti table.table tbody tr>td:last-child .btn{
+    margin-right:10px!important;
+  }
+  .ba-management #restransazioniricorrenti table.table tbody tr>td::before{
+    color:inherit!important;opacity:.75;
+  }
+}
