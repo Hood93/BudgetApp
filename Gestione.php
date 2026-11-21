@@ -52,32 +52,24 @@
             </div>
             <div class="col-12 col-xl-9 ba-management-month" id="resmensile">
             </div>
-            <div class="col-12 col-md-4 ba-management-actions">
-                <div class="d-grid gap-2">
-                    <button class="btn btn-dark py-2 btn-sm text-start" name="addtranric" id="addtranric"><i class="fa-solid fa-circle-plus fa-sm" style="color: #77bb41;"></i>
+            <div class="col-12 ba-management-actions">
+                <div class="ba-management-action-grid">
+                    <button class="btn btn-dark py-2 btn-sm text-start ba-action-tile" name="addtranric" id="addtranric"><i class="fa-solid fa-circle-plus fa-sm" style="color: #77bb41;"></i>
                         Aggiungi Transazione Ricorrente
                     </button>
-                    <button class="btn btn-dark py-2 btn-sm text-start insnuovoanno" name="insnuovoanno" id="insnuovoanno"><i class="fa-solid fa-circle-plus fa-sm" style="color: #77bb41;"></i>
-                        Inserisci Nuovo Anno
-                    </button>
-                </div>
-            </div>
-            <div class="col-12 col-md-4 ba-management-actions">
-                <div class="d-grid gap-2">
-                    <button class="btn btn-dark py-2 btn-sm text-start" name="addcat" id="addcat"><i class="fa-solid fa-circle-plus fa-sm" style="color: #77bb41;"></i>
+                    <button class="btn btn-dark py-2 btn-sm text-start ba-action-tile" name="addcat" id="addcat"><i class="fa-solid fa-circle-plus fa-sm" style="color: #77bb41;"></i>
                         Aggiungi Categoria
                     </button>
-                    <button class="btn btn-dark py-2 btn-sm text-start uploadfile" name="uploadfile" id="uploadfile"><i class="fa-solid fa-circle-plus fa-sm" style="color: #77bb41;"></i>
-                        Carica File Transazioni
-                    </button>
-                </div>
-            </div>
-            <div class="col-12 col-md-4 ba-management-actions">
-                <div class="d-grid gap-2">
-                    <button class="btn btn-dark py-2 btn-sm text-start" name="addcredito" id="addcredito"><i class="fa-solid fa-circle-plus fa-sm" style="color: #77bb41;"></i>
+                    <button class="btn btn-dark py-2 btn-sm text-start ba-action-tile" name="addcredito" id="addcredito"><i class="fa-solid fa-circle-plus fa-sm" style="color: #77bb41;"></i>
                         Aggiungi Credito
                     </button>
-                    <button class="btn btn-dark py-2 btn-sm text-start" name="tabelleassociative" id="tabelleassociative"><i class="fa-solid fa-circle-plus fa-sm" style="color: #77bb41;"></i>
+                    <button class="btn btn-dark py-2 btn-sm text-start ba-action-tile insnuovoanno" name="insnuovoanno" id="insnuovoanno"><i class="fa-solid fa-circle-plus fa-sm" style="color: #77bb41;"></i>
+                        Inserisci Nuovo Anno
+                    </button>
+                    <button class="btn btn-dark py-2 btn-sm text-start ba-action-tile uploadfile" name="uploadfile" id="uploadfile"><i class="fa-solid fa-circle-plus fa-sm" style="color: #77bb41;"></i>
+                        Carica File Transazioni
+                    </button>
+                    <button class="btn btn-dark py-2 btn-sm text-start ba-action-tile" name="tabelleassociative" id="tabelleassociative"><i class="fa-solid fa-circle-plus fa-sm" style="color: #77bb41;"></i>
                         Visualizza Tabelle Associative
                     </button>
                 </div>
