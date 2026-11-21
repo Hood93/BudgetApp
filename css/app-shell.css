@@ -104,3 +104,17 @@ body>.container-fluid,body>.container{min-width:0}
 @media(min-width:992px){.ba-management-toolbar .ba-management-actions{flex:0 0 33.3333%;max-width:33.3333%}}
 @media(max-width:991px){.ba-management{margin-left:0!important;width:100%!important;padding:18px!important}}
 @media(max-width:767px){.ba-transaction-item{padding:14px;gap:12px;align-items:flex-start}.ba-transaction-icon{width:42px;height:42px;flex-basis:42px;font-size:1.15rem}.ba-transaction-actions{flex-direction:column;align-items:flex-end;gap:8px}.ba-transaction-amount{font-size:.95rem}.ba-management-toolbar .ba-management-month{overflow-x:auto}}
+
+
+/* Unified financial tables: compact, readable, and horizontally scrollable */
+.ba-panel .table-responsive,.ba-management-reports .table-responsive,.ba-management-month .table-responsive,.ba-results-panel .table-responsive{border:1px solid var(--ba-border);border-radius:14px;overflow-x:auto;max-width:100%}
+.ba-panel table.table,.ba-management table.table,.ba-results-panel table.table{border-collapse:separate;border-spacing:0;margin-bottom:0;background:var(--ba-surface);width:100%}
+.ba-panel table.table thead th,.ba-management table.table thead th,.ba-results-panel table.table thead th{background:#edf2fa!important;color:#536681!important;font-size:.78rem;font-weight:750;letter-spacing:.02em;white-space:nowrap;padding:13px 15px;border:0;border-bottom:1px solid #dce4f0}
+.ba-panel table.table tbody td,.ba-management table.table tbody td,.ba-results-panel table.table tbody td{padding:12px 15px;vertical-align:middle;border:0;border-bottom:1px solid #edf1f6;background:transparent}
+.ba-panel table.table tbody tr:nth-child(even),.ba-management table.table tbody tr:nth-child(even),.ba-results-panel table.table tbody tr:nth-child(even){background:#f8faff}
+.ba-panel table.table tbody tr:hover,.ba-management table.table tbody tr:hover,.ba-results-panel table.table tbody tr:hover{background:#eef4ff}
+.ba-panel table.table tbody tr:last-child td,.ba-management table.table tbody tr:last-child td,.ba-results-panel table.table tbody tr:last-child td{border-bottom:0}
+.ba-management table.table .btn,.ba-results-panel table.table .btn{border-radius:9px;min-width:34px;min-height:34px}
+.ba-management table.table td:first-child i{max-width:100%}
+.ba-management-reports,.ba-management-month{overflow-x:auto}
+@media(max-width:767px){.ba-panel table.table,.ba-management table.table,.ba-results-panel table.table{font-size:.85rem}.ba-panel table.table thead th,.ba-management table.table thead th,.ba-results-panel table.table thead th,.ba-panel table.table tbody td,.ba-management table.table tbody td,.ba-results-panel table.table tbody td{padding:10px 11px}}
