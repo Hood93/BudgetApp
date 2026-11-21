@@ -106,6 +106,8 @@
 
 <script>
     $(document).ready(function() {
+        const currentYear = String(new Date().getFullYear());
+        if ($('#anno option[value="' + currentYear + '"]').length) $('#anno').val(currentYear);
         getcategorie();
         getresocontoannuale();
         getresocontoannualecategorie();
@@ -132,9 +134,22 @@
                     data: {
                         ajax: 1,
                     },
+                    dataType: 'json',
                     success: function(response) {
-                        alert('Nuovo Anno Inserito');
-                    }
+                        if (!response || !response.ok) {
+                            alert('Impossibile inizializzare l’anno.');
+                            return;
+                        }
+                        alert(response.inserite > 0
+                            ? 'Anno ' + response.anno + ': ' + response.inserite + ' righe iniziali create.'
+                            : 'Anno ' + response.anno + ': dati iniziali già presenti, nessun duplicato creato.');
+                        getresocontomensile();
+                        const currentYear = String(response.anno);
+                        if (!$('#anno option[value="' + currentYear + '"]').length) {
+                            $('#anno').append($('<option></option>').val(currentYear).text(currentYear));
+                        }
+                    },
+                    error: function() { alert('Impossibile inizializzare l’anno. Riprova.'); }
                 });
             }
         })
@@ -185,7 +200,7 @@
             url: './php/preleva_dati_reportannuale.php',
             data: {
                 ajax: 1,
-
+                cerca: $('#anno').val() || String(new Date().getFullYear())
             },
             success: function(response) {
                 $("#resannuale").html(response);

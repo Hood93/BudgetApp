@@ -38,6 +38,7 @@
             <div class="col-12 col-md-4"><div class="ba-stat"><div class="ba-stat-icon ba-negative"><i class="fa-solid fa-arrow-trend-down"></i></div><div><div class="ba-stat-label">Uscite</div><div class="ba-stat-value" id="baUscite">—</div><div class="ba-stat-caption">Totale periodo selezionato</div></div></div></div>
             <div class="col-12 col-md-4"><div class="ba-stat"><div class="ba-stat-icon ba-neutral"><i class="fa-solid fa-wallet"></i></div><div><div class="ba-stat-label">Saldo</div><div class="ba-stat-value" id="baSaldo">—</div><div class="ba-stat-caption">Differenza entrate e uscite</div></div></div></div>
           </section>
+          <section class="ba-insights row g-3 mt-1" aria-label="Indicatori mensili"><div class="col-12 col-md-6"><div class="ba-panel ba-insight"><div class="ba-stat-label">Saldo ultimo mese disponibile</div><div class="ba-insight-value" id="baLatestBalance">—</div><div class="ba-stat-caption" id="baLatestMonth">In attesa dei dati</div></div></div><div class="col-12 col-md-6"><div class="ba-panel ba-insight"><div class="ba-stat-label">Variazione spese rispetto al mese precedente</div><div class="ba-insight-value" id="baExpenseChange">—</div><div class="ba-stat-caption" id="baExpensePeriod">Confronto tra mesi consecutivi disponibili</div></div></div></section>
           <section class="ba-charts row g-4 mt-1">
             <div class="col-12 col-xl-7"><div class="ba-panel"><div class="ba-panel-heading"><div><div class="ba-eyebrow">MOVIMENTI</div><h3>Entrate e uscite</h3></div><i class="fa-solid fa-chart-column text-secondary"></i></div><div class="ba-chart-wrap"><canvas id="SpeseChart"></canvas></div></div></div>
             <div class="col-12 col-xl-5"><div class="ba-panel"><div class="ba-panel-heading"><div><div class="ba-eyebrow">ANDAMENTO</div><h3>Residuo mensile</h3></div><i class="fa-solid fa-chart-line text-secondary"></i></div><div class="ba-chart-wrap"><canvas id="ResiduoChart"></canvas></div></div></div>
@@ -76,6 +77,7 @@
                     creaGrafico(response)
                     ResiduiMensiliGrafico(response);
                     aggiornaRiepilogo(response);
+                    aggiornaCategorie();
                 },
                 error: function() { $('#baEntrate, #baUscite, #baSaldo').text('Dati non disponibili'); }
             });
@@ -101,10 +103,46 @@
                 creaGrafico(response);
                 ResiduiMensiliGrafico(response);
                 aggiornaRiepilogo(response);
+                aggiornaCategorie();
             },
             error: function() { $('#baEntrate, #baUscite, #baSaldo').text('Dati non disponibili'); }
         });
 
+    }
+
+    let categoryRequest = null;
+    function aggiornaCategorie() {
+        if (categoryRequest) categoryRequest.abort();
+        const container = $('#baTopCategories').text('Caricamento categorie...');
+        categoryRequest = $.ajax({
+            type: 'POST', dataType: 'json',
+            url: './php/json/preleva_dati_categorie_top.php',
+            data: {cerca: $('#anno').val() || ''}
+        }).done(function (rows) {
+            container.empty();
+            if (!Array.isArray(rows) || !rows.length) {
+                container.text('Nessuna spesa nel periodo selezionato.');
+                return;
+            }
+            const total = rows.reduce((sum, row) => sum + (Number(row.totale) || 0), 0);
+            const euro = new Intl.NumberFormat('it-IT', {style:'currency',currency:'EUR'});
+            const list = $('<div class="ba-category-ranking"></div>');
+            rows.forEach(row => {
+                const amount = Number(row.totale) || 0;
+                const item = $('<div class="ba-category-rank-item"></div>');
+                const header = $('<div class="ba-category-rank-label"></div>');
+                $('<span></span>').text(row.categoria || 'Senza categoria').appendTo(header);
+                $('<strong></strong>').text(euro.format(amount)).appendTo(header);
+                item.append(header);
+                $('<div class="ba-category-rank-track"></div>').append(
+                    $('<div class="ba-category-rank-fill"></div>').css('width', total ? (100 * amount / total) + '%' : '0%')
+                ).appendTo(item);
+                list.append(item);
+            });
+            container.append(list);
+        }).fail(function (_xhr, status) {
+            if (status !== 'abort') container.text('Impossibile caricare le categorie.');
+        });
     }
 
     function aggiornaRiepilogo(rows) {
@@ -115,6 +153,21 @@
         $('#baEntrate').text(euro.format(entrate));
         $('#baUscite').text(euro.format(uscite));
         $('#baSaldo').text(euro.format(entrate - uscite));
+        const latest = rows[rows.length - 1];
+        const previous = rows.length > 1 ? rows[rows.length - 2] : null;
+        $('#baLatestBalance').text(latest ? euro.format((Number(latest.entrate)||0) - Math.abs(Number(latest.uscite)||0)) : '—');
+        $('#baLatestMonth').text(latest ? latest.mese : 'Nessun dato disponibile');
+        if (latest && previous) {
+            const currentExpense = Math.abs(Number(latest.uscite)||0);
+            const priorExpense = Math.abs(Number(previous.uscite)||0);
+            const change = currentExpense - priorExpense;
+            $('#baExpenseChange').text((change > 0 ? '+' : '') + euro.format(change))
+                .toggleClass('ba-amount-negative', change > 0).toggleClass('ba-amount-positive', change < 0);
+            $('#baExpensePeriod').text(String(previous.mese) + ' → ' + String(latest.mese));
+        } else {
+            $('#baExpenseChange').text('—').removeClass('ba-amount-negative ba-amount-positive');
+            $('#baExpensePeriod').text('Servono almeno due mesi con dati');
+        }
         const container = $('#resmensile').empty();
         if (!rows.length) {
             container.text('Nessuna transazione per il periodo selezionato.');

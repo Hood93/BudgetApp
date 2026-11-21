@@ -12,6 +12,10 @@ $baTitle = ['Homepage.php'=>'Dashboard','Gestione.php'=>'Gestione budget','Trans
 ?>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link rel="stylesheet" href="css/app-shell.css">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#192638">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="BudgetApp">
 <div class="ba-overlay" id="baOverlay" aria-hidden="true"></div>
 <aside class="ba-sidebar" id="baSidebar" aria-label="Navigazione principale">
   <a class="ba-brand" href="<?php echo htmlspecialchars($GLOBALS['Homepage'] ?? 'Homepage.php', ENT_QUOTES, 'UTF-8'); ?>"><span class="ba-brand-icon"><i class="fa-solid fa-wallet"></i></span>BudgetApp</a>

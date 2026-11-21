@@ -1,0 +1,18 @@
+{
+  "name": "BudgetApp",
+  "short_name": "BudgetApp",
+  "start_url": "./Homepage.php",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#101827",
+  "theme_color": "#192638",
+  "lang": "it",
+  "icons": [
+    {
+      "src": "assets/budgetapp-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
