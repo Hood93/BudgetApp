@@ -28,11 +28,29 @@ $baTitle = ['Homepage.php'=>'Dashboard','Gestione.php'=>'Gestione budget','Trans
 </aside>
 <header class="ba-topbar">
   <div class="d-flex align-items-center gap-3"><button class="ba-mobile-toggle" type="button" id="baMenuToggle" aria-controls="baSidebar" aria-expanded="false" aria-label="Apri menu"><i class="fa-solid fa-bars"></i></button><div><h1 class="ba-page-title"><?php echo htmlspecialchars($baTitle, ENT_QUOTES, 'UTF-8'); ?></h1><div class="ba-topbar-note">Panoramica delle tue finanze</div></div></div>
-  <span class="d-none d-sm-inline-flex align-items-center gap-2 text-secondary small"><i class="fa-regular fa-calendar"></i><?php echo date('d/m/Y'); ?></span>
+  <div class="ba-topbar-tools"><button type="button" id="baThemeToggle" class="ba-theme-toggle" aria-label="Cambia tema" title="Tema: automatico"><i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i><span id="baThemeLabel">Auto</span></button><span class="d-none d-sm-inline-flex align-items-center gap-2 text-secondary small"><i class="fa-regular fa-calendar"></i><?php echo date('d/m/Y'); ?></span></div>
 </header>
 <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
 <script>
 (function(){
+  const themeKey='budgetapp-theme';
+  const themeOptions=['auto','light','dark'];
+  const media=window.matchMedia('(prefers-color-scheme: dark)');
+  const themeButton=document.getElementById('baThemeToggle');
+  const themeLabel=document.getElementById('baThemeLabel');
+  function savedTheme(){try{const value=localStorage.getItem(themeKey);return themeOptions.includes(value)?value:'auto';}catch(e){return 'auto';}}
+  function applyTheme(){
+    const setting=savedTheme();
+    const dark=setting==='dark'||(setting==='auto'&&media.matches);
+    document.documentElement.setAttribute('data-bs-theme',dark?'dark':'light');
+    document.documentElement.setAttribute('data-ba-theme',dark?'dark':'light');
+    if(themeLabel)themeLabel.textContent=setting==='auto'?'Auto':setting==='dark'?'Scuro':'Chiaro';
+    if(themeButton){themeButton.title='Tema: '+(setting==='auto'?'automatico':setting==='dark'?'scuro':'chiaro')+' (clicca per cambiare)';themeButton.setAttribute('aria-label',themeButton.title);}
+  }
+  if(themeButton)themeButton.addEventListener('click',()=>{const next=themeOptions[(themeOptions.indexOf(savedTheme())+1)%themeOptions.length];try{localStorage.setItem(themeKey,next);}catch(e){}applyTheme();});
+  if(media.addEventListener)media.addEventListener('change',applyTheme);
+  else if(media.addListener)media.addListener(applyTheme);
+  applyTheme();
   const sidebar=document.getElementById('baSidebar'),overlay=document.getElementById('baOverlay'),toggle=document.getElementById('baMenuToggle');
   function setOpen(open){sidebar.classList.toggle('ba-open',open);overlay.classList.toggle('ba-open',open);toggle.setAttribute('aria-expanded',String(open));}
   toggle.addEventListener('click',()=>setOpen(!sidebar.classList.contains('ba-open')));
