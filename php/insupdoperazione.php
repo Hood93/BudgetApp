@@ -22,12 +22,18 @@ if (!$date || $date->format('Y-m-d') !== $values['dataoperazione']) {
     http_response_code(400);
     exit('Data non valida');
 }
-if ($values['anno'] !== $date->format('Y') || $values['ordinemese'] !== (string)(int)$date->format('n')) {
+if (($values['anno'] !== '' && $values['anno'] !== $date->format('Y')) || ($values['ordinemese'] !== '' && $values['ordinemese'] !== (string)(int)$date->format('n'))) {
     http_response_code(400);
     exit('Anno o mese non valido');
 }
 $monthNames = [1=>'Gennaio',2=>'Febbraio',3=>'Marzo',4=>'Aprile',5=>'Maggio',6=>'Giugno',7=>'Luglio',8=>'Agosto',9=>'Settembre',10=>'Ottobre',11=>'Novembre',12=>'Dicembre'];
 $values['mese'] = $monthNames[(int)$date->format('n')];
+$values['anno'] = $date->format('Y');
+$values['ordinemese'] = (string)(int)$date->format('n');
+if ($values['descrizione'] === '' || $values['categoria'] === '' || !in_array($values['tag1'], ['Entrata', 'Uscita'], true)) {
+    http_response_code(400);
+    exit('Descrizione, tipologia e categoria sono obbligatorie');
+}
 foreach (['entrate', 'uscite'] as $amount) {
     if ($values[$amount] === '') $values[$amount] = '0';
     if (!preg_match('/^-?[0-9]+(?:[.,][0-9]{1,2})?$/', $values[$amount])) {
@@ -35,6 +41,10 @@ foreach (['entrate', 'uscite'] as $amount) {
         exit('Importo non valido');
     }
     $values[$amount] = str_replace(',', '.', $values[$amount]);
+    if ((float)$values[$amount] < 0) {
+        http_response_code(400);
+        exit('Gli importi devono essere positivi');
+    }
 }
 try {
     if ($editing) {
@@ -52,7 +62,8 @@ try {
     }
     if (!mysqli_stmt_execute($stmt)) throw new RuntimeException('Execute failed');
     mysqli_stmt_close($stmt);
-    echo 'Data Inserted';
+    header('Content-Type: text/plain; charset=utf-8');
+    echo 'Operazione salvata';
 } catch (Throwable $exception) {
     error_log('BudgetApp operation write failed: ' . $exception->getMessage());
     http_response_code(500);
