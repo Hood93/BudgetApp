@@ -5,7 +5,7 @@ if (!preg_match('/^[0-9]{4}$/', $year)) {
     http_response_code(400);
     exit('Anno non valido');
 }
-$stmt = mysqli_prepare($conn, 'SELECT ordinemese, mese, COALESCE(SUM(entrate),0) AS Entrate, COALESCE(SUM(uscite),0) AS Uscite FROM budgettable WHERE anno = ? GROUP BY ordinemese, mese ORDER BY ordinemese DESC');
+$stmt = mysqli_prepare($conn, 'SELECT ordinemese, mese, COALESCE(SUM(entrate),0) AS Entrate, COALESCE(SUM(uscite),0) AS Uscite FROM budgettable WHERE anno = ? GROUP BY ordinemese, mese ORDER BY ordinemese ASC');
 if (!$stmt) { http_response_code(500); exit('Impossibile caricare il report'); }
 mysqli_stmt_bind_param($stmt, 's', $year);
 mysqli_stmt_execute($stmt);
