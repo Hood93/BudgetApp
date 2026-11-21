@@ -115,7 +115,26 @@
         $('#baEntrate').text(euro.format(entrate));
         $('#baUscite').text(euro.format(uscite));
         $('#baSaldo').text(euro.format(entrate - uscite));
-        $('#resmensile').text(rows.length ? 'Dati di ' + rows.length + ' mesi disponibili nei grafici.' : 'Nessuna transazione per il periodo selezionato.');
+        const container = $('#resmensile').empty();
+        if (!rows.length) {
+            container.text('Nessuna transazione per il periodo selezionato.');
+            return;
+        }
+        const table = $('<table class="table table-hover align-middle mb-0"></table>');
+        table.append('<thead><tr><th>Mese</th><th class="text-end">Entrate</th><th class="text-end">Uscite</th><th class="text-end">Saldo</th></tr></thead>');
+        const tbody = $('<tbody></tbody>');
+        rows.forEach(row => {
+            const income = Number(row.entrate) || 0;
+            const expense = Math.abs(Number(row.uscite) || 0);
+            const tr = $('<tr></tr>');
+            $('<td></td>').text(row.mese ?? '').appendTo(tr);
+            $('<td class="text-end"></td>').text(euro.format(income)).appendTo(tr);
+            $('<td class="text-end"></td>').text(euro.format(expense)).appendTo(tr);
+            $('<td class="text-end fw-semibold"></td>').addClass(income-expense >= 0 ? 'text-success' : 'text-danger').text(euro.format(income-expense)).appendTo(tr);
+            tbody.append(tr);
+        });
+        table.append(tbody);
+        container.append($('<div class="table-responsive"></div>').append(table));
     }
 
     // Grafico entrate e uscite
