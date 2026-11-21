@@ -72,8 +72,6 @@ try {
         if (!mysqli_stmt_execute($statement)) throw new RuntimeException('CSV insert failed');
     }
     mysqli_commit($conn);
-    mysqli_stmt_close($statement);
-    fclose($handle);
     header('Location: ../Gestione.php', true, 303);
     exit;
 } catch (InvalidArgumentException $exception) {
