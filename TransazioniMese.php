@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 
 <head>
     <meta charset="UTF-8">
@@ -12,7 +12,7 @@
     <!-- Font Link -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- End of Font Link -->
-    <title>Transazioni Totali</title>
+    <title>Transazioni del mese</title>
 </head>
 
 <body>
@@ -23,7 +23,8 @@
         include "php/utility.php";
 
         ?>
-        <div class="container-fluid" id="transazionitotalimese" style="padding-top: 90px !important;">
+        <section class="ba-welcome"><div class="ba-eyebrow">QUESTO MESE</div><h2>Movimenti mensili</h2><p>Panoramica delle transazioni del mese corrente.</p></section>
+        <div class="ba-results-panel" id="transazionitotalimese" aria-live="polite">
         </div>
     </div>
 
