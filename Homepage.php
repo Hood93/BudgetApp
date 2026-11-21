@@ -103,6 +103,7 @@
                 creaGrafico(response);
                 ResiduiMensiliGrafico(response);
                 aggiornaRiepilogo(response);
+                aggiornaCategorie();
             },
             error: function() { $('#baEntrate, #baUscite, #baSaldo').text('Dati non disponibili'); }
         });
