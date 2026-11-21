@@ -88,7 +88,7 @@
             <div class="col-12 col-xl-8" id="resannuale">
             </div>
 
-            <div class="col-12 col-xl-4" id="categorie" style="max-height: 574px; overflow-y: auto;">
+            <div class="col-12 col-xl-4" id="categorie">
             </div>
         </div>
         <div class="row">
