@@ -19,13 +19,12 @@
 </head>
 
 <body>
-    <div class="container-fluid">
-        <?php
-        include "gvariable.php"; // File Variabili
-        include "componenti/navbar.php"; // File Navbar
-        include "php/utility.php"; //File Utility
-
-        ?>
+    <?php
+    include "gvariable.php"; // File Variabili
+    include "php/utility.php"; // File Utility
+    include "componenti/navbar.php"; // File Navbar
+    ?>
+    <main class="container-fluid ba-transactions-page">
         <div class="container-fluid">
             <?php include "componenti/Modal/ModalEditOperazione.php"; // File Modal Edit 
             include "componenti/Modal/ModalInsertOperazione.php"; // File Modal Edit 
@@ -44,7 +43,7 @@
         </div>
         <div class="ba-results-panel" id="transazionitotali" aria-live="polite">
         </div>
-    </div>
+    </main>
 
     <!-- Jquery CDN -->
     <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
