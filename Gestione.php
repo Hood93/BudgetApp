@@ -302,22 +302,29 @@
 
 
     function apriCollapse(_this) {
-        var idcreditore = $(_this).attr("idcreditore")
-
-        $('#showdettagliocredito').collapse('toggle');
+        var idcreditore = $(_this).attr("idcreditore");
+        var $panel = $('#showdettagliocredito');
+        var $button = $(_this);
+        if ($panel.hasClass('show') && $panel.attr('data-creditore') === idcreditore) {
+            $panel.collapse('hide');
+            $button.attr('aria-expanded', 'false');
+            return;
+        }
+        $('.ba-credit-detail').attr('aria-expanded', 'false');
+        $button.attr('aria-expanded', 'true');
+        $panel.attr('data-creditore', idcreditore).html('<div class="ba-credit-loading">Caricamento rate...</div>');
+        $panel.collapse('show');
         $.ajax({
             type: 'POST',
             url: './php/preleva_dati_dettagliocreditore.php',
-            data: {
-                ajax: 1,
-                idcreditore: idcreditore
-
-            },
+            data: { ajax: 1, idcreditore: idcreditore },
             success: function(response) {
-                $("#showdettagliocredito").html(response);
+                if ($panel.attr('data-creditore') === idcreditore) $panel.html(response);
+            },
+            error: function() {
+                if ($panel.attr('data-creditore') === idcreditore) $panel.text('Impossibile caricare le rate.');
             }
         });
-
     }
 
     function gettabassdescrizione() {
