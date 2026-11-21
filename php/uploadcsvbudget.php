@@ -26,9 +26,11 @@ try {
     $statement = mysqli_prepare($conn, 'INSERT INTO transazionipending (data_operazione,mese,anno,ordinemese,descrizione,uscite,entrate,tag1,descrizioneold,categorie) VALUES (?,?,?,?,?,?,?,?,?,?)');
     if (!$statement) throw new RuntimeException('Cannot prepare import');
     $line = 0;
+    $imported = 0;
     while (($row = fgetcsv($handle, 0, ';')) !== false) {
         $line++;
-        if ($line === 1 || $row === [null]) continue;
+        if ($row === [null]) continue;
+        if ($line === 1 && !preg_match('/^\\d{2}[\\/-]\\d{2}[\\/-]\\d{4}$/', trim((string)($row[0] ?? '')))) continue;
         if (count($row) < 6) throw new InvalidArgumentException('CSV: colonne mancanti alla riga ' . $line);
         $rawDate = trim($row[0]);
         $date = DateTimeImmutable::createFromFormat('!d/m/Y', $rawDate)
@@ -59,7 +61,8 @@ try {
         $normalizeAmount = static function ($value) {
             $value = trim(str_replace(['€', ' ', "\xc2\xa0"], '', (string)$value));
             if ($value === '') return '0';
-            $value = str_replace('-', '', $value);
+            // Bank statements can use a leading minus for debits.
+            $value = ltrim($value, '-');
             if (str_contains($value, ',')) $value = str_replace(',', '.', str_replace('.', '', $value));
             if (!preg_match('/^[0-9]+(?:\\.[0-9]{1,2})?$/', $value)) throw new InvalidArgumentException('Importo CSV non valido');
             return $value;
@@ -70,7 +73,9 @@ try {
         $order = (string)$monthOrder;
         mysqli_stmt_bind_param($statement, 'ssssssssss', $dateValue, $month, $year, $order, $description, $expense, $income, $tag, $original, $category);
         if (!mysqli_stmt_execute($statement)) throw new RuntimeException('CSV insert failed');
+        $imported++;
     }
+    if ($imported === 0) throw new InvalidArgumentException('Il CSV non contiene transazioni valide');
     mysqli_commit($conn);
     header('Location: ../Gestione.php', true, 303);
     exit;
