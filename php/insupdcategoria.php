@@ -1,114 +1,64 @@
 <?php
-
-include "db.php";
-$editidcategoria = $_POST['editidcategoria'];
-
-if (empty($editidcategoria)) {
-    //Inserimento nuova categoria
-
-
-    $newcategoria = $_POST['newcategoria'];
-    $newiconacategoria = $_POST['newiconacategoria'];
-    $query = "INSERT INTO categoriebudget(categoria,icona) 
- VALUES('$newcategoria', '$newiconacategoria')";
-    echo $query;
-    if (mysqli_query($conn, $query)) {
-        echo 'Data Inserted';
-    }
-
-    $causale = "Iniziale";
-    $uscite = "0";
-    $entrate = "0";
-    $tag1 = "Uscita";
-    $categorie = $newcategoria;
-    $anno = date("Y");
-
-    for ($i = 1; $i <= 12; $i++) {
-        if ($i < "10") {
-            $data = $anno . "-0" . $i . "-01";
-            switch ($i) {
-                case "01":
-                    $mese = "Gennaio";
-                    $ordinemese = "1";
-                    break;
-                case "02":
-                    $mese = "Febbraio";
-                    $ordinemese = "2";
-                    break;
-                case "03":
-                    $mese = "Marzo";
-                    $ordinemese = "3";
-                    break;
-                case "04":
-                    $mese = "Aprile";
-                    $ordinemese = "4";
-                    break;
-                case "05":
-                    $mese = "Maggio";
-                    $ordinemese = "5";
-                    break;
-                case "06":
-                    $mese = "Giugno";
-                    $ordinemese = "6";
-                    break;
-                case "07":
-                    $mese = "Luglio";
-                    $ordinemese = "7";
-                    break;
-                case "08":
-                    $mese = "Agosto";
-                    $ordinemese = "8";
-                    break;
-                case "09":
-                    $mese = "Settembre";
-                    $ordinemese = "9";
-                    break;
-                default:
-                    $mese = "";
-            }
-        } else {
-            $data = $anno . "-" . $i . "-01";
-
-            switch ($i) {
-                case "10":
-                    $mese = "Ottobre";
-                    $ordinemese = "10";
-                    break;
-                case "11":
-                    $mese = "Novembre";
-                    $ordinemese = "11";
-                    break;
-                case "12":
-                    $mese = "Dicembre";
-                    $ordinemese = "12";
-                    break;
-                default:
-                    $mese = "";
-            }
+require_once __DIR__ . '/db.php';
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    http_response_code(405);
+    exit('Metodo non consentito');
+}
+$id = trim((string)($_POST['editidcategoria'] ?? ''));
+$editing = $id !== '';
+$name = trim((string)($_POST[$editing ? 'editcategoria' : 'newcategoria'] ?? ''));
+$icon = trim((string)($_POST['newiconacategoria'] ?? ''));
+if ($name === '' || ($editing && (!ctype_digit($id) || (int)$id < 1))) {
+    http_response_code(400);
+    exit('Dati categoria non validi');
+}
+$months = [1=>'Gennaio',2=>'Febbraio',3=>'Marzo',4=>'Aprile',5=>'Maggio',6=>'Giugno',7=>'Luglio',8=>'Agosto',9=>'Settembre',10=>'Ottobre',11=>'Novembre',12=>'Dicembre'];
+try {
+    mysqli_begin_transaction($conn);
+    if ($editing) {
+        $lookup = mysqli_prepare($conn, 'SELECT categoria FROM categoriebudget WHERE idcategoria=? FOR UPDATE');
+        mysqli_stmt_bind_param($lookup, 'i', $id);
+        mysqli_stmt_execute($lookup);
+        $res = mysqli_stmt_get_result($lookup);
+        $previous = mysqli_fetch_assoc($res);
+        mysqli_stmt_close($lookup);
+        if (!$previous) {
+            mysqli_rollback($conn);
+            http_response_code(404);
+            exit('Categoria non trovata');
         }
-        $queryinstranscate = "INSERT INTO budgettable (data_operazione,mese,anno,ordinemese,causale,uscite,entrate,tag1,categorie) 
-        VALUES('$data', '$mese', '$anno', '$ordinemese', '$causale', '$uscite', '$entrate', '$tag1', '$categorie')";
-        mysqli_query($conn, $queryinstranscate);
+        $update = mysqli_prepare($conn, 'UPDATE categoriebudget SET categoria=? WHERE idcategoria=?');
+        mysqli_stmt_bind_param($update, 'si', $name, $id);
+        if (!mysqli_stmt_execute($update)) throw new RuntimeException('Category update failed');
+        mysqli_stmt_close($update);
+        $transactions = mysqli_prepare($conn, 'UPDATE budgettable SET categorie=? WHERE categorie=?');
+        $oldName = $previous['categoria'];
+        mysqli_stmt_bind_param($transactions, 'ss', $name, $oldName);
+        if (!mysqli_stmt_execute($transactions)) throw new RuntimeException('Transaction update failed');
+        mysqli_stmt_close($transactions);
+    } else {
+        $insert = mysqli_prepare($conn, 'INSERT INTO categoriebudget (categoria,icona) VALUES (?,?)');
+        mysqli_stmt_bind_param($insert, 'ss', $name, $icon);
+        if (!mysqli_stmt_execute($insert)) throw new RuntimeException('Category insert failed');
+        mysqli_stmt_close($insert);
+        $year = date('Y');
+        $initial = mysqli_prepare($conn, 'INSERT INTO budgettable (data_operazione,mese,anno,ordinemese,causale,uscite,entrate,tag1,categorie) VALUES (?,?,?,?,?,?,?,?,?)');
+        $cause = 'Iniziale';
+        $zero = '0';
+        $tag = 'Uscita';
+        foreach ($months as $month => $monthName) {
+            $date = sprintf('%s-%02d-01', $year, $month);
+            $monthOrder = (string)$month;
+            mysqli_stmt_bind_param($initial, 'sssssssss', $date, $monthName, $year, $monthOrder, $cause, $zero, $zero, $tag, $name);
+            if (!mysqli_stmt_execute($initial)) throw new RuntimeException('Monthly initialization failed');
+        }
+        mysqli_stmt_close($initial);
     }
-} else {
-
-    //Modifica Categoria
-
-    $editidcategoria = $_POST['editidcategoria'];
-    $editcategoria = $_POST['editcategoria'];
-
-    $query = "UPDATE categoriebudget SET categoria = '" . $editcategoria . "'
-     WHERE idcategoria = " . $editidcategoria;
-    if (mysqli_query($conn, $query)) {
-        echo 'Data Inserted';
-    }
-    //Update transazioni con la categoria modificata
-
-    $querytranscate = "SELECT categorie,idBudgetTable FROM budgettable";
-
-    $result = mysqli_query($conn, $querytranscate);
-    while ($row = mysqli_fetch_assoc($result)) {
-        $queryupdtranscate = "UPDATE budgettable SET categorie = '" . $editcategoria . "' WHERE idBudgetTable = '" . $row['idBudgetTable'] . "'";
-        mysqli_query($conn, $queryupdtranscate);
-    }
+    mysqli_commit($conn);
+    echo 'Data Inserted';
+} catch (Throwable $exception) {
+    mysqli_rollback($conn);
+    error_log('BudgetApp category write failed: ' . $exception->getMessage());
+    http_response_code(500);
+    echo 'Errore durante il salvataggio della categoria';
 }
