@@ -241,3 +241,52 @@ body .modal .modal-header,body .modal .modal-footer{border-color:var(--ba-border
 .ba-management-reports>#categorie table tbody td{vertical-align:middle}
 :root[data-ba-theme="dark"] .ba-management-reports>#categorie table thead th{background:#273750!important;color:#d5e2f6!important}
 @media(max-width:1199px){.ba-management-reports>#categorie{max-height:480px}}
+
+
+/* Gestione: category table matches annual report, without clipped corners */
+.ba-management-reports{align-items:stretch;overflow:visible}
+.ba-management-reports>#resannuale,.ba-management-reports>#categorie{min-width:0;overflow:visible;align-self:stretch}
+.ba-management-reports>#categorie{max-height:none;scrollbar-gutter:auto;display:flex;flex-direction:column}
+.ba-management-reports>#categorie>.table-responsive{
+  display:block;
+  flex:1 1 auto;
+  min-height:0;
+  max-height:100%;
+  overflow-y:auto!important;
+  overflow-x:auto!important;
+  overscroll-behavior:contain;
+  border:1px solid var(--ba-border);
+  border-radius:18px!important;
+  background:var(--ba-surface);
+  scrollbar-gutter:stable;
+  isolation:isolate;
+}
+.ba-management-reports>#categorie table.table{
+  border-collapse:separate;
+  border-spacing:0;
+  width:100%;
+  margin:0!important;
+  border-radius:18px;
+  background:transparent!important;
+}
+.ba-management-reports>#categorie table.table thead th{
+  position:sticky;
+  top:0;
+  z-index:5;
+  background:#edf2fa!important;
+  box-shadow:0 1px 0 var(--ba-border);
+}
+.ba-management-reports>#categorie table.table thead th:first-child{border-top-left-radius:17px}
+.ba-management-reports>#categorie table.table thead th:last-child{border-top-right-radius:17px}
+.ba-management-reports>#categorie table.table tbody tr:last-child td:first-child{border-bottom-left-radius:17px}
+.ba-management-reports>#categorie table.table tbody tr:last-child td:last-child{border-bottom-right-radius:17px}
+@media(min-width:1200px){
+ .ba-management-reports>#categorie{height:0;min-height:100%;max-height:100%}
+ .ba-management-reports>#categorie>.table-responsive{height:100%}
+}
+@media(max-width:1199px){
+ .ba-management-reports>#categorie{height:auto;max-height:none}
+ .ba-management-reports>#categorie>.table-responsive{max-height:480px}
+}
+:root[data-ba-theme="dark"] .ba-management-reports>#categorie>.table-responsive{background:var(--ba-surface);border-color:var(--ba-border)}
+:root[data-ba-theme="dark"] .ba-management-reports>#categorie table.table thead th{background:#273750!important;color:#d5e2f6!important}
