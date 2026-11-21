@@ -7,7 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 $items = $_POST['arraytranpendmod'] ?? null;
 $operation = (string)($_POST['operazione'] ?? '');
-if (!is_array($items) || !in_array($operation, ['inserimento', 'eliminazione'], true)) {
+if (!is_array($items) || !in_array($operation, ['inserimento', 'elimina'], true)) {
     http_response_code(400);
     exit('Richiesta non valida');
 }
