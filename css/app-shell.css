@@ -151,3 +151,25 @@ body>.container-fluid,body>.container{min-width:0}
 .ba-category-total{font-weight:750!important;color:#344861;background:#f4f7fc!important;font-variant-numeric:tabular-nums}
 .ba-category-table tfoot td,.ba-category-table tfoot th{background:#eaf0fa!important;font-weight:800;white-space:nowrap;padding:14px 15px!important;font-variant-numeric:tabular-nums}
 @media(max-width:767px){.ba-recurring-section,.ba-category-report{padding:14px}.ba-management #restransazioniricorrenti{margin-top:22px}.ba-management #resannualecategorie{margin-top:26px}.ba-report-hint{display:none}}
+
+
+/* Credits: compact, readable management section */
+.ba-management #rescrediti{margin-top:34px;margin-bottom:32px}
+.ba-credit-section{background:#fff;border:1px solid var(--ba-border);border-radius:18px;padding:20px;box-shadow:0 8px 26px #182d5008;min-width:0}
+.ba-credit-scroll{max-width:100%;overflow-x:auto;border:1px solid #e2e9f3;border-radius:13px}
+.ba-credit-table{width:100%;margin:0!important;border-collapse:separate;border-spacing:0;min-width:600px}
+.ba-credit-table thead th{padding:14px 16px!important;white-space:nowrap;background:#edf2fa!important;color:#536681!important;font-size:.78rem}
+.ba-credit-table tbody td{padding:13px 16px!important;vertical-align:middle!important;border-bottom:1px solid #edf1f6!important;background:transparent!important}
+.ba-credit-table tbody tr:nth-child(even){background:#f8faff}
+.ba-credit-table tbody tr:hover{background:#eef4ff}
+.ba-credit-table tbody tr:last-child td{border-bottom:0!important}
+.ba-credit-name{font-weight:750;color:#243957}
+.ba-credit-description{color:#5c6c83}
+.ba-credit-amount{font-weight:800;color:#243957;white-space:nowrap;font-variant-numeric:tabular-nums}
+.ba-credit-duration{display:inline-flex;align-items:center;padding:6px 10px;border-radius:8px;background:#eef2fa;color:#516583;font-size:.83rem;font-weight:650;white-space:nowrap}
+.ba-credit-detail{display:inline-flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap;background:#edf2ff!important;color:#3d5fb4!important;font-weight:700;font-size:.83rem;padding:8px 12px!important;border:1px solid #dbe4ff!important}
+.ba-credit-detail:hover,.ba-credit-detail[aria-expanded="true"]{background:#dbe5ff!important}
+.ba-credit-details{margin-top:18px}
+.ba-credit-details .table-responsive{border:1px solid #e2e9f3;border-radius:12px;overflow-x:auto}
+.ba-credit-loading,.ba-credit-empty{padding:22px!important;color:#718096;text-align:center}
+@media(max-width:767px){.ba-management #rescrediti{margin-top:26px}.ba-credit-section{padding:14px}.ba-credit-table tbody td{padding:11px 12px!important}}
