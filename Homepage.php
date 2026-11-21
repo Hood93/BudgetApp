@@ -24,34 +24,27 @@
         include "php/utility.php"; // File Utility
         include "componenti/navbar.php"; // File Navbar
         ?>
-        <div class="row mt-5">
-            <div class="container-fluid">
-                <div class="row" style="padding-top: 20px !important; padding-bottom: 20px !important;">
-                    <div class="col">
-                        Selezione Anno Report
-                        <?php echo "<select class='form-select' onchange='selanno(this)' name='anno' id='anno'>";
-                        echo "<option value=''></option>";
-                        foreach ($tableanno as $anno) {
-                            echo "<option value='" . $anno . "'>" . $anno . "</option>";
-                        }
-                        echo "</select>"; ?>
-                    </div>
-                    <div class="col" id="resmensile">
-                        Mo vediamo
-                    </div>
-                </div>
-                <div>
-                    <canvas id="SpeseChart" style="max-height: 300px;"></canvas>
-                </div>
-                <div>
-                    <canvas id="ResiduoChart"></canvas>
-                </div>
-
-                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-
+        <main class="ba-dashboard">
+          <section class="ba-welcome d-flex flex-wrap justify-content-between align-items-center gap-3">
+            <div><div class="ba-eyebrow">PANORAMICA FINANZIARIA</div><h2>Il tuo budget, a colpo d'occhio</h2><p>Entrate, uscite e andamento del saldo durante l'anno.</p></div>
+            <div class="ba-year-control"><label for="anno" class="form-label mb-1">Anno di riferimento</label>
+              <select class="form-select" onchange="selanno(this)" name="anno" id="anno"><option value="">Tutti gli anni</option>
+              <?php foreach ($tableanno as $anno): ?><option value="<?php echo htmlspecialchars((string)$anno, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars((string)$anno, ENT_QUOTES, 'UTF-8'); ?></option><?php endforeach; ?>
+              </select>
             </div>
-        </div>
+          </section>
+          <section class="ba-stats row g-3 mt-1" aria-label="Riepilogo annuale">
+            <div class="col-12 col-md-4"><div class="ba-stat"><div class="ba-stat-icon ba-positive"><i class="fa-solid fa-arrow-trend-up"></i></div><div><div class="ba-stat-label">Entrate</div><div class="ba-stat-value" id="baEntrate">—</div><div class="ba-stat-caption">Totale periodo selezionato</div></div></div></div>
+            <div class="col-12 col-md-4"><div class="ba-stat"><div class="ba-stat-icon ba-negative"><i class="fa-solid fa-arrow-trend-down"></i></div><div><div class="ba-stat-label">Uscite</div><div class="ba-stat-value" id="baUscite">—</div><div class="ba-stat-caption">Totale periodo selezionato</div></div></div></div>
+            <div class="col-12 col-md-4"><div class="ba-stat"><div class="ba-stat-icon ba-neutral"><i class="fa-solid fa-wallet"></i></div><div><div class="ba-stat-label">Saldo</div><div class="ba-stat-value" id="baSaldo">—</div><div class="ba-stat-caption">Differenza entrate e uscite</div></div></div></div>
+          </section>
+          <section class="ba-charts row g-4 mt-1">
+            <div class="col-12 col-xl-7"><div class="ba-panel"><div class="ba-panel-heading"><div><div class="ba-eyebrow">MOVIMENTI</div><h3>Entrate e uscite</h3></div><i class="fa-solid fa-chart-column text-secondary"></i></div><div class="ba-chart-wrap"><canvas id="SpeseChart"></canvas></div></div></div>
+            <div class="col-12 col-xl-5"><div class="ba-panel"><div class="ba-panel-heading"><div><div class="ba-eyebrow">ANDAMENTO</div><h3>Residuo mensile</h3></div><i class="fa-solid fa-chart-line text-secondary"></i></div><div class="ba-chart-wrap"><canvas id="ResiduoChart"></canvas></div></div></div>
+          </section>
+          <section class="ba-panel mt-4"><div class="ba-panel-heading"><div><div class="ba-eyebrow">RIEPILOGO</div><h3>Resoconto mensile</h3></div></div><div id="resmensile" class="ba-summary-content">Seleziona un anno per consultare il riepilogo.</div></section>
+        </main>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     </div>
     <!-- Container Principale -->
     <!-- Jquery CDN -->
@@ -79,6 +72,7 @@
                 success: function(response) {
                     creaGrafico(response)
                     ResiduiMensiliGrafico(response);
+                    aggiornaRiepilogo(response);
                 }
             });
         }
@@ -101,13 +95,13 @@
             success: function(response) {
                 creaGrafico(response);
                 ResiduiMensiliGrafico(response);
+                aggiornaRiepilogo(response);
             }
         });
 
     }
 
-    //Funzione Grafico
-    function creaGrafico(label) {
+    function aggiornaRiepilogo(rows) {\n        if (!Array.isArray(rows)) return;\n        const parseAmount = value => {\n            if (typeof value === "number") return Number.isFinite(value) ? value : 0;\n            let v = String(value ?? "0").replace(/[^0-9,.-]/g, "");\n            if (v.includes(",") && v.includes(".")) v = v.replace(/\\./g, "").replace(",", ".");\n            else if (v.includes(",")) v = v.replace(",", ".");\n            return Number(v) || 0;\n        };\n        const entrate = rows.reduce((sum, row) => sum + parseAmount(row.entrate), 0);\n        const uscite = rows.reduce((sum, row) => sum + Math.abs(parseAmount(row.uscite)), 0);\n        const euro = new Intl.NumberFormat("it-IT", {style:"currency",currency:"EUR"});\n        $("#baEntrate").text(euro.format(entrate));\n        $("#baUscite").text(euro.format(uscite));\n        $("#baSaldo").text(euro.format(entrate - uscite));\n    }\n\n    //Funzione Grafico\n    function creaGrafico(label) {
 
         var mesi = label.map(function(e) {
             return e.mese;
@@ -135,7 +129,7 @@
                     // values for category one
                     type: 'bar',
                     label: "Entrate",
-                    backgroundColor: '#119f19',
+                    backgroundColor: '#20b486',
                     borderWidth:0,
                     borderRadius:20,
                     borderSkipped:false,
@@ -145,7 +139,7 @@
                     // values for category two
                     type: 'bar',
                     label: "Uscite",
-                    backgroundColor: '#e3201b',
+                    backgroundColor: '#f07883',
                     borderWidth:0,
                     borderRadius:20,
                     borderSkipped:false,
@@ -194,9 +188,12 @@
                 datasets: [{
                     label: 'Residuo Mensile',
                     data: ris,
-                    pointRadius:10,
-                    pointHoverRadius:15,
-                    borderWidth: 1,
+                    pointRadius:4,
+                    pointHoverRadius:7,
+                    borderColor: '#5273ec',
+                    backgroundColor: 'rgba(82,115,236,.10)',
+                    tension: .35,
+                    borderWidth: 3,
                     fill:true
                 }]
             },
