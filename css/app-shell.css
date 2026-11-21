@@ -381,3 +381,85 @@ body .modal .modal-header,body .modal .modal-footer{border-color:var(--ba-border
  .ba-management .ba-management-action-grid .ba-action-tile i{font-size:1.1rem}
 }
 @media(max-width:360px){.ba-management .ba-management-action-grid .ba-action-tile{font-size:.78rem!important;padding:10px!important;min-height:94px}}
+
+
+/* Mobile-first reports: preserve desktop tables and JS table row hooks */
+@media(max-width:767px){
+  .ba-management{min-width:0}
+  .ba-management .ba-welcome{padding-bottom:14px}
+  .ba-management .ba-welcome h2{font-size:1.55rem;line-height:1.18}
+  .ba-management .ba-welcome p{font-size:.91rem;line-height:1.5}
+  .ba-management-toolbar{padding:15px!important;border-radius:17px!important}
+  .ba-management-toolbar>.row{--bs-gutter-y:14px}
+  .ba-management-toolbar .ba-management-year,.ba-management-toolbar .ba-management-month{width:100%;min-width:0}
+  .ba-management-toolbar .ba-management-month{overflow-x:auto}
+  .ba-management-toolbar .ba-management-month table{font-size:.82rem;min-width:0}
+  .ba-management-toolbar .ba-management-month th,.ba-management-toolbar .ba-management-month td{padding:10px 7px;white-space:nowrap}
+  .ba-management-toolbar .ba-management-action-grid{margin-top:5px}
+  .ba-management-reports{--bs-gutter-y:20px}
+  .ba-management-reports>#resannuale,.ba-management-reports>#categorie{width:100%;min-width:0}
+  .ba-management-reports>#resannuale>.ba-annual-report-scroll{border:0!important;border-radius:0!important;background:transparent!important;overflow:visible!important}
+  .ba-annual-report-table,.ba-annual-report-table tbody,.ba-annual-report-table tfoot,.ba-annual-report-table tr,.ba-annual-report-table td,.ba-annual-report-table th{display:block;width:100%}
+  .ba-annual-report-table{border:0!important;background:transparent!important}
+  .ba-annual-report-table thead{display:none}
+  .ba-annual-report-table tbody,.ba-annual-report-table tfoot{display:grid;gap:10px}
+  .ba-annual-report-table tbody tr,.ba-annual-report-table tfoot tr{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 12px;border:1px solid var(--ba-border);border-radius:15px!important;padding:14px;background:var(--ba-surface)!important;overflow:hidden}
+  .ba-annual-report-table tbody tr>th,.ba-annual-report-table tfoot tr>th{grid-column:1/-1;font-size:1.03rem;font-weight:750;padding:0 0 9px!important;border-bottom:1px solid var(--ba-border)!important}
+  .ba-annual-report-table tbody tr>td,.ba-annual-report-table tfoot tr>td{border:0!important;padding:2px 0!important;min-width:0;overflow-wrap:anywhere;font-weight:650;font-variant-numeric:tabular-nums}
+  .ba-annual-report-table tbody tr>td::before,.ba-annual-report-table tfoot tr>td::before{content:attr(data-label);display:block;font-size:.7rem;font-weight:650;color:var(--ba-muted);margin-bottom:4px}
+  .ba-annual-report-table tbody tr>td:last-child,.ba-annual-report-table tfoot tr>td:last-child{grid-column:1/-1;border-top:1px solid var(--ba-border)!important;padding-top:9px!important}
+  .ba-annual-report-table tfoot{margin-top:12px}
+  .ba-annual-report-table tfoot tr{border-color:var(--ba-accent);background:var(--ba-surface)!important}
+  .ba-management-reports>#categorie{border-radius:16px!important;overflow:hidden!important;min-height:0}
+  .ba-management-reports>#categorie>.table-responsive{max-height:420px!important;overflow:auto!important;border-radius:16px!important}
+  .ba-management-reports>#categorie table{font-size:.86rem}
+  .ba-management-reports>#categorie table td,.ba-management-reports>#categorie table th{padding:11px 9px;white-space:nowrap}
+  .ba-recurring-section,.ba-credit-section,.ba-category-report{min-width:0;padding:15px!important;border-radius:17px!important}
+  .ba-recurring-section .ba-report-heading,.ba-credit-section .ba-report-heading,.ba-category-report .ba-report-heading{margin-bottom:12px}
+  .ba-recurring-section .ba-recurring-scroll{overflow:visible!important;border:0!important;border-radius:0!important}
+  .ba-recurring-section table,.ba-recurring-section tbody,.ba-recurring-section tr,.ba-recurring-section td{display:block;width:100%}
+  .ba-recurring-section thead{display:none}
+  .ba-recurring-section tbody{display:grid;gap:12px}
+  .ba-recurring-section tbody tr{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px 14px;border:1px solid var(--ba-border);border-radius:15px;overflow:hidden;padding:14px;background:var(--ba-surface)}
+  .ba-recurring-section table.table tbody tr.ba-recurring-active{background:#1d493a!important;border-color:#34765b}
+  .ba-recurring-section table.table tbody tr.ba-recurring-expired{background:#354052!important;border-color:#526078}
+  .ba-recurring-section tbody tr td{padding:0!important;border:0!important;min-width:0;overflow-wrap:anywhere;font-size:.86rem}
+  .ba-recurring-section tbody tr td::before{content:attr(data-label);display:block;font-size:.68rem;letter-spacing:.02em;opacity:.78;margin-bottom:3px;font-weight:700}
+  .ba-recurring-section tbody tr td:nth-child(2){grid-column:1/-1;font-size:1rem;font-weight:750;padding-bottom:9px!important;border-bottom:1px solid #ffffff26!important}
+  .ba-recurring-section tbody tr td:nth-child(2)::before{display:none}
+  .ba-recurring-section tbody tr td:last-child{grid-column:1/-1;min-width:0!important;padding-top:8px!important;border-top:1px solid #ffffff26!important}
+  .ba-recurring-section tbody tr td:last-child::before{margin-bottom:7px}
+  .ba-recurring-section tbody tr td:last-child .viewbtn,.ba-recurring-section tbody tr td:last-child .delbtn{width:44px!important;height:44px!important;min-width:44px!important;min-height:44px!important;margin-right:10px!important}
+  .ba-credit-scroll{overflow:visible!important}
+  .ba-credit-table,.ba-credit-table tbody,.ba-credit-table tr,.ba-credit-table td{display:block;width:100%}
+  .ba-credit-table thead{display:none}
+  .ba-credit-table tbody{display:grid;gap:12px}
+  .ba-credit-table tbody tr{border:1px solid var(--ba-border);border-radius:15px;padding:14px;background:var(--ba-surface)!important}
+  .ba-credit-table tbody td{border:0!important;padding:5px 0!important;min-width:0;overflow-wrap:anywhere}
+  .ba-credit-table tbody td:nth-child(1){font-size:1.05rem;font-weight:750}
+  .ba-credit-table tbody td:nth-child(2){color:var(--ba-muted)}
+  .ba-credit-table tbody td:nth-child(3)::before{content:"Durata: ";font-size:.78rem;color:var(--ba-muted)}
+  .ba-credit-table tbody td:nth-child(4)::before{content:"Importo: ";font-size:.78rem;color:var(--ba-muted)}
+  .ba-credit-table tbody td:last-child{padding-top:12px!important}
+  .ba-credit-table tbody td:last-child button{min-height:44px}
+  .ba-category-report .ba-category-scroll{max-width:100%;overflow-x:auto;overscroll-behavior-x:contain}
+  .ba-category-report .ba-report-hint{font-size:.76rem}
+  .ba-category-report .ba-category-cell{min-height:42px}
+  #VistaDettaglioCategorieMese .modal-dialog{margin:8px!important;max-width:calc(100% - 16px)!important}
+  #VistaDettaglioCategorieMese .modal-header{padding:16px!important}
+  #VistaDettaglioCategorieMese .modal-title{font-size:1.12rem!important}
+  #VistaDettaglioCategorieMese .modal-body{padding:12px!important;max-height:65dvh}
+  #VistaDettaglioCategorieMese .ba-detail-table{min-width:620px}
+  #VistaDettaglioCategorieMese .modal-footer{padding:12px!important;min-height:0}
+  .ba-dashboard .ba-stats .ba-stat{min-height:0}
+  .ba-dashboard .ba-charts .ba-panel{padding:16px!important}
+  .ba-dashboard .ba-chart-wrap{height:270px!important;min-height:0!important}
+  .ba-dashboard .ba-summary-content{overflow-x:auto}
+  .ba-filter-panel .btn,.ba-filter-panel .form-control,.ba-filter-panel .form-select{min-height:44px}
+  .ba-results-panel{min-width:0}
+}
+@media(max-width:380px){
+ .ba-management-toolbar .ba-management-month table{font-size:.73rem}
+ .ba-management-toolbar .ba-management-month th,.ba-management-toolbar .ba-management-month td{padding:8px 5px}
+ .ba-recurring-section tbody tr{gap:8px}
+}
