@@ -63,7 +63,7 @@ while ($row = mysqli_fetch_assoc($result)):
         $('#editdescrizione').val(data[2]);
         $('#editentrate').val(data[3]);
         $('#edituscite').val(data[4]);
-        $('#edittag1').val(data[5]).trigger('change');
+        $('#edittag1').val(data[5]);
         $('#editcategoria').val(data[6]);
         $('#editmodal').modal('show');
     }
