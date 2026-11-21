@@ -3,12 +3,12 @@
 $baCurrentPage = basename($_SERVER['SCRIPT_NAME'] ?? '');
 $baLinks = [
  ['Homepage.php', 'Home', 'fa-chart-pie', $GLOBALS['Homepage'] ?? 'Homepage.php'],
- ['Transazioni.php', 'Transazioni Totali', 'fa-arrow-right-arrow-left', $GLOBALS['Transazioni'] ?? 'Transazioni.php'],
+ ['TransazioniTotali.php', 'Transazioni Totali', 'fa-arrow-right-arrow-left', $GLOBALS['Transazioni'] ?? 'TransazioniTotali.php'],
  ['TransazioniMese.php', 'Transazioni Mese', 'fa-calendar-days', $GLOBALS['TransazioniMese'] ?? 'TransazioniMese.php'],
  ['TransazioniPending.php', 'Transazioni Pending', 'fa-clock', $GLOBALS['TransazioniPending'] ?? 'TransazioniPending.php'],
  ['Gestione.php', 'Gestione', 'fa-sliders', $GLOBALS['Gestione'] ?? 'Gestione.php'],
 ];
-$baTitle = ['Homepage.php'=>'Dashboard','Gestione.php'=>'Gestione budget','Transazioni.php'=>'Transazioni totali','TransazioniMese.php'=>'Transazioni mensili','TransazioniPending.php'=>'Transazioni in sospeso'][$baCurrentPage] ?? pathinfo($baCurrentPage, PATHINFO_FILENAME);
+$baTitle = ['Homepage.php'=>'Dashboard','Gestione.php'=>'Gestione budget','TransazioniTotali.php'=>'Transazioni totali','TransazioniMese.php'=>'Transazioni mensili','TransazioniPending.php'=>'Transazioni in sospeso'][$baCurrentPage] ?? pathinfo($baCurrentPage, PATHINFO_FILENAME);
 ?>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link rel="stylesheet" href="css/app-shell.css">
