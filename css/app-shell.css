@@ -173,3 +173,51 @@ body>.container-fluid,body>.container{min-width:0}
 .ba-credit-details .table-responsive{border:1px solid #e2e9f3;border-radius:12px;overflow-x:auto}
 .ba-credit-loading,.ba-credit-empty{padding:22px!important;color:#718096;text-align:center}
 @media(max-width:767px){.ba-management #rescrediti{margin-top:26px}.ba-credit-section{padding:14px}.ba-credit-table tbody td{padding:11px 12px!important}}
+
+
+/* Unified modal layout: all existing form IDs and AJAX hooks are preserved */
+.ba-form-modal{overflow:hidden}
+.ba-form-modal .modal-header{padding:22px 26px}
+.ba-form-modal .modal-title{font-weight:750;font-size:1.3rem}
+.ba-form-modal .modal-body{padding:22px 26px;max-height:min(70vh,700px);overflow-y:auto}
+.ba-form-modal .modal-footer{padding:16px 26px;gap:10px}
+.ba-operation-form{display:grid;gap:18px}
+.ba-form-field{min-width:0}
+.ba-form-field .form-label{display:block;margin-bottom:7px;font-size:.84rem;font-weight:700;color:var(--ba-ink)}
+.ba-form-field .form-control,.ba-form-field .form-select{width:100%;min-height:46px;padding:10px 13px}
+.ba-form-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
+.ba-modal-actions .btn{min-height:42px;padding:9px 18px}
+body .modal .form-group{margin-bottom:13px}
+body .modal .modal-body .form-label,body .modal .modal-body label{font-weight:650}
+body .modal .modal-dialog{max-width:min(95vw,760px)}
+body .modal .modal-content{background:var(--ba-surface);color:var(--ba-ink);border:1px solid var(--ba-border)}
+body .modal .modal-header,body .modal .modal-footer{border-color:var(--ba-border)}
+@media(max-width:575px){.ba-form-grid{grid-template-columns:1fr}.ba-form-modal .modal-header,.ba-form-modal .modal-body,.ba-form-modal .modal-footer{padding:16px}.ba-modal-actions .btn{flex:1}}
+/* Theme control and system-aware dark palette */
+.ba-topbar-tools{display:flex;align-items:center;gap:20px}
+.ba-theme-toggle{display:inline-flex;align-items:center;gap:8px;background:var(--ba-bg);border:1px solid var(--ba-border);border-radius:10px;color:var(--ba-ink);padding:8px 12px;font-size:.8rem;font-weight:700}
+.ba-theme-toggle:hover{border-color:var(--ba-accent)}
+:root[data-ba-theme="dark"]{color-scheme:dark;--ba-bg:#101827;--ba-surface:#192538;--ba-ink:#edf3ff;--ba-muted:#a6b6cb;--ba-border:#34465e;--ba-accent:#89a5ff;--ba-sidebar:#0d1422}
+:root[data-ba-theme="dark"] body{background:var(--ba-bg)!important;color:var(--ba-ink)}
+:root[data-ba-theme="dark"] body .ba-panel,:root[data-ba-theme="dark"] body .ba-stat,:root[data-ba-theme="dark"] body .ba-transaction-item,:root[data-ba-theme="dark"] body .ba-recurring-section,:root[data-ba-theme="dark"] body .ba-category-report,:root[data-ba-theme="dark"] body .ba-credit-section,:root[data-ba-theme="dark"] body .card,:root[data-ba-theme="dark"] body .modal-content{background:var(--ba-surface)!important;color:var(--ba-ink)!important;border-color:var(--ba-border)}
+:root[data-ba-theme="dark"] body .table,:root[data-ba-theme="dark"] body table{--bs-table-bg:transparent;background:var(--ba-surface)!important;color:var(--ba-ink)!important;--bs-table-color:var(--ba-ink);--bs-table-border-color:var(--ba-border)}
+:root[data-ba-theme="dark"] body .table thead th,:root[data-ba-theme="dark"] body .ba-category-table thead th,:root[data-ba-theme="dark"] body .ba-category-table th:first-child{background:#273750!important;color:#d5e2f6!important;border-color:var(--ba-border)!important}
+:root[data-ba-theme="dark"] body .table tbody td,:root[data-ba-theme="dark"] body .table tbody th{border-color:var(--ba-border)!important;color:inherit}
+:root[data-ba-theme="dark"] body .table tbody tr:nth-child(even){background:#202e43!important}
+:root[data-ba-theme="dark"] body .table tbody tr:hover{background:#2b3e57!important}
+:root[data-ba-theme="dark"] body .ba-recurring-section table.table tbody tr.ba-recurring-active td{background:#1d493a!important;color:#d2f7e0}
+:root[data-ba-theme="dark"] body .ba-recurring-section table.table tbody tr.ba-recurring-expired td{background:#354052!important;color:#d2d9e5}
+:root[data-ba-theme="dark"] body .ba-category-table tfoot td,:root[data-ba-theme="dark"] body .ba-category-table tfoot th,:root[data-ba-theme="dark"] body .ba-category-total{background:#2a3a53!important;color:#edf3ff!important}
+:root[data-ba-theme="dark"] body .ba-category-cell{background:transparent}
+:root[data-ba-theme="dark"] body .ba-category-cell:hover{background:#344968}
+:root[data-ba-theme="dark"] body .ba-report-heading h3,:root[data-ba-theme="dark"] body .ba-credit-name,:root[data-ba-theme="dark"] body .ba-credit-amount,:root[data-ba-theme="dark"] body .ba-form-field .form-label,:root[data-ba-theme="dark"] body .ba-transaction-category{color:var(--ba-ink)}
+:root[data-ba-theme="dark"] body .ba-report-heading p,:root[data-ba-theme="dark"] body .ba-report-hint,:root[data-ba-theme="dark"] body .ba-credit-description,:root[data-ba-theme="dark"] body .ba-transaction-description{color:var(--ba-muted)}
+:root[data-ba-theme="dark"] body .form-control,:root[data-ba-theme="dark"] body .form-select,:root[data-ba-theme="dark"] body .input-group-text{background-color:#152135;color:#edf3ff;border-color:var(--ba-border)}
+:root[data-ba-theme="dark"] body .form-control::placeholder{color:#96a8bf}
+:root[data-ba-theme="dark"] body .btn-secondary{background:#42516a;border-color:#42516a;color:white}
+:root[data-ba-theme="dark"] body .ba-credit-duration,:root[data-ba-theme="dark"] body .ba-credit-detail{background:#2d4260!important;color:#d5e2ff!important;border-color:#415779!important}
+:root[data-ba-theme="dark"] body .ba-positive{background:#153f32;color:#76e3b4}
+:root[data-ba-theme="dark"] body .ba-negative{background:#4c2732;color:#ff9dad}
+:root[data-ba-theme="dark"] body .ba-neutral{background:#273b68;color:#b1c6ff}
+:root[data-ba-theme="dark"] body .text-secondary{color:#a6b6cb!important}
+:root[data-ba-theme="dark"] body .ba-recurring-scroll,:root[data-ba-theme="dark"] body .ba-category-scroll,:root[data-ba-theme="dark"] body .ba-credit-scroll{border-color:var(--ba-border)}
