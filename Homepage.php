@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 
 <head>
     <meta charset="UTF-8">
@@ -12,7 +12,7 @@
     <!-- CDN Icone-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- CDN Icone -->
-    <link rel="stylesheet" href="/css/graph.css">
+    <link rel="stylesheet" href="css/graph.css">
     <title>Homepage</title>
 </head>
 
@@ -53,6 +53,7 @@
 </body>
 <script>
     $(document).ready(function() {
+        $('#anno').val(String(new Date().getFullYear()));
         getresocontoannuale()
         ReminderTransazioni()
 
@@ -62,18 +63,20 @@
         function getresocontoannuale() {
             $.ajax({
 
-                type: 'GET',
+                type: 'POST',
                 url: './php/json/preleva_dati_reportannualejson.php',
                 dataType: 'JSON',
                 data: {
                     ajax: 1,
+                    cerca: $('#anno').val() || String(new Date().getFullYear()),
                 },
 
                 success: function(response) {
                     creaGrafico(response)
                     ResiduiMensiliGrafico(response);
                     aggiornaRiepilogo(response);
-                }
+                },
+                error: function() { $('#baEntrate, #baUscite, #baSaldo').text('Dati non disponibili'); }
             });
         }
 
@@ -96,18 +99,19 @@
                 creaGrafico(response);
                 ResiduiMensiliGrafico(response);
                 aggiornaRiepilogo(response);
-            }
+            },
+            error: function() { $('#baEntrate, #baUscite, #baSaldo').text('Dati non disponibili'); }
         });
 
     }
 
-    function aggiornaRiepilogo(rows) {\n        if (!Array.isArray(rows)) return;\n        const parseAmount = value => {\n            if (typeof value === "number") return Number.isFinite(value) ? value : 0;\n            let v = String(value ?? "0").replace(/[^0-9,.-]/g, "");\n            if (v.includes(",") && v.includes(".")) v = v.replace(/\\./g, "").replace(",", ".");\n            else if (v.includes(",")) v = v.replace(",", ".");\n            return Number(v) || 0;\n        };\n        const entrate = rows.reduce((sum, row) => sum + parseAmount(row.entrate), 0);\n        const uscite = rows.reduce((sum, row) => sum + Math.abs(parseAmount(row.uscite)), 0);\n        const euro = new Intl.NumberFormat("it-IT", {style:"currency",currency:"EUR"});\n        $("#baEntrate").text(euro.format(entrate));\n        $("#baUscite").text(euro.format(uscite));\n        $("#baSaldo").text(euro.format(entrate - uscite));\n    }\n\n    //Funzione Grafico\n    function creaGrafico(label) {
+    function aggiornaRiepilogo(rows) {\n        if (!Array.isArray(rows)) return;\n        const parseAmount = value => {\n            if (typeof value === "number") return Number.isFinite(value) ? value : 0;\n            let v = String(value ?? "0").replace(/[^0-9,.-]/g, "");\n            if (v.includes(",") && v.includes(".")) v = v.replace(/\\./g, "").replace(",", ".");\n            else if (v.includes(",")) v = v.replace(",", ".");\n            return Number(v) || 0;\n        };\n        const entrate = rows.reduce((sum, row) => sum + parseAmount((row.entrate ?? row.Entrate)), 0);\n        const uscite = rows.reduce((sum, row) => sum + Math.abs(parseAmount((row.uscite ?? row.Uscite))), 0);\n        const euro = new Intl.NumberFormat("it-IT", {style:"currency",currency:"EUR"});\n        $("#baEntrate").text(euro.format(entrate));\n        $("#baUscite").text(euro.format(uscite));\n        $("#baSaldo").text(euro.format(entrate - uscite));\n    }\n\n    //Funzione Grafico\n    function creaGrafico(label) {
 
         var mesi = label.map(function(e) {
             return e.mese;
         });
         var entrate = label.map(function(e) {
-            return e.entrate;
+            return Number(e.entrate) || 0;
         });
         var uscite = label.map(function(e) {
             return (e.uscite * -1);
@@ -164,13 +168,13 @@
             return e.mese;
         });
         var entrate = label.map(function(e) {
-            return e.entrate;
+            return Number(e.entrate) || 0;
         });
         var uscite = label.map(function(e) {
-            return e.uscite;
+            return Number(e.uscite) || 0;
         });
         var ris = label.map(function(e) {
-            return e.ris;
+            return Number(e.ris) || 0;
         });
 
         //Controllo se è gia presente un Grafico
