@@ -22,10 +22,12 @@ if (!$date || $date->format('Y-m-d') !== $values['dataoperazione']) {
     http_response_code(400);
     exit('Data non valida');
 }
-if (!preg_match('/^[0-9]{4}$/', $values['anno']) || !ctype_digit($values['ordinemese']) || (int)$values['ordinemese'] < 1 || (int)$values['ordinemese'] > 12) {
+if ($values['anno'] !== $date->format('Y') || $values['ordinemese'] !== (string)(int)$date->format('n')) {
     http_response_code(400);
     exit('Anno o mese non valido');
 }
+$monthNames = [1=>'Gennaio',2=>'Febbraio',3=>'Marzo',4=>'Aprile',5=>'Maggio',6=>'Giugno',7=>'Luglio',8=>'Agosto',9=>'Settembre',10=>'Ottobre',11=>'Novembre',12=>'Dicembre'];
+$values['mese'] = $monthNames[(int)$date->format('n')];
 foreach (['entrate', 'uscite'] as $amount) {
     if ($values[$amount] === '') $values[$amount] = '0';
     if (!preg_match('/^-?[0-9]+(?:[.,][0-9]{1,2})?$/', $values[$amount])) {
@@ -41,7 +43,7 @@ try {
         $stmt = mysqli_prepare($conn, 'INSERT INTO budgettable (data_operazione,mese,anno,ordinemese,descrizione,uscite,entrate,tag1,categorie) VALUES (?,?,?,?,?,?,?,?,?)');
     }
     if (!$stmt) throw new RuntimeException('Prepare failed');
-    $args = array_values($values);
+    $args = [$values['dataoperazione'], $values['mese'], $values['anno'], $values['ordinemese'], $values['descrizione'], $values['uscite'], $values['entrate'], $values['tag1'], $values['categoria']];
     if ($editing) {
         $args[] = (int)$id;
         mysqli_stmt_bind_param($stmt, 'sssssssssi', ...$args);
