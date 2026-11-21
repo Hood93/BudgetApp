@@ -50,3 +50,19 @@ body .modal-content{border:0;border-radius:18px;box-shadow:0 24px 70px #15243d30
 /* Gestione has a top-level container after the shared navigation. */
 body>.container.text-center{margin-top:24px!important;text-align:left!important}
 @media(max-width:767px){.ba-stat{min-height:110px;padding:18px}.ba-panel{padding:18px}.ba-chart-wrap{height:270px}.ba-welcome{align-items:stretch!important}.ba-year-control{width:100%}}
+
+/* Transaction screens */
+.ba-filter-panel{padding:22px 24px}
+.ba-filter-panel .form-label{font-size:.82rem;font-weight:700;color:#53637b;margin-bottom:7px}
+.ba-filter-panel .input-group-text{border-color:var(--ba-border);background:#f8faff;color:#60708d}
+.ba-filter-panel .btn-primary{background:#4568e8;border-color:#4568e8;min-height:42px;font-weight:650}
+.ba-filter-panel .btn-primary:hover{background:#3656cb;border-color:#3656cb}
+.ba-filter-panel .form-control,.ba-filter-panel .form-select{min-height:42px}
+.ba-filter-panel .form-check-input{cursor:pointer}
+.ba-results-panel{min-width:0;overflow-x:auto;border-radius:18px}
+.ba-results-panel table{width:100%}
+.ba-results-panel .table-responsive{overflow-x:auto}
+.ba-results-panel .btn{white-space:nowrap}
+.ba-management .row>.col{min-width:170px}
+.ba-management #resannuale,.ba-management #categorie,.ba-management #restransazioniricorrenti,.ba-management #resannualecategorie,.ba-management #rescrediti{min-width:0}
+@media(max-width:767px){.ba-filter-panel{padding:16px}.ba-results-panel{border-radius:12px}.ba-management .row>.col{min-width:100%}}
