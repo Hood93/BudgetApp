@@ -13,7 +13,7 @@ if (!$result) {
   echo "An error occurred.\n";
   exit;
 }
-echo "<div class='table-responsive'>";
+echo "<section class='ba-recurring-section'><div class='ba-report-heading'><div><h3>Spese ricorrenti</h3><p>Verde: attive · Grigio: scadute</p></div></div><div class='table-responsive ba-recurring-scroll'>";
 echo "<table class='table table-hover align-middle'>
 <thead>
 <tr>";
@@ -33,10 +33,10 @@ echo "<tbody>";
 while ($row = mysqli_fetch_assoc($result)) {
   switch($row['stato']){
     case "Attiva":
-      echo "<tr class='tractive'>";
+      echo "<tr class='ba-recurring-active'>";
       break;
     case "Disattiva":
-      echo "<tr class='trdisable'>";
+      echo "<tr class='ba-recurring-expired'>";
       break;
   }
   echo "<td style='display:none;'>" . $row["idtransazioniricorrenti"] . "</td>";
@@ -46,8 +46,8 @@ while ($row = mysqli_fetch_assoc($result)) {
   echo "<td class='text-start'>" . $mesi[$row['mesefinale']] . "</td>";
   echo "<td class='text-start'>" . $row['annofinale'] . "</td>";
   echo "<td class='text-start'>" . htmlspecialchars((string)$row['categoria'], ENT_QUOTES, 'UTF-8') . "</td>";
-  echo "<td class='text-start'>" . $row['entrata'] . "</td>";
-  echo "<td class='text-start'>" . $row['uscita'] . "</td>";
+  echo "<td class='text-start'>" . number_format((float)$row['entrata'], 2, ',', '.') . " €</td>";
+  echo "<td class='text-start'>" . number_format((float)$row['uscita'], 2, ',', '.') . " €</td>";
   switch($row['stato']){
     case "Attiva":
       echo "<td class='text-start'><button type='button' class='btn text-start viewbtn'><i class='fa-solid fa-circle-info fa-lg pe-2' style='color: #000000;'></i></button><button type='button' class='btn text-start delbtn'><i class='fa-sharp fa-solid fa-trash fa-lg ps-2' style='color: #000000;'></i></button></td>";
@@ -60,7 +60,7 @@ while ($row = mysqli_fetch_assoc($result)) {
 }
 echo "</tbody>";
 echo "</table>";
-echo "</div>";
+echo "</div></section>";
 ?>
 <script>
     $(document).ready(function() {
