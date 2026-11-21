@@ -1,62 +1,62 @@
             <!-- Modal -->
             <div class="modal fade" id="ModalNewOperazione" role="dialog">
-              <div class="modal-dialog">
-                <div class="modal-content">
+              <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+                <div class="modal-content ba-form-modal">
                   <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Inserisci Operazione</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
                   <form action="" method="POST">
-                    <div class="modal-body">
+                    <div class="modal-body ba-operation-form">
 
-                      <div class="form-group">
-                        <label> Data Operazione </label>
-                        <input type="date" name="newdataoperazione" id="newdataoperazione" value="newdataoperazione" class="form-control">
+                      <div class="ba-form-grid"><div class="ba-form-grid"><div class="form-group ba-form-field">
+                        <label for="newdataoperazione" class="form-label">Data Operazione</label>
+                        <input type="date" name="newdataoperazione" id="newdataoperazione"  class="form-control">
                       </div>
-                      <!--<div class="form-group">
+                      <!--<div class="form-group ba-form-field">
                         <label>Causale</label>
                         <input type="text" name="newcausale" id="newcausale" class="form-control" placeholder="Inserire Causale">
                       </div>-->
-                      <div class="form-group">
-                        <label>Descrizione</label>
+                      <div class="form-group ba-form-field">
+                        <label for="newdescrizione" class="form-label">Descrizione</label>
                         <input type="text" name="newdescrizione" id="newdescrizione" class="form-control" placeholder="Inserire Descrizione">
                       </div>
-                      <div class="form-group">
-                        <label>Entrata</label>
-                        <input type="number" name="newentrate" id="newentrate" class="form-control" placeholder="Inserire Entrata" value = "0">
+                      <div class="form-group ba-form-field">
+                        <label for="newentrate" class="form-label">Entrata</label>
+                        <input type="number" step="0.01" min="0" name="newentrate" id="newentrate" class="form-control" placeholder="Inserire Entrata" value = "0">
                       </div>
-                      <div class="form-group">
-                        <label>Uscita</label>
-                        <input type="number" name="newuscite" id="newuscite" class="form-control" placeholder="Inserire Uscita" value = "0">
-                      </div>
-                      <div class="form-group">
-                        <label>Tag1</label>
-                        <select name="newtag1" id="newtag1" class="form-control" required>
-                          <option value=""></option>
+                      <div class="form-group ba-form-field">
+                        <label for="newuscite" class="form-label">Uscita</label>
+                        <input type="number" step="0.01" min="0" name="newuscite" id="newuscite" class="form-control" placeholder="Inserire Uscita" value = "0">
+                      </div></div>
+                      <div class="form-group ba-form-field">
+                        <label for="newtag1" class="form-label">Tipologia</label>
+                        <select name="newtag1" id="newtag1" class="form-control form-select" required>
+                          <option value="">Seleziona...</option>
                           <option value="Entrata">Entrata</option>
                           <option value="Uscita">Uscita</option>
                         </select>
                       </div>
-                      <div class="form-group">
-                        <label>Categoria</label>
+                      <div class="form-group ba-form-field">
+                        <label for="newcategoria" class="form-label">Categoria</label>
                         <?php
-                        echo "<select id='newcategoria' name='newcategoria' class='form-control'>";
+                        echo "<select id='newcategoria' name='newcategoria' class='form-control form-select'>";
                         echo "<option value=''></option>";
                         foreach ($catarray as $cate) {
-                          echo "<option value='" . $cate . "'>" . $cate . "</option>";
+                          echo "<option value='" . htmlspecialchars((string)$cate, ENT_QUOTES, 'UTF-8') . "'>" . htmlspecialchars((string)$cate, ENT_QUOTES, 'UTF-8') . "</option>";
                         }
                         echo "</select>"; ?>
-                      </div>
-                      <!--<div class="form-group">
+                      </div></div>
+                      <!--<div class="form-group ba-form-field">
                         <label>Tag3</label>
                         <input type="text" name="newtag3" id="newtag3" class="form-control" placeholder="Inserire Tag3">
                       </div>
-                      <div class="form-group">
+                      <div class="form-group ba-form-field">
                         <label>Tag4</label>
                         <input type="text" name="newtag4" id="newtag4" class="form-control" placeholder="Inserire Tag4">
                       </div>-->
                     </div>
-                    <div class="modal-footer">
+                    <div class="modal-footer ba-modal-actions">
                       <button type="button" id="closebtn" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
                       <button type="button" class="btn btn-dark savebtnnew">Salva</button>
                     </div>
