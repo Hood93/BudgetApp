@@ -9,7 +9,7 @@
                   <form action="" method="POST">
                     <div class="modal-body ba-operation-form">
 
-                      <div class="ba-form-grid"><div class="ba-form-grid"><div class="form-group ba-form-field">
+                      <div class="form-group ba-form-field">
                         <label for="newdataoperazione" class="form-label">Data Operazione</label>
                         <input type="date" name="newdataoperazione" id="newdataoperazione"  class="form-control">
                       </div>
