@@ -30,7 +30,7 @@ while ($row = mysqli_fetch_assoc($result)):
     $count++;
     $expense = $row['tag1'] === 'Uscita';
     $amount = $expense ? $row['uscite'] : $row['entrate'];
-    $edit = implode(',', [$row['idBudgetTable'], $row['data_operazione'], $row['descrizione'], $row['entrate'], $row['uscite'], $row['tag1'], $row['categorie']]);
+    $edit = [$row['idBudgetTable'], $row['data_operazione'], $row['descrizione'], $row['entrate'], $row['uscite'], $row['tag1'], $row['categorie']];
 ?>
   <article class="ba-transaction-item <?php echo $expense ? 'ba-expense' : 'ba-income'; ?>">
     <div class="ba-transaction-icon" aria-hidden="true"><?php echo $row['icona'] ?: '<i class="fa-solid fa-receipt"></i>'; ?></div>
@@ -41,7 +41,7 @@ while ($row = mysqli_fetch_assoc($result)):
     </div>
     <div class="ba-transaction-actions">
       <div class="ba-transaction-amount"><?php echo $expense ? '−' : '+'; ?> <?php echo $escape($amount); ?> €</div>
-      <button type="button" data-bs-toggle="modal" data-bs-target="#ModalEditOperazione" class="btn btn-outline-secondary editbtn" onclick="EditOperazione(this)" data="<?php echo $escape($edit); ?>" aria-label="Modifica transazione"><i class="fa-solid fa-pen-to-square"></i></button>
+      <button type="button" data-bs-toggle="modal" data-bs-target="#ModalEditOperazione" class="btn btn-outline-secondary editbtn" onclick="EditOperazione(this)" data-edit="<?php echo $escape(json_encode($edit, JSON_UNESCAPED_UNICODE | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_HEX_TAG)); ?>" aria-label="Modifica transazione"><i class="fa-solid fa-pen-to-square"></i></button>
     </div>
   </article>
 <?php endwhile; ?>
@@ -49,86 +49,22 @@ while ($row = mysqli_fetch_assoc($result)):
 </div>
 
 <script>
-    $(document).ready(function() {
-
-        /*$('.editbtn').on('click', function() {
-
-            $('#editmodal').modal('show');
-
-            //$tr = $(this).closest('tr');
-            //var data = $tr.children("td").map(function() {
-            //    return $(this).text();
-            //}).get();
-            var data = $('#btnedit').attr('data')
-            console.log(data)
-            data = data.split(',')
-
- 
-            editidoperazione = data[0];
-            editdataoperazione = data[1].replaceAll('/', '-');
-            //editcausale = data[2];
-            editdescrizione = data[2];
-            editentrate = data[3];
-            edituscite = data[4];
-            //editentrate = editentrate.replace("€", "");
-            //edituscite = edituscite.replace("€", "");
-            //editentrate = editentrate.replace(/\s+/g, '');
-            //edituscite = edituscite.replace(/\s+/g, '');
-            edittag1 = data[5];
-            editcategoria = data[6];
-            //edittag3 = data[8];
-            //edittag4 = data[9];
-
-            $('#editidoperazione').val(editidoperazione);
-            $('#editdataoperazione').val(editdataoperazione);
-            //$('#editcausale').val(editcausale);
-            $('#editdescrizione').val(editdescrizione);
-            $('#editentrate').val(editentrate);
-            $('#edituscite').val(edituscite);
-            $('#edittag1').val(edittag1);
-            $('#editcategoria').val(editcategoria);
-            //$('#edittag3').val(edittag3);
-            //$('#edittag4').val(edittag4);
-        });*/
-    });
-
-
-    function EditOperazione(_this){
+    // JSON keeps descriptions containing commas intact and preserves legacy form IDs.
+    function EditOperazione(button) {
+        const raw = button.getAttribute('data-edit');
+        let data;
+        try { data = JSON.parse(raw); } catch (error) {
+            console.error('Dati transazione non validi', error);
+            return;
+        }
+        if (!Array.isArray(data) || data.length < 7) return;
+        $('#editidoperazione').val(data[0]);
+        $('#editdataoperazione').val(String(data[1] || '').replaceAll('/', '-'));
+        $('#editdescrizione').val(data[2]);
+        $('#editentrate').val(data[3]);
+        $('#edituscite').val(data[4]);
+        $('#edittag1').val(data[5]).trigger('change');
+        $('#editcategoria').val(data[6]);
         $('#editmodal').modal('show');
-
-            //$tr = $(this).closest('tr');
-            //var data = $tr.children("td").map(function() {
-            //    return $(this).text();
-            //}).get();
-            var data = $(_this).attr('data')
-            console.log(data)
-            data = data.split(',')
-
- 
-            editidoperazione = data[0];
-            editdataoperazione = data[1].replaceAll('/', '-');
-            //editcausale = data[2];
-            editdescrizione = data[2];
-            editentrate = data[3];
-            edituscite = data[4];
-            //editentrate = editentrate.replace("€", "");
-            //edituscite = edituscite.replace("€", "");
-            //editentrate = editentrate.replace(/\s+/g, '');
-            //edituscite = edituscite.replace(/\s+/g, '');
-            edittag1 = data[5];
-            editcategoria = data[6];
-            //edittag3 = data[8];
-            //edittag4 = data[9];
-
-            $('#editidoperazione').val(editidoperazione);
-            $('#editdataoperazione').val(editdataoperazione);
-            //$('#editcausale').val(editcausale);
-            $('#editdescrizione').val(editdescrizione);
-            $('#editentrate').val(editentrate);
-            $('#edituscite').val(edituscite);
-            $('#edittag1').val(edittag1);
-            $('#editcategoria').val(editcategoria);
-            //$('#edittag3').val(edittag3);
-            //$('#edittag4').val(edittag4);
     }
 </script>
