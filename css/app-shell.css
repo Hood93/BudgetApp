@@ -346,3 +346,25 @@ body .modal .modal-header,body .modal .modal-footer{border-color:var(--ba-border
   font-size:1rem;
 }
 .ba-recurring-section table.table td:last-child .delbtn{margin-right:0!important}
+
+
+/* Unified category detail modal and financial amount hierarchy */
+#VistaDettaglioCategorieMese .modal-dialog{max-width:min(94vw,1100px)}
+#VistaDettaglioCategorieMese .modal-content{border-radius:20px;overflow:hidden}
+#VistaDettaglioCategorieMese .modal-header{gap:10px;flex-wrap:wrap}
+#VistaDettaglioCategorieMese .modal-body{min-height:0;max-height:65vh;overflow-y:auto}
+#VistaDettaglioCategorieMese .modal-footer{min-height:70px}
+#VistaDettaglioCategorieMese .ba-detail-table-wrap{border:1px solid var(--ba-border);border-radius:14px;overflow:auto}
+#VistaDettaglioCategorieMese .ba-detail-table{margin-bottom:0;min-width:680px;border-collapse:separate;border-spacing:0}
+#VistaDettaglioCategorieMese .ba-detail-table th{white-space:nowrap}
+#VistaDettaglioCategorieMese .ba-detail-table td{vertical-align:middle}
+.ba-amount-negative{color:#ef5269!important;font-weight:700;font-variant-numeric:tabular-nums}
+.ba-amount-positive{color:#159968!important;font-weight:700;font-variant-numeric:tabular-nums}
+.ba-amount-muted{color:var(--ba-muted)!important;font-variant-numeric:tabular-nums}
+:root[data-ba-theme="dark"] .ba-amount-positive{color:#43cf9c!important}
+:root[data-ba-theme="dark"] .ba-amount-negative{color:#ff667e!important}
+:root[data-ba-theme="dark"] #VistaDettaglioCategorieMese .ba-detail-table-wrap{border-color:var(--ba-border)}
+:root[data-ba-theme="dark"] #VistaDettaglioCategorieMese .ba-detail-table thead th{background:#273750!important;color:#d5e2f6!important}
+.ba-dashboard .ba-chart-wrap{position:relative;height:340px;min-height:280px}
+.ba-dashboard .ba-chart-wrap canvas{width:100%!important;height:100%!important}
+@media(max-width:575px){.ba-dashboard .ba-chart-wrap{height:280px}#VistaDettaglioCategorieMese .modal-body{max-height:60vh}}
