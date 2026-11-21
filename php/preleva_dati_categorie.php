@@ -14,8 +14,8 @@ if (!$result) {
     echo "An error occurred.\n";
     exit;
 }
-echo "<div class='table table-responsive'>";
-echo "<table class='table table-bordered border-black rounded-pill'>
+echo "<div class='table-responsive'>";
+echo "<table class='table table-hover align-middle'>
 <thead>
 <tr>";
 echo "<th scope='col'><i class='fa-solid fa-icons fa-lg' style='color: #000000;'></i></th>";
@@ -27,9 +27,9 @@ echo "<tbody>";
 
 while ($row = mysqli_fetch_assoc($result)) {
     echo "<tr>";
-    echo "<td style='display:none;'>" . $row["idcategoria"] . "</td>";
-    echo "<td class='text-start'>" . $row['icona']. "</td>";
-    echo "<td class='text-start'>" . $row['categoria'] . "</td>";
+    echo "<td style='display:none;'>" . (int)$row["idcategoria"] . "</td>";
+    echo "<td class='text-start'>" . (preg_match('/^<i\\s+class=[\\"\\'][a-zA-Z0-9 _-]+[\\"\\']\\s*><\\/i>$/', trim((string)$row['icona'])) ? $row['icona'] : '<i class=\\"fa-solid fa-folder\\"></i>') . "</td>";
+    echo "<td class='text-start'>" . htmlspecialchars((string)$row['categoria'], ENT_QUOTES, 'UTF-8') . "</td>";
     echo "<td>" . "<button type='button' data-bs-toggle='modal' data-bs-target='#ModalEditCategoria' class='btn btn-success btn-sm editbtn'><i class='fa-solid fa-pen-to-square fa-sm' style='color: #ffffff;'></i></button>" . "</td>";
     echo "</tr>";
 }
@@ -37,9 +37,6 @@ echo "</tbody>";
 echo "</table>";
 echo "</div>";
 ?>
-</tbody>
-</table>
-
 <script>
     $(document).ready(function() {
         //Modal Edit
