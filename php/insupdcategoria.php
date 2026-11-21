@@ -8,7 +8,7 @@ $id = trim((string)($_POST['editidcategoria'] ?? ''));
 $editing = $id !== '';
 $name = trim((string)($_POST[$editing ? 'editcategoria' : 'newcategoria'] ?? ''));
 $icon = trim((string)($_POST['newiconacategoria'] ?? ''));
-if ($name === '' || ($editing && (!ctype_digit($id) || (int)$id < 1))) {
+if ($name === '' || strlen($name) > 150 || strlen($icon) > 1000 || ($editing && (!ctype_digit($id) || (int)$id < 1))) {
     http_response_code(400);
     exit('Dati categoria non validi');
 }
@@ -55,10 +55,14 @@ try {
         mysqli_stmt_close($initial);
     }
     mysqli_commit($conn);
-    echo 'Data Inserted';
+    header('Content-Type: text/plain; charset=utf-8');
+    echo 'Categoria salvata';
 } catch (Throwable $exception) {
     mysqli_rollback($conn);
     error_log('BudgetApp category write failed: ' . $exception->getMessage());
-    http_response_code(500);
-    echo 'Errore durante il salvataggio della categoria';
+    // MySQL 1062 is a duplicate key (e.g. a category name already present).
+    $duplicate = $exception instanceof mysqli_sql_exception && (int)$exception->getCode() === 1062;
+    http_response_code($duplicate ? 409 : 500);
+    header('Content-Type: text/plain; charset=utf-8');
+    echo $duplicate ? 'Esiste già una categoria con questo nome.' : 'Errore durante il salvataggio della categoria';
 }
