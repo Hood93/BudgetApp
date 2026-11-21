@@ -1,140 +1,52 @@
-<div class="table-responsive">
-    <table class="table table-bordered table-striped table-hover" id="table_TransazioniTotali">
-        <thead class="bg-light text-dark">
-            <tr>
-                <!--<th scope="col">Data Operazione</th>
-                <th scope="col">Causale</th>
-                <th scope="col">Descrizione</th>
-                <th scope="col">Entrate</th>
-                <th scope="col">Uscite</th>
-                <th scope="col">Tag1</th>
-                <th scope="col">Categorie</th>
-                <th scope="col">Tag3</th>
-                <th scope="col">Tag4</th>
-                <th scope="col">Azioni</th>-->
-            </tr>
-        </thead>
-        <tbody>
-            <?php
-            //ini_set('display_errors', 1);
-            include "db.php";
-
-            $datadioggi = date("d-m-Y");
-
-
-
-
-            //$query = "SELECT * FROM budgettable ";
-            $query = "select  * from budget.budgettable left join budget.categoriebudget on budget.budgettable.categorie = budget.categoriebudget.categoria";
-
-
-
-
-            if (isset($_POST["cerca"])) {
-                $query .=
-                    " WHERE data_operazione LIKE '%" . $_POST["cerca"] . "%' 
-                            OR causale LIKE '%" . $_POST["cerca"] . "%' 
-                            OR descrizione LIKE '%" . $_POST["cerca"] . "%' 
-                            OR entrate LIKE '%" . $_POST["cerca"] . "%' 
-                            OR uscite LIKE '%" . $_POST["cerca"] . "%'
-                            OR tag1 LIKE '%" . $_POST["cerca"] . "%'
-                            OR categorie LIKE '%" . $_POST["cerca"] . "%'
-                            OR tag3 LIKE '%" . $_POST["cerca"] . "%'
-                            OR tag4 LIKE '%" . $_POST["cerca"] . "%'";
-            }
-            if (isset($_POST["anno"])) {
-                $query .=
-                    " WHERE anno LIKE '%" . $_POST["anno"] . "%'
-                AND mese LIKE '%" . $_POST["mese"] . "%'
-                AND tag1 LIKE '%" . $_POST["tag1"] . "%'
-                    AND categoria LIKE '%" . $_POST["categoria"] . "%'";
-            } else if (isset($_POST["mese"])) {
-                $query .=
-                    " WHERE mese LIKE '%" . $_POST["mese"] . "%'
-                AND anno LIKE '%" . $_POST["anno"] . "%'
-                AND tag1 LIKE '%" . $_POST["tag1"] . "%'
-                AND categoria LIKE '%" . $_POST["categoria"] . "%'";
-            } elseif (isset($_POST["categoria"])) {
-                " WHERE categoria LIKE '%" . $_POST["categoria"] . "%'
-                AND anno LIKE '%" . $_POST["anno"] . "%'
-                AND tag1 LIKE '%" . $_POST["tag1"] . "%'
-                AND mese LIKE '%" . $_POST["mese"] . "%'";
-            } elseif (isset($_POST["tag1"])) {
-                " WHERE tag1 LIKE '%" . $_POST["tag1"] . "%'
-                AND anno LIKE '%" . $_POST["anno"] . "%'
-                AND categoria LIKE '%" . $_POST["categoria"] . "%'
-                AND mese LIKE '%" . $_POST["mese"] . "%'";
-            }
-
-            $query .= " order by data_operazione desc";
-
-
-
-            //Ciclo il risultato
-            $result = mysqli_query($conn, $query);
-            if (!$result) {
-                echo "An error occurred.\n";
-                exit;
-            }
-
-
-            while ($row = mysqli_fetch_assoc($result)) {
-                if ($row['tag1'] == "Uscita"){
-                    $cardcolor = " text-bg-danger ";
-                    $valore€ = $row["uscite"];
-                } else {
-                    $cardcolor = " text-bg-success ";
-                    $valore€ = $row["entrate"];
-                }
-
-                if ($row['causale'] == "Iniziale") {
-                } elseif (strtotime($datadioggi) < strtotime($row['data_operazione'])) {
-                } else {
-                    $datojson = $row["idBudgetTable"] . "," . $row["data_operazione"] . "," . $row["descrizione"] .",". $row['entrate'] . ",". $row['uscite'] . "," . $row["tag1"] . "," .$row["categorie"];
-                     echo "<tr>";
-                        //echo "<td style='display:none;'>" . $row["idBudgetTable"] . "</td>";
-                        //echo "<td>" . $row["data_operazione"] . "</td>";
-                    //echo "<td>" . $row["causale"] . "</td>";
-                        //echo "<td>" . $row["descrizione"] . "</td>";
-                        //echo "<td> € " . $row["entrate"] . "</td>";
-                        //echo "<td> € " . $row["uscite"] . "</td>";
-                        //echo "<td>" . $row["tag1"] . "</td>";
-                        //echo "<td>" . $row["icona"] . " " . $row["categorie"] . "</td>";
-                    //echo "<td>" . $row["tag3"] . "</td>";
-                    //echo "<td>" . $row["tag4"] . "</td>";
-                        //echo "<td>" . "<button type='button' data-bs-toggle='modal' data-bs-target='#ModalEditOperazione' class='btn btn-success editbtn'><span><i class='fa-solid fa-pen-to-square'></i></span></button>" . "</td>";
-
-                    echo "<div class='card h-25".$cardcolor." mb-3'>";
-                        echo "<div class='row g-0'>";
-                            echo "<div class='col immcat text-center'>";
-                            echo "<h5 class='card-title icocard'>". $row["icona"] ."</h5>";
-                            echo "</div>";
-                            echo "<div class='col'>";
-                               echo "<div class='card-body'>";
-                                    echo "<h5 class='card-title catecard'>". $row["categorie"] ."</h5>";
-                                    echo "<p class='card-text'>";
-                                    echo "<div class='scroll'><h5 class='desccard'>".$row["descrizione"]."</h5></div>";
-                                    echo "</p>";
-                                    echo "<p class='card-text'><small class='text-body-secondary'>".$row["data_operazione"]."</small></p>";
-                                echo "</div>";
-                            echo "</div>";
-                            echo "<div class='col valorecard text-center'> € ".$valore€."</div>";
-                            echo "<div class='row'>";
-                            echo "<div class='col bottcard text-center'><button type='button' data-bs-toggle='modal' data-bs-target='#ModalEditOperazione' class='btn btn-dark editbtn' onclick=EditOperazione(this) data='".$datojson."'><span><i class='fa-solid fa-pen-to-square'></i></span></button></div>";
-                            echo "</div>";
-                            echo "</div>";
-                    echo "</div>";
-                    echo "</tr>";
-                }
-            }
-            ?>
-        </tbody>
-    </table>
+<?php
+include "db.php";
+$search = trim((string)($_POST['cerca'] ?? ''));
+$year = trim((string)($_POST['anno'] ?? ''));
+$month = trim((string)($_POST['mese'] ?? ''));
+$tag = trim((string)($_POST['tag1'] ?? ''));
+$category = trim((string)($_POST['categoria'] ?? ''));
+$sql = "SELECT b.*, c.icona FROM budget.budgettable b LEFT JOIN budget.categoriebudget c ON b.categorie = c.categoria WHERE b.causale <> 'Iniziale' AND b.data_operazione <= CURDATE()";
+$values = [];
+$types = '';
+if ($search !== '') {
+    $sql .= " AND (b.data_operazione LIKE ? OR b.causale LIKE ? OR b.descrizione LIKE ? OR b.entrate LIKE ? OR b.uscite LIKE ? OR b.tag1 LIKE ? OR b.categorie LIKE ? OR b.tag3 LIKE ? OR b.tag4 LIKE ?)";
+    for ($i=0; $i<9; $i++) { $values[] = "%".$search."%"; $types .= 's'; }
+}
+foreach (['anno'=>$year,'mese'=>$month,'tag1'=>$tag,'categorie'=>$category] as $column=>$value) {
+    if ($value !== '') { $sql .= " AND b.".$column." = ?"; $values[] = $value; $types .= 's'; }
+}
+$sql .= " ORDER BY b.data_operazione DESC";
+$stmt = mysqli_prepare($conn, $sql);
+if (!$stmt) { http_response_code(500); echo '<p class="text-danger">Impossibile caricare le transazioni.</p>'; exit; }
+if ($values) mysqli_stmt_bind_param($stmt, $types, ...$values);
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
+$escape = static function ($value) { return htmlspecialchars((string)($value ?? ''), ENT_QUOTES, 'UTF-8'); };
+?>
+<div class="ba-transaction-list">
+<?php
+$count = 0;
+while ($row = mysqli_fetch_assoc($result)):
+    $count++;
+    $expense = $row['tag1'] === 'Uscita';
+    $amount = $expense ? $row['uscite'] : $row['entrate'];
+    $edit = implode(',', [$row['idBudgetTable'], $row['data_operazione'], $row['descrizione'], $row['entrate'], $row['uscite'], $row['tag1'], $row['categorie']]);
+?>
+  <article class="ba-transaction-item <?php echo $expense ? 'ba-expense' : 'ba-income'; ?>">
+    <div class="ba-transaction-icon" aria-hidden="true"><?php echo $row['icona'] ?: '<i class="fa-solid fa-receipt"></i>'; ?></div>
+    <div class="ba-transaction-details">
+      <div class="ba-transaction-category"><?php echo $escape($row['categorie']); ?></div>
+      <div class="ba-transaction-description"><?php echo $escape($row['descrizione']); ?></div>
+      <div class="ba-transaction-date"><i class="fa-regular fa-calendar me-1"></i><?php echo $escape($row['data_operazione']); ?></div>
+    </div>
+    <div class="ba-transaction-actions">
+      <div class="ba-transaction-amount"><?php echo $expense ? '−' : '+'; ?> <?php echo $escape($amount); ?> €</div>
+      <button type="button" data-bs-toggle="modal" data-bs-target="#ModalEditOperazione" class="btn btn-outline-secondary editbtn" onclick="EditOperazione(this)" data="<?php echo $escape($edit); ?>" aria-label="Modifica transazione"><i class="fa-solid fa-pen-to-square"></i></button>
+    </div>
+  </article>
+<?php endwhile; ?>
+<?php if ($count === 0): ?><div class="ba-empty-state"><i class="fa-regular fa-folder-open"></i><p>Nessuna transazione trovata.</p></div><?php endif; ?>
 </div>
-
-
-
-
 
 <script>
     $(document).ready(function() {
