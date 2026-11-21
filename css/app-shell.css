@@ -221,3 +221,23 @@ body .modal .modal-header,body .modal .modal-footer{border-color:var(--ba-border
 :root[data-ba-theme="dark"] body .ba-neutral{background:#273b68;color:#b1c6ff}
 :root[data-ba-theme="dark"] body .text-secondary{color:#a6b6cb!important}
 :root[data-ba-theme="dark"] body .ba-recurring-scroll,:root[data-ba-theme="dark"] body .ba-category-scroll,:root[data-ba-theme="dark"] body .ba-credit-scroll{border-color:var(--ba-border)}
+
+
+/* Regression fixes: transaction page offset, modal footer and category scroll */
+.ba-transactions-page{min-width:0}
+.ba-transactions-page>.container-fluid{width:100%;max-width:100%;padding:0}
+.ba-transactions-page .ba-welcome,.ba-transactions-page .ba-filter-panel,.ba-transactions-page .ba-results-panel{max-width:100%;min-width:0}
+#ModalNewOperazione .ba-form-modal,#ModalEditOperazione .ba-form-modal{display:flex;flex-direction:column;max-height:calc(100dvh - 32px)}
+#ModalNewOperazione .ba-form-modal>form,#ModalEditOperazione .ba-form-modal>form{display:flex;flex-direction:column;min-height:0;flex:1}
+#ModalNewOperazione .modal-body,#ModalEditOperazione .modal-body{flex:1 1 auto;min-height:0;overflow-y:auto}
+#ModalNewOperazione .modal-footer,#ModalEditOperazione .modal-footer{flex-shrink:0;margin-top:auto;background:var(--ba-surface);position:relative;z-index:1}
+.ba-management-reports{align-items:stretch}
+.ba-management-reports>#resannuale,.ba-management-reports>#categorie{min-width:0;align-self:stretch}
+.ba-management-reports>#categorie{max-height:574px;overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable}
+.ba-management-reports>#categorie>.table-responsive{overflow:visible!important;border-radius:14px}
+.ba-management-reports>#categorie table{margin:0;width:100%;border-collapse:separate;border-spacing:0}
+.ba-management-reports>#categorie table thead{position:sticky;top:0;z-index:5}
+.ba-management-reports>#categorie table thead th{position:sticky;top:0;z-index:5;background:#edf2fa!important;box-shadow:0 1px 0 var(--ba-border)}
+.ba-management-reports>#categorie table tbody td{vertical-align:middle}
+:root[data-ba-theme="dark"] .ba-management-reports>#categorie table thead th{background:#273750!important;color:#d5e2f6!important}
+@media(max-width:1199px){.ba-management-reports>#categorie{max-height:480px}}
