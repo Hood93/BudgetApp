@@ -77,6 +77,7 @@
                     creaGrafico(response)
                     ResiduiMensiliGrafico(response);
                     aggiornaRiepilogo(response);
+                    aggiornaCategorie();
                 },
                 error: function() { $('#baEntrate, #baUscite, #baSaldo').text('Dati non disponibili'); }
             });
@@ -106,6 +107,41 @@
             error: function() { $('#baEntrate, #baUscite, #baSaldo').text('Dati non disponibili'); }
         });
 
+    }
+
+    let categoryRequest = null;
+    function aggiornaCategorie() {
+        if (categoryRequest) categoryRequest.abort();
+        const container = $('#baTopCategories').text('Caricamento categorie...');
+        categoryRequest = $.ajax({
+            type: 'POST', dataType: 'json',
+            url: './php/json/preleva_dati_categorie_top.php',
+            data: {cerca: $('#anno').val() || ''}
+        }).done(function (rows) {
+            container.empty();
+            if (!Array.isArray(rows) || !rows.length) {
+                container.text('Nessuna spesa nel periodo selezionato.');
+                return;
+            }
+            const total = rows.reduce((sum, row) => sum + (Number(row.totale) || 0), 0);
+            const euro = new Intl.NumberFormat('it-IT', {style:'currency',currency:'EUR'});
+            const list = $('<div class="ba-category-ranking"></div>');
+            rows.forEach(row => {
+                const amount = Number(row.totale) || 0;
+                const item = $('<div class="ba-category-rank-item"></div>');
+                const header = $('<div class="ba-category-rank-label"></div>');
+                $('<span></span>').text(row.categoria || 'Senza categoria').appendTo(header);
+                $('<strong></strong>').text(euro.format(amount)).appendTo(header);
+                item.append(header);
+                $('<div class="ba-category-rank-track"></div>').append(
+                    $('<div class="ba-category-rank-fill"></div>').css('width', total ? (100 * amount / total) + '%' : '0%')
+                ).appendTo(item);
+                list.append(item);
+            });
+            container.append(list);
+        }).fail(function (_xhr, status) {
+            if (status !== 'abort') container.text('Impossibile caricare le categorie.');
+        });
     }
 
     function aggiornaRiepilogo(rows) {
