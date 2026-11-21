@@ -53,7 +53,7 @@
 </body>
 <script>
     $(document).ready(function() {
-        $('#anno').val(String(new Date().getFullYear()));
+        if ($('#anno option[value="' + new Date().getFullYear() + '"]').length) $('#anno').val(String(new Date().getFullYear()));
         getresocontoannuale()
         ReminderTransazioni()
 
@@ -68,10 +68,11 @@
                 dataType: 'JSON',
                 data: {
                     ajax: 1,
-                    cerca: $('#anno').val() || String(new Date().getFullYear()),
+                    cerca: $('#anno').val(),
                 },
 
                 success: function(response) {
+                    if (!Array.isArray(response)) { $('#baEntrate, #baUscite, #baSaldo').text('Dati non disponibili'); return; }
                     creaGrafico(response)
                     ResiduiMensiliGrafico(response);
                     aggiornaRiepilogo(response);
@@ -96,6 +97,7 @@
                 cerca: cerca
             },
             success: function(response) {
+                if (!Array.isArray(response)) { $('#baEntrate, #baUscite, #baSaldo').text('Dati non disponibili'); return; }
                 creaGrafico(response);
                 ResiduiMensiliGrafico(response);
                 aggiornaRiepilogo(response);
@@ -105,7 +107,19 @@
 
     }
 
-    function aggiornaRiepilogo(rows) {\n        if (!Array.isArray(rows)) return;\n        const parseAmount = value => {\n            if (typeof value === "number") return Number.isFinite(value) ? value : 0;\n            let v = String(value ?? "0").replace(/[^0-9,.-]/g, "");\n            if (v.includes(",") && v.includes(".")) v = v.replace(/\\./g, "").replace(",", ".");\n            else if (v.includes(",")) v = v.replace(",", ".");\n            return Number(v) || 0;\n        };\n        const entrate = rows.reduce((sum, row) => sum + parseAmount((row.entrate ?? row.Entrate)), 0);\n        const uscite = rows.reduce((sum, row) => sum + Math.abs(parseAmount((row.uscite ?? row.Uscite))), 0);\n        const euro = new Intl.NumberFormat("it-IT", {style:"currency",currency:"EUR"});\n        $("#baEntrate").text(euro.format(entrate));\n        $("#baUscite").text(euro.format(uscite));\n        $("#baSaldo").text(euro.format(entrate - uscite));\n    }\n\n    //Funzione Grafico\n    function creaGrafico(label) {
+    function aggiornaRiepilogo(rows) {
+        if (!Array.isArray(rows)) throw new Error('Formato report non valido');
+        const entrate = rows.reduce((sum, row) => sum + (Number(row.entrate) || 0), 0);
+        const uscite = rows.reduce((sum, row) => sum + Math.abs(Number(row.uscite) || 0), 0);
+        const euro = new Intl.NumberFormat('it-IT', {style:'currency', currency:'EUR'});
+        $('#baEntrate').text(euro.format(entrate));
+        $('#baUscite').text(euro.format(uscite));
+        $('#baSaldo').text(euro.format(entrate - uscite));
+        $('#resmensile').text(rows.length ? 'Dati di ' + rows.length + ' mesi disponibili nei grafici.' : 'Nessuna transazione per il periodo selezionato.');
+    }
+
+    // Grafico entrate e uscite
+    function creaGrafico(label) {
 
         var mesi = label.map(function(e) {
             return e.mese;
@@ -114,7 +128,7 @@
             return Number(e.entrate) || 0;
         });
         var uscite = label.map(function(e) {
-            return (e.uscite * -1);
+            return Math.abs(Number(e.uscite) || 0);
         });
 
         //Controllo se è gia presente un Grafico
