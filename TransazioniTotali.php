@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 
 <head>
     <meta charset="UTF-8">
@@ -30,58 +30,19 @@
             <?php include "componenti/Modal/ModalEditOperazione.php"; // File Modal Edit 
             include "componenti/Modal/ModalInsertOperazione.php"; // File Modal Edit 
             ?>
-            <div class="row mb-3" style="padding-left: 10px !important;">
-                <div class="col-10" style="padding-top: 80px !important;">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text bg-light"><i class="fa-solid fa-magnifying-glass text-primary py-2"></i></span>
-                        </div>
-                        <input type="text" class="form-control" onkeyup="cercacontrollo(this)" placeholder="Ricerca Generica">
-                    </div>
-                </div>
-                <div class="col-2" style="padding-top: 80px !important;">
-                    <button class="btn btn-dark py-2 btn-sm" name="add" id="add">
-                        Aggiungi Transazione
-                    </button>
-                </div>
-            </div>
-            <div class="row mb-3">
-                <div class="col">
-                    Filtro Per Anno <select name="filtroanno" id="filtroanno" onchange='filtraanno(this)'>
-                        <?php
-                        echo "<option value=''></option>";
-                        foreach ($tableanno as $anno) {
-                            echo "<option value='" . $anno . "'>" . $anno . "</option>";
-                        }
-                        ?>
-                    </select>
-                </div>
-                <div class="col">
-                    Filtro Per Mese <select name="filtromese" id="filtromese" onchange='filtramese(this)'>
-                        <?php
-                        echo "<option value=''></option>";
-                        foreach ($mesi as $mese) {
-                            echo "<option value='" . $mese . "'>" . $mese . "</option>";
-                        }
-                        ?>
-                    </select>
-                </div>
-                <div class="col">
-                    Filtro Per Tag1 <input type="text" name="filtrotag1" id="filtrotag1" class="form-control" onkeyup="filtratag1(this)" placeholder="Ricerca Tag1">
-                </div>
-                <div class="col">
-                    Filtro Per Categoria <select name="filtrocategoria" id="filtrocategoria" onchange='filtracategoria(this)'>
-                        <?php
-                        echo "<option value=''></option>";
-                        foreach ($catarray as $categoria) {
-                            echo "<option value='" . $categoria . "'>" . $categoria . "</option>";
-                        }
-                        ?>
-                    </select>
-                </div>
-            </div>
+            <section class="ba-welcome"><div class="ba-eyebrow">MOVIMENTI</div><h2>Tutte le transazioni</h2><p>Consulta, cerca e filtra i movimenti registrati.</p></section>
+            <section class="ba-panel ba-filter-panel mb-4">
+              <div class="row g-3 align-items-end">
+                <div class="col-12 col-lg-8"><label class="form-label" for="baSearch">Ricerca transazioni</label><div class="input-group"><span class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></span><input id="baSearch" type="search" class="form-control" onkeyup="cercacontrollo(this)" placeholder="Cerca una transazione..."></div></div>
+                <div class="col-12 col-lg-4"><button class="btn btn-primary w-100" name="add" id="add"><i class="fa-solid fa-plus me-2"></i>Aggiungi transazione</button></div>
+                <div class="col-6 col-lg-3"><label class="form-label" for="filtroanno">Anno</label><select class="form-select" name="filtroanno" id="filtroanno" onchange="filtraanno(this)"><option value="">Tutti</option><?php foreach ($tableanno as $anno): ?><option value="<?php echo htmlspecialchars((string)$anno, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars((string)$anno, ENT_QUOTES, 'UTF-8'); ?></option><?php endforeach; ?></select></div>
+                <div class="col-6 col-lg-3"><label class="form-label" for="filtromese">Mese</label><select class="form-select" name="filtromese" id="filtromese" onchange="filtramese(this)"><option value="">Tutti</option><?php foreach ($mesi as $mese): ?><option value="<?php echo htmlspecialchars((string)$mese, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars((string)$mese, ENT_QUOTES, 'UTF-8'); ?></option><?php endforeach; ?></select></div>
+                <div class="col-6 col-lg-3"><label class="form-label" for="filtrotag1">Tag</label><input type="text" name="filtrotag1" id="filtrotag1" class="form-control" onkeyup="filtratag1(this)" placeholder="Filtra per tag"></div>
+                <div class="col-6 col-lg-3"><label class="form-label" for="filtrocategoria">Categoria</label><select class="form-select" name="filtrocategoria" id="filtrocategoria" onchange="filtracategoria(this)"><option value="">Tutte</option><?php foreach ($catarray as $categoria): ?><option value="<?php echo htmlspecialchars((string)$categoria, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars((string)$categoria, ENT_QUOTES, 'UTF-8'); ?></option><?php endforeach; ?></select></div>
+              </div>
+            </section>
         </div>
-        <div class="container-fluid" id="transazionitotali" style="padding-top: 10px !important;">
+        <div class="ba-results-panel" id="transazionitotali" aria-live="polite">
         </div>
     </div>
 
