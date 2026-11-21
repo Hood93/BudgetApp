@@ -67,103 +67,47 @@
 
             <!-- Modal -->
 
-            <!-- Jquery CDN -->
-            <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
-            <!-- End of Jquery CDN -->
-            <script>
-              $(document).ready(function() {
-
-                $('.savebtnnew').on('click', function() {
-                  var newdataoperazione = $('#newdataoperazione').val();
-                  var newcausale = $('#newcausale').val();
-                  var newdescrizione = $('#newdescrizione').val();
-                  var newentrate = $('#newentrate').val();
-                  var newuscite = $('#newuscite').val();
-                  var newtag1 = $('#newtag1').val();
-                  var newcategoria = $('#newcategoria').val();
-                  var newtag3 = $('#newtag3').val();
-                  var newtag4 = $('#newtag4').val();
-                  var splitdata = newdataoperazione.split('-');
-                  switch (splitdata[1]) {
-                    case "01":
-                      var newmese = "Gennaio";
-                      var newordinemese = "1";
-                      break;
-                    case "02":
-                      var newmese = "Febbraio";
-                      var newordinemese = "2";
-                      break;
-                    case "03":
-                      var newmese = "Marzo";
-                      var newordinemese = "3";
-                      break;
-                    case "04":
-                      var newmese = "Aprile";
-                      var newordinemese = "4";
-                      break;
-                    case "05":
-                      var newmese = "Maggio";
-                      var newordinemese = "5";
-                      break;
-                    case "06":
-                      var newmese = "Giugno";
-                      var newordinemese = "6";
-                      break;
-                    case "07":
-                      var newmese = "Luglio";
-                      var newordinemese = "7";
-                      break;
-                    case "08":
-                      var newmese = "Agosto";
-                      var newordinemese = "8";
-                      break;
-                    case "09":
-                      var newmese = "Settembre";
-                      var newordinemese = "9";
-                      break;
-                    case "10":
-                      var newmese = "Ottobre";
-                      var newordinemese = "10";
-                      break;
-                    case "11":
-                      var newmese = "Novembre";
-                      var newordinemese = "11";
-                      break;
-                    case "12":
-                      var newmese = "Dicembre";
-                      var newordinemese = "12";
-                      break;
-                    default:
-                      var newmese = "";
-                  }
-                  var newanno = splitdata[0];
-                  if (newtag1 != "") {
-                    $.ajax({
-                    type: 'POST',
-                    url: 'php/insupdoperazione.php',
-                    data: {
-                      ajax: 1,
-                      newdataoperazione: newdataoperazione,
-                      newmese: newmese,
-                      newanno: newanno,
-                      newordinemese: newordinemese,
-                      newcausale: newcausale,
-                      newdescrizione: newdescrizione,
-                      newentrate: newentrate,
-                      newuscite: newuscite,
-                      newtag1: newtag1,
-                      newcategoria: newcategoria,
-                      newtag3: newtag3,
-                      newtag4: newtag4
-                    },
-                    success: function(response) {
-                      document.getElementById('closebtn').click();
-                      location.reload();
-                    }
-                  });
-                  }else{
-                    alert("Tutti i campi sono obbligatori")
-                  }
-                });
-              });
-            </script>
+<script>
+$(function () {
+    const $form = $('#ModalNewOperazione form');
+    $form.on('submit', function (event) {
+        event.preventDefault();
+        const prefix = 'new';
+        const date = $('#'+prefix+'dataoperazione').val();
+        const description = $('#'+prefix+'descrizione').val().trim();
+        const tag = $('#'+prefix+'tag1').val();
+        const category = $('#'+prefix+'categoria').val();
+        const income = $('#'+prefix+'entrate').val();
+        const expense = $('#'+prefix+'uscite').val();
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || !description || !tag || !category ||
+            income === '' || expense === '' || Number(income) < 0 || Number(expense) < 0) {
+            alert('Compila data, descrizione, importi, tipologia e categoria.');
+            return;
+        }
+        const month = Number(date.slice(5, 7));
+        const months = ['Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'];
+        const data = {
+            ajax: 1,
+            [prefix+'dataoperazione']: date,
+            [prefix+'mese']: months[month-1] || '',
+            [prefix+'anno']: date.slice(0,4),
+            [prefix+'ordinemese']: String(month),
+            [prefix+'descrizione']: description,
+            [prefix+'entrate']: income,
+            [prefix+'uscite']: expense,
+            [prefix+'tag1']: tag,
+            [prefix+'categoria']: category
+        };
+        
+        const $button = $form.find('.savebtnnew');
+        $button.prop('disabled', true);
+        $.ajax({
+            type: 'POST', url: 'php/insupdoperazione.php', data: data,
+            success: function () { window.location.reload(); },
+            error: function (xhr) { alert(xhr.responseText || 'Errore durante il salvataggio.'); },
+            complete: function () { $button.prop('disabled', false); }
+        });
+    });
+    $form.find('.savebtnnew').on('click', function () { $form.trigger('submit'); });
+});
+</script>
