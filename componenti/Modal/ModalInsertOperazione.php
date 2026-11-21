@@ -21,7 +21,7 @@
                         <label for="newdescrizione" class="form-label">Descrizione</label>
                         <input type="text" name="newdescrizione" id="newdescrizione" class="form-control" placeholder="Inserire Descrizione">
                       </div>
-                      <div class="form-group ba-form-field">
+                      <div class="ba-form-grid"><div class="form-group ba-form-field">
                         <label for="newentrate" class="form-label">Entrata</label>
                         <input type="number" step="0.01" min="0" name="newentrate" id="newentrate" class="form-control" placeholder="Inserire Entrata" value = "0">
                       </div>
@@ -29,7 +29,7 @@
                         <label for="newuscite" class="form-label">Uscita</label>
                         <input type="number" step="0.01" min="0" name="newuscite" id="newuscite" class="form-control" placeholder="Inserire Uscita" value = "0">
                       </div></div>
-                      <div class="form-group ba-form-field">
+                      <div class="ba-form-grid"><div class="form-group ba-form-field">
                         <label for="newtag1" class="form-label">Tipologia</label>
                         <select name="newtag1" id="newtag1" class="form-control form-select" required>
                           <option value="">Seleziona...</option>
@@ -46,7 +46,7 @@
                           echo "<option value='" . htmlspecialchars((string)$cate, ENT_QUOTES, 'UTF-8') . "'>" . htmlspecialchars((string)$cate, ENT_QUOTES, 'UTF-8') . "</option>";
                         }
                         echo "</select>"; ?>
-                      </div></div>
+                      </div></div></div>
                       <!--<div class="form-group ba-form-field">
                         <label>Tag3</label>
                         <input type="text" name="newtag3" id="newtag3" class="form-control" placeholder="Inserire Tag3">
