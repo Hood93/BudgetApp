@@ -69,111 +69,47 @@
 
             <!-- Modal -->
 
-            <!-- Jquery CDN -->
-            <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
-            <!-- End of Jquery CDN -->
-            <script>
-                $(document).ready(function() {
-
-                    $('.savebtnedit').on('click', function() {
-                        var editidoperazione = $('#editidoperazione').val();
-                        var editdataoperazione = $('#editdataoperazione').val();
-                        //var editcausale = $('#editcausale').val();
-                        var editdescrizione = $('#editdescrizione').val();
-                        var editentrate = $('#editentrate').val();
-                        var edituscite = $('#edituscite').val();
-                        var edittag1 = $('#edittag1').val();
-                        var editcategoria = $('#editcategoria').val();
-                        //var edittag3 = $('#edittag3').val();
-                        //var edittag4 = $('#edittag4').val();
-                        var splitdata = editdataoperazione.split('-');
-                        //editentrate = editentrate.replace("€", "");
-                        //edituscite = edituscite.replace("€", "");
-                        //editentrate = editentrate.replace(/\s+/g, '');
-                        //edituscite = edituscite.replace(/\s+/g, '');
-                        switch (splitdata[1]) {
-                            case "01":
-                                var editmese = "Gennaio";
-                                var editordinemese = "1";
-                                break;
-                            case "02":
-                                var editmese = "Febbraio";
-                                var editordinemese = "2";
-                                break;
-                            case "03":
-                                var editmese = "Marzo";
-                                var editordinemese = "3";
-                                break;
-                            case "04":
-                                var editmese = "Aprile";
-                                var editordinemese = "4";
-                                break;
-                            case "05":
-                                var editmese = "Maggio";
-                                var editordinemese = "5";
-                                break;
-                            case "06":
-                                var editmese = "Giugno";
-                                var editordinemese = "6";
-                                break;
-                            case "07":
-                                var editmese = "Luglio";
-                                var editordinemese = "7";
-                                break;
-                            case "08":
-                                var editmese = "Agosto";
-                                var editordinemese = "8";
-                                break;
-                            case "09":
-                                var editmese = "Settembre";
-                                var editordinemese = "9";
-                                break;
-                            case "10":
-                                var editmese = "Ottobre";
-                                var editordinemese = "10";
-                                break;
-                            case "11":
-                                var editmese = "Novembre";
-                                var editordinemese = "11";
-                                break;
-                            case "12":
-                                var editmese = "Dicembre";
-                                var editordinemese = "12";
-                                break;
-                            default:
-                                var editmese = "";
-                        }
-                        var editanno = splitdata[0];
-                        if (edittag1 != "") {
-                        $.ajax({
-                            type: 'POST',
-                            url: 'php/insupdoperazione.php',
-                            data: {
-                                ajax: 1,
-                                editidoperazione: editidoperazione,
-                                editdataoperazione: editdataoperazione,
-                                editmese: editmese,
-                                editanno: editanno,
-                                editordinemese: editordinemese,
-                                //editcausale: editcausale,
-                                editdescrizione: editdescrizione,
-                                editentrate: editentrate,
-                                edituscite: edituscite,
-                                edittag1: edittag1,
-                                editcategoria: editcategoria,
-                                //edittag3: edittag3,
-                                //edittag4: edittag4
-                            },
-                            success: function(response) {
-                                document.getElementById('closebtn').click();
-                                location.reload();
-                            }
-                        
-
-                        });
-                    } else {
-                        alert("Tutti i campi sono obbligatori")
-                    }
-                    });
-                });
-            </script>
+<script>
+$(function () {
+    const $form = $('#ModalEditOperazione form');
+    $form.on('submit', function (event) {
+        event.preventDefault();
+        const prefix = 'edit';
+        const date = $('#'+prefix+'dataoperazione').val();
+        const description = $('#'+prefix+'descrizione').val().trim();
+        const tag = $('#'+prefix+'tag1').val();
+        const category = $('#'+prefix+'categoria').val();
+        const income = $('#'+prefix+'entrate').val();
+        const expense = $('#'+prefix+'uscite').val();
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || !description || !tag || !category ||
+            income === '' || expense === '' || Number(income) < 0 || Number(expense) < 0) {
+            alert('Compila data, descrizione, importi, tipologia e categoria.');
+            return;
+        }
+        const month = Number(date.slice(5, 7));
+        const months = ['Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'];
+        const data = {
+            ajax: 1,
+            [prefix+'dataoperazione']: date,
+            [prefix+'mese']: months[month-1] || '',
+            [prefix+'anno']: date.slice(0,4),
+            [prefix+'ordinemese']: String(month),
+            [prefix+'descrizione']: description,
+            [prefix+'entrate']: income,
+            [prefix+'uscite']: expense,
+            [prefix+'tag1']: tag,
+            [prefix+'categoria']: category
+        };
+        data.editidoperazione = $('#editidoperazione').val();
+        const $button = $form.find('.savebtnedit');
+        $button.prop('disabled', true);
+        $.ajax({
+            type: 'POST', url: 'php/insupdoperazione.php', data: data,
+            success: function () { window.location.reload(); },
+            error: function (xhr) { alert(xhr.responseText || 'Errore durante il salvataggio.'); },
+            complete: function () { $button.prop('disabled', false); }
+        });
+    });
+    $form.find('.savebtnedit').on('click', function () { $form.trigger('submit'); });
+});
+</script>
