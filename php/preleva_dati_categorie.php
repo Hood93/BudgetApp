@@ -31,7 +31,7 @@ while ($row = mysqli_fetch_assoc($result)) {
     // Preserve configured Font Awesome icons without injecting database HTML.
     $iconMarkup = (string)($row['icona'] ?? '');
     $iconClasses = 'fa-solid fa-folder';
-    if (preg_match('/<i\\b[^>]*\\bclass\\s*=\\s*["\\']([^"\\']+)["\\']/i', $iconMarkup, $matches)) {
+    if (preg_match('~<i\\b[^>]*class\\s*=\\s*"([^"]+)"~i', $iconMarkup, $matches) || preg_match("~<i\\\\b[^>]*class\\\\s*=\\\\s*'([^']+)'~i", $iconMarkup, $matches)) {
         $tokens = preg_split('/\\s+/', trim($matches[1]));
         $allowed = array_values(array_filter($tokens, static fn($token) => preg_match('/^(?:fa|fas|far|fab|fa-solid|fa-regular|fa-brands|fa-[a-z0-9-]+)$/', $token)));
         if ($allowed && count($allowed) === count($tokens)) $iconClasses = implode(' ', $allowed);
