@@ -8,7 +8,7 @@ if ($year !== '' && !preg_match('/^[0-9]{4}$/', $year)) {
     exit;
 }
 $sql = "SELECT categorie, ROUND(SUM(ABS(CAST(uscite AS DECIMAL(15,2)))),2) AS totale
-        FROM budgettable WHERE causale <> 'Iniziale' AND uscite <> 0";
+        FROM budgettable WHERE (causale IS NULL OR causale <> 'Iniziale') AND uscite <> 0";
 if ($year !== '') $sql .= ' AND anno = ?';
 $sql .= ' GROUP BY categorie HAVING totale > 0 ORDER BY totale DESC LIMIT 5';
 $stmt = mysqli_prepare($conn, $sql);
