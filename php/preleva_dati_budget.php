@@ -25,7 +25,7 @@ if (($year !== '' && !preg_match('/^[0-9]{4}$/', $year)) ||
 // Use the application calendar date, not the MySQL server clock: a database host
 // with an outdated date would otherwise hide every newer transaction.
 $today = (new DateTimeImmutable('now', new DateTimeZone('Europe/Rome')))->format('Y-m-d');
-$where = " WHERE b.causale <> 'Iniziale' AND b.data_operazione <= ?";
+$where = " WHERE (b.causale IS NULL OR b.causale <> 'Iniziale') AND b.data_operazione <= ?";
 $params = [$today];
 $types = 's';
 if ($search !== '') {
