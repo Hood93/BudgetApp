@@ -617,3 +617,25 @@ body .modal .modal-header,body .modal .modal-footer{border-color:var(--ba-border
  .ba-management .ba-management-month .ba-month-report th,
  .ba-management .ba-management-month .ba-month-report td{white-space:normal!important;font-size:.79rem}
 }
+
+/* Transactions v2: filtered overview, month separators and progressive loading */
+.ba-transactions-summary .ba-summary-tile{padding:18px 20px;height:100%;display:flex;flex-direction:column;gap:6px;min-width:0}
+.ba-summary-tile span{color:var(--ba-muted);font-size:.83rem}
+.ba-summary-tile strong{color:var(--ba-ink);font-size:clamp(1rem,2.3vw,1.55rem);font-weight:750;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.ba-transactions-summary .col-4:first-child strong{color:var(--ba-success,#36c995)}
+.ba-transactions-summary .col-4:nth-child(2) strong{color:var(--ba-danger,#fb6378)}
+.ba-transactions-page #baAdvancedFilters{padding-top:8px}
+.ba-transactions-page #baAdvancedFilters[hidden]{display:none!important}
+.ba-period-heading{font-size:1.03rem;font-weight:750;color:var(--ba-ink);margin:24px 0 12px;padding:0 4px}
+.ba-load-footer{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:26px 12px 55px;min-height:100px}
+.ba-load-footer #baLoadMore[hidden]{display:none!important}
+.ba-load-footer #baLoadSentinel{height:1px;width:100%}
+.ba-transactions-page .ba-transaction-item{transition:background-color .15s,border-color .15s}
+.ba-transactions-page .ba-transaction-item:hover{border-color:var(--ba-accent,#7191ff)}
+@media(max-width:767px){
+ .ba-transactions-summary{--bs-gutter-x:8px}
+ .ba-transactions-summary .ba-summary-tile{padding:12px 10px;min-height:80px}
+ .ba-summary-tile span{font-size:.73rem}
+ .ba-summary-tile strong{font-size:clamp(.85rem,3.4vw,1.15rem)}
+ .ba-period-heading{margin:20px 0 10px;font-size:.96rem}
+}
