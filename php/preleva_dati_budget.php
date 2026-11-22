@@ -22,9 +22,12 @@ if (($year !== '' && !preg_match('/^[0-9]{4}$/', $year)) ||
     strlen($search)>200 || strlen($tag)>100 || strlen($category)>200 || strlen($cursor)>200) {
     baFail(400, 'Filtri non validi');
 }
-$where = " WHERE b.causale <> 'Iniziale' AND b.data_operazione <= CURDATE()";
-$params = [];
-$types = '';
+// Use the application calendar date, not the MySQL server clock: a database host
+// with an outdated date would otherwise hide every newer transaction.
+$today = (new DateTimeImmutable('now', new DateTimeZone('Europe/Rome')))->format('Y-m-d');
+$where = " WHERE b.causale <> 'Iniziale' AND b.data_operazione <= ?";
+$params = [$today];
+$types = 's';
 if ($search !== '') {
     $where .= " AND (b.data_operazione LIKE ? OR b.causale LIKE ? OR b.descrizione LIKE ? OR b.entrate LIKE ? OR b.uscite LIKE ? OR b.tag1 LIKE ? OR b.categorie LIKE ? OR b.tag3 LIKE ? OR b.tag4 LIKE ?)";
     for ($i=0;$i<9;$i++) { $params[]='%'.$search.'%'; $types.='s'; }
