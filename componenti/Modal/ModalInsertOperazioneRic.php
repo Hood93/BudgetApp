@@ -85,7 +85,7 @@
                 let saving = false;
 
                 function preview() {
-                    const match = /^(\\d{4})-(\\d{2})-(\\d{2})$/.exec($date.val() || '');
+                    const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec($date.val() || '');
                     const duration = Number($duration.val());
                     const monthIndex = months.indexOf($month.val());
                     if (!match || monthIndex < 0 || !Number.isInteger(duration) || duration < 1 || duration > 12) {
@@ -107,7 +107,7 @@
                 window.DettaglioDurata = preview;
                 window.EnableInsert = enable;
                 $date.on('change input',function () {
-                    const match = /^\\d{4}-(\\d{2})-\\d{2}$/.exec($date.val() || '');
+                    const match = /^\d{4}-(\d{2})-\d{2}$/.exec($date.val() || '');
                     if (match && Number(match[1]) >= 1) $month.val(months[Number(match[1])-1] || '');
                     enable();
                 });
