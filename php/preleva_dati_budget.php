@@ -81,7 +81,7 @@ try {
         $amount=$expense?$row['uscite']:$row['entrate'];
         $iconClass='fa-solid fa-receipt';
         $icon=(string)($row['icona']??'');
-        if (preg_match('~<i\\b[^>]*class\\s*=\\s*["\\\']([^"\\\']+)["\\\']~i',$icon,$match)) {
+        if (preg_match('~<i\\b[^>]*class\\s*=\\s*["\\x27]([^"\\x27]+)["\\x27]~i',$icon,$match)) {
             $tokens=preg_split('/\\s+/',trim($match[1]));
             if ($tokens && count(array_filter($tokens,static fn($t)=>preg_match('/^(?:fa|fas|far|fab|fa-solid|fa-regular|fa-brands|fa-[a-z0-9-]+)$/',$t)))===count($tokens)) $iconClass=implode(' ',$tokens);
         }
