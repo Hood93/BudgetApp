@@ -52,7 +52,7 @@
                       </div>
                       <div class="form-group">
                         <label>Durata</label>
-                        <input type="number" name="newdurataopric" id="newdurataopric" max="12" class="form-control" onchange="DettaglioDurata()" placeholder="Inserire Durata">
+                        <input type="number" name="newdurataopric" id="newdurataopric" min="1" max="12" class="form-control" onchange="DettaglioDurata()" placeholder="Inserire Durata">
                         <p id="messaggiodurata"></p>
                       </div>
                       <div class="form-check form-switch">
@@ -75,169 +75,70 @@
             <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
             <!-- End of Jquery CDN -->
             <script>
-              $(document).ready(function() {
-                $('.savebtnnewopric').on('click', function() {
-                  var newdataoperazioneopric = $('#newdataoperazioneopric').val();
-                  var splitdata = newdataoperazioneopric.split('-');
-                  var newdescrizioneopric = $('#newdescrizioneopric').val();
-                  var newcategoriaopric = $('#newcategoriaopric').val();
-                  var newmesepartopric = $('#newmesepartopric').val();
-                  var newentrateopric = $('#newentrateopric').val();
-                  var newusciteopric = $('#newusciteopric').val();
-                  var newtag1opric = $('#newtag1opric').val();
-                  var newdurataopric = $('#newdurataopric').val();
-                  var newannoopric = new Date();
-                  newannoopric = newannoopric.getFullYear();
-                  switch (newmesepartopric) {
-                    case "Gennaio":
-                      var newnummesepartopric = "01";
-                      var newnumgiornopartopric = splitdata[2];
-                      var newordinemeseopric = "1";
-                      break;
-                    case "Febbraio":
-                      var newnummesepartopric = "02";
-                      var newnumgiornopartopric = splitdata[2];
-                      var newordinemeseopric = "2";
-                      break;
-                    case "Marzo":
-                      var newnummesepartopric = "03";
-                      var newnumgiornopartopric = splitdata[2];
-                      var newordinemeseopric = "3";
-                      break;
-                    case "Aprile":
-                      var newnummesepartopric = "04";
-                      var newnumgiornopartopric = splitdata[2];
-                      var newordinemeseopric = "4";
-                      break;
-                    case "Maggio":
-                      var newnummesepartopric = "05";
-                      var newnumgiornopartopric = splitdata[2];
-                      var newordinemeseopric = "5";
-                      break;
-                    case "Giugno":
-                      var newnummesepartopric = "06";
-                      var newnumgiornopartopric = splitdata[2];
-                      var newordinemeseopric = "6";
-                      break;
-                    case "Luglio":
-                      var newnummesepartopric = "07";
-                      var newnumgiornopartopric = splitdata[2];
-                      var newordinemeseopric = "7";
-                      break;
-                    case "Agosto":
-                      var newnummesepartopric = "08";
-                      var newnumgiornopartopric = splitdata[2];
-                      var newordinemeseopric = "8";
-                      break;
-                    case "Settembre":
-                      var newnummesepartopric = "09";
-                      var newnumgiornopartopric = splitdata[2];
-                      var newordinemeseopric = "9";
-                      break;
-                    case "Ottobre":
-                      var newnummesepartopric = "10";
-                      var newnumgiornopartopric = splitdata[2];
-                      var newordinemeseopric = "10";
-                      break;
-                    case "Novembre":
-                      var newnummesepartopric = "11";
-                      var newnumgiornopartopric = splitdata[2];
-                      var newordinemeseopric = "11";
-                      break;
-                    case "Dicembre":
-                      var newnummesepartopric = "12";
-                      var newnumgiornopartopric = splitdata[2];
-                      var newordinemeseopric = "12";
-                      break;
-                    default:
-                      var newdataopric = "";
-                  }
+              (function () {
+                const months = ['Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'];
+                const $date = $('#newdataoperazioneopric');
+                const $month = $('#newmesepartopric');
+                const $duration = $('#newdurataopric');
+                const $confirm = $('#swtichconferma');
+                const $save = $('#idsavebtnnewopric');
+                let saving = false;
 
-                  $.ajax({
-                    type: 'POST',
-                    url: 'php/insoperazioneric.php',
-                    data: {
-                      ajax: 1,
-                      newmesepartopric: newmesepartopric,
-                      newannoopric: newannoopric,
-                      newordinemeseopric: newordinemeseopric,
-                      newdescrizioneopric: newdescrizioneopric,
-                      newusciteopric: newusciteopric,
-                      newtag1opric: newtag1opric,
-                      newentrateopric: newentrateopric,
-                      newcategoriaopric: newcategoriaopric,
-                      newnumgiornopartopric: newnumgiornopartopric,
-                      newnummesepartopric: newnummesepartopric,
-                      newdurataopric: newdurataopric
-                    },
-                    success: function(response) {
-                      document.getElementById('closebtnnewopric').click();
-                      location.reload();
+                function preview() {
+                    const match = /^(\\d{4})-(\\d{2})-(\\d{2})$/.exec($date.val() || '');
+                    const duration = Number($duration.val());
+                    const monthIndex = months.indexOf($month.val());
+                    if (!match || monthIndex < 0 || !Number.isInteger(duration) || duration < 1 || duration > 12) {
+                        $('#messaggiodurata').text('Seleziona una data, il mese di partenza e una durata da 1 a 12 mesi.');
+                        return false;
                     }
-
-                  });
-                });
-              });
-
-              function DettaglioDurata() {
-                var annoini = new Date();
-                annoini = annoini.getFullYear(); // Prendo anno attuale
-                var meseinizio = $("#newmesepartopric :selected").text(); //Prendo il mese iniziale text
-                var durata = $("#newdurataopric").val(); //Prendo la durata
-                const mesenum = {
-                  "Gennaio": 1,
-                  "Febbraio": 2,
-                  "Marzo": 3,
-                  "Aprile": 4,
-                  "Maggio": 5,
-                  "Giugno": 6,
-                  "Luglio": 7,
-                  "Agosto": 8,
-                  "Settembre": 9,
-                  "Ottobre": 10,
-                  "Novembre": 11,
-                  "Dicembre": 12
-                };
-                var meseini = mesenum[meseinizio] //Mese iniziale in numero
-
-                var mesefin = meseini
-                var annofin = annoini;
-
-                for (i = 1; i < durata; i++) {
-                  console.log("for")
-                  if (mesefin >= 12) {
-                    mesefin = 0
-                    annofin = annoini + 1;
-                  } else {
-                    annofin = annoini
-                  }
-                  mesefin = mesefin + 1;
+                    const year = Number(match[1]);
+                    const endIndex = monthIndex + duration - 1;
+                    const endMonth = endIndex % 12;
+                    const endYear = year + Math.floor(endIndex / 12);
+                    $('#messaggiodurata').text('Verrà inserita una transazione ricorrente da ' +
+                        months[monthIndex] + ' del ' + year + ' fino a ' + months[endMonth] + ' del ' + endYear +
+                        ' (' + duration + ' operazioni mensili).');
+                    return true;
                 }
-                
-                const mesenumfin = {
-                  "1": "Gennaio",
-                  "2": "Febbraio",
-                  "3": "Marzo",
-                  "4": "Aprile",
-                  "5": "Maggio",
-                  "6": "Giugno",
-                  "7": "Luglio",
-                  "8": "Agosto",
-                  "9": "Settembre",
-                  "10": "Ottobre",
-                  "11": "Novembre",
-                  "12": "Dicembre"
-                };
-                $('#messaggiodurata').html('Verrà inserita una transazione ricorrente da ' + meseinizio + " del " + annoini + " fino al " + mesenumfin[mesefin] + " del " + annofin)
-              }
-
-              function EnableInsert(){
-                var conferma = $('#swtichconferma').is(":checked");
-                var btnconferma = document.getElementById("idsavebtnnewopric")
-                if (conferma != true) {
-                  $("#idsavebtnnewopric").attr('disabled','disabled');  
-                } else  {
-                  $("#idsavebtnnewopric").prop("disabled", false);
-                } 
-              }
+                function enable() {
+                    $save.prop('disabled',saving || !$confirm.is(':checked') || !preview());
+                }
+                window.DettaglioDurata = preview;
+                window.EnableInsert = enable;
+                $date.on('change input',function () {
+                    const match = /^\\d{4}-(\\d{2})-\\d{2}$/.exec($date.val() || '');
+                    if (match && Number(match[1]) >= 1) $month.val(months[Number(match[1])-1] || '');
+                    enable();
+                });
+                $month.on('change',enable);
+                $duration.on('input change',enable);
+                $confirm.on('change',enable);
+                $save.on('click',function () {
+                    if (saving || !preview() || !$confirm.is(':checked')) return;
+                    const data = {
+                        newdataoperazioneopric:$date.val(),
+                        newmesepartopric:$month.val(),
+                        newdescrizioneopric:$('#newdescrizioneopric').val(),
+                        newcategoriaopric:$('#newcategoriaopric').val(),
+                        newentrateopric:$('#newentrateopric').val(),
+                        newusciteopric:$('#newusciteopric').val(),
+                        newtag1opric:$('#newtag1opric').val(),
+                        newdurataopric:$duration.val()
+                    };
+                    saving=true;enable();
+                    $.ajax({type:'POST',url:'php/insoperazioneric.php',data:data,dataType:'json'})
+                        .done(function (response) {
+                            if (response && response.ok) {
+                                $('#ModalNewOperazioneRic').modal('hide');
+                                location.reload();
+                            } else {
+                                alert((response && response.error) || 'Impossibile salvare la ricorrenza');
+                            }
+                        }).fail(function (xhr) {
+                            alert((xhr.responseJSON && xhr.responseJSON.error) || 'Errore durante il salvataggio della ricorrenza');
+                        }).always(function () {saving=false;enable();});
+                });
+                enable();
+              })();
             </script>
