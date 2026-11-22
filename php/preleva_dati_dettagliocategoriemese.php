@@ -14,7 +14,7 @@ $sql = "SELECT b.idBudgetTable, b.data_operazione, b.descrizione, b.entrate, b.u
         FROM budgettable b
         LEFT JOIN categoriebudget c ON b.categorie = c.categoria
         WHERE b.mese = ? AND b.categorie = ? AND b.anno = ?
-          AND b.causale <> 'Iniziale' AND b.data_operazione <= CURDATE()
+          AND (b.causale IS NULL OR b.causale <> 'Iniziale') AND b.data_operazione <= CURDATE()
         ORDER BY b.data_operazione ASC, b.idBudgetTable ASC";
 $stmt = mysqli_prepare($conn, $sql);
 if (!$stmt) {
