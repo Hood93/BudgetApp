@@ -430,7 +430,14 @@ body .modal .modal-header,body .modal .modal-footer{border-color:var(--ba-border
   .ba-recurring-section tbody tr td:last-child{grid-column:1/-1;min-width:0!important;padding-top:8px!important;border-top:1px solid #ffffff26!important}
   .ba-recurring-section tbody tr td:last-child::before{margin-bottom:7px}
   .ba-recurring-section tbody tr td:last-child .viewbtn,.ba-recurring-section tbody tr td:last-child .delbtn{width:44px!important;height:44px!important;min-width:44px!important;min-height:44px!important;margin-right:10px!important}
-  .ba-credit-scroll{overflow:visible!important}
+  .ba-credit-scroll{overflow:visible!important;min-width:0;max-width:100%;border:0}
+  .ba-management #rescrediti,.ba-management #rescrediti .ba-credit-section{min-width:0;max-width:100%;box-sizing:border-box}
+  .ba-management #rescrediti table.ba-credit-table{min-width:0!important;max-width:100%;width:100%;box-sizing:border-box}
+  .ba-management #rescrediti .ba-credit-table tbody{grid-template-columns:minmax(0,1fr);min-width:0;max-width:100%}
+  .ba-management #rescrediti .ba-credit-table tbody tr,.ba-management #rescrediti .ba-credit-table tbody td{min-width:0;max-width:100%;box-sizing:border-box}
+  .ba-management #rescrediti .ba-credit-amount{white-space:normal;overflow-wrap:anywhere}
+  .ba-management #rescrediti .ba-credit-details{min-width:0;max-width:100%}
+  .ba-management #rescrediti .ba-credit-details .table-responsive{max-width:100%;overflow-x:auto}
   .ba-credit-table,.ba-credit-table tbody,.ba-credit-table tr,.ba-credit-table td{display:block;width:100%}
   .ba-credit-table thead{display:none}
   .ba-credit-table tbody{display:grid;gap:12px}
