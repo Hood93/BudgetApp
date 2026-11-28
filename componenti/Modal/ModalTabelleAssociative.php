@@ -55,6 +55,22 @@
 .ba-ass-insert .ba-ass-preview-target{font-weight:700;color:var(--ba-ink,var(--bs-body-color))}
 .ba-ass-insert .modal-footer .btn{min-height:44px}
 @media(max-width:600px){.ba-ass-insert .modal-body,.ba-ass-insert .modal-header,.ba-ass-insert .modal-footer{padding:14px}.ba-ass-insert .modal-footer{display:grid;grid-template-columns:1fr 1.5fr;gap:8px}.ba-ass-insert .modal-footer .btn{margin:0;white-space:normal}}
+#ModalTabAssociative .ba-ass-group-card{position:relative;min-width:0}
+#ModalTabAssociative .ba-ass-group-card summary{min-height:44px;padding-inline-end:52px;align-content:center}
+#ModalTabAssociative .ba-ass-group-add{position:absolute;top:12px;right:12px;min-width:44px;min-height:44px}
+.ba-ass-insert [hidden]{display:none!important}
+.ba-ass-picker{display:grid;gap:8px;min-width:0}
+.ba-ass-picker-tabs{display:flex;flex-wrap:wrap;gap:6px}
+.ba-ass-picker-tabs button[aria-pressed=true]{background:var(--bs-primary);color:white;border-color:var(--bs-primary)}
+.ba-ass-suggestions{max-height:250px;overflow-y:auto;overscroll-behavior:contain;border:1px solid var(--ba-border,var(--bs-border-color));border-radius:12px;padding:8px;margin-top:8px}
+.ba-ass-suggestion-group+ .ba-ass-suggestion-group{margin-top:12px}
+.ba-ass-suggestion-title{display:flex;align-items:center;gap:8px;padding:6px 8px;font-size:.82rem;font-weight:700;color:var(--ba-muted,var(--bs-secondary-color));overflow-wrap:anywhere}
+.ba-ass-suggestion{display:flex;justify-content:space-between;align-items:center;gap:10px;width:100%;min-height:44px;text-align:left;background:transparent;color:inherit;border:1px solid transparent;border-radius:8px;padding:8px}
+.ba-ass-suggestion span{min-width:0;overflow-wrap:anywhere}
+.ba-ass-suggestion small{display:block}
+.ba-ass-suggestion i{flex-shrink:0}
+.ba-ass-suggestion[aria-pressed=true]{border-color:var(--bs-primary);background:var(--ba-surface-alt,var(--bs-tertiary-bg))}
+.ba-ass-suggestion:hover{background:var(--ba-surface-alt,var(--bs-tertiary-bg))}
 </style>
 <div class="modal fade" id="ModalTabAssociative" tabindex="-1" aria-labelledby="baAssTitle" aria-hidden="true">
  <div class="modal-dialog modal-xl modal-dialog-scrollable"><div class="modal-content">
@@ -81,12 +97,21 @@ $(function(){
  let active='desc', view='list';
  const expanded={desc:new Set(),cat:new Set()};
  const newButton=document.getElementById('baAssNew');
- newButton.addEventListener('click',()=>{
-  const target=document.getElementById(active==='desc'?'ModalNewDesAssociativa':'ModalNewCatAssociativa');
+ let opening=false;
+ function openNew(tab,prefill=null){
+  if(opening||!modal.classList.contains('show'))return;
+  const target=document.getElementById(tab==='desc'?'ModalNewDesAssociativa':'ModalNewCatAssociativa');
   if(!target)return;
-  modal.addEventListener('hidden.bs.modal',()=>bootstrap.Modal.getOrCreateInstance(target).show(),{once:true});
+  if(prefill!==null){
+   const source=target.querySelector(tab==='desc'?'#newolddescrizione':'#newdescrizioneass');
+   const destination=target.querySelector(tab==='desc'?'#newnewdescrizione':'#newcategoriaassociata');
+   source.value='';destination.value=prefill;
+  }
+  opening=true;
+  modal.addEventListener('hidden.bs.modal',()=>{opening=false;bootstrap.Modal.getOrCreateInstance(target).show();},{once:true});
   bootstrap.Modal.getOrCreateInstance(modal).hide();
- });
+ }
+ newButton.addEventListener('click',()=>openNew(active));
  function renderGroups(panel,rows){
   let container=panel.querySelector('.ba-ass-groups');
   if(!container){container=document.createElement('div');container.className='ba-ass-groups';(panel.querySelector('.table-responsive')||panel).append(container);}
@@ -113,7 +138,12 @@ $(function(){
     if(original){const button=document.createElement('button');button.type='button';button.className='btn btn-outline-secondary btn-sm';button.setAttribute('aria-label','Modifica '+label.textContent);button.innerHTML='<i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>';button.addEventListener('click',()=>original.click());line.append(button);}
     details.append(line);
    }
-   container.append(details);
+   const card=document.createElement('div');card.className='ba-ass-group-card';
+   const add=document.createElement('button');add.type='button';add.className='btn btn-outline-primary btn-sm ba-ass-group-add';
+   add.setAttribute('aria-label','Aggiungi associazione a '+key);add.title='Aggiungi associazione a '+key;
+   add.innerHTML='<i class="fa-solid fa-plus" aria-hidden="true"></i>';
+   add.addEventListener('click',()=>openNew(tab,key));
+   card.append(details,add);container.append(card);
   }
   if(!groups.size)container.textContent='Nessuna associazione trovata.';
  }
