@@ -35,6 +35,26 @@
 #ModalTabAssociative .ba-ass-group-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid var(--ba-border,#40516a)}
 #ModalTabAssociative .ba-ass-group-row span{min-width:0;overflow-wrap:anywhere}
 #ModalTabAssociative .ba-ass-group-row button{flex-shrink:0;min-width:44px;min-height:44px}
+#ModalTabAssociative .ba-ass-toolbar{position:sticky;top:0;z-index:3;background:var(--ba-surface,var(--bs-body-bg));padding:0 0 12px}
+#ModalTabAssociative .ba-ass-new{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+#ModalTabAssociative .ba-ass-new button{min-height:44px}
+#ModalTabAssociative .ba-ass-panel .addbtndesass,#ModalTabAssociative .ba-ass-panel .addbtndcatass{display:none!important}
+.ba-ass-insert .modal-dialog{max-width:min(560px,calc(100% - 24px));margin-inline:auto}
+.ba-ass-insert .modal-content{background:var(--ba-surface,var(--bs-body-bg));color:var(--ba-ink,var(--bs-body-color));border:1px solid var(--ba-border,var(--bs-border-color));border-radius:18px}
+.ba-ass-insert .modal-header{align-items:flex-start;gap:12px}
+.ba-ass-insert .modal-header,.ba-ass-insert .modal-footer{border-color:var(--ba-border,var(--bs-border-color));padding:16px 20px}
+.ba-ass-insert .modal-header .btn-close{flex-shrink:0;margin:0 0 0 auto}
+.ba-ass-insert .ba-ass-help{color:var(--ba-muted,var(--bs-secondary-color));font-size:.83rem;line-height:1.45}
+.ba-ass-insert .modal-body{display:grid;gap:18px;padding:20px;min-width:0}
+.ba-ass-insert .ba-ass-form{display:flex;flex-direction:column;min-height:0;overflow:hidden}
+.ba-ass-insert .ba-ass-field{display:grid;gap:5px;min-width:0}
+.ba-ass-insert .ba-ass-field label{font-weight:650;margin:0}
+.ba-ass-insert .form-control{min-height:44px;border-radius:10px}
+.ba-ass-insert .ba-ass-preview{display:grid;gap:10px;padding:16px;border:1px solid var(--ba-border,var(--bs-border-color));border-radius:14px;background:var(--ba-surface-alt,var(--bs-tertiary-bg));overflow-wrap:anywhere}
+.ba-ass-insert .ba-ass-preview-source{color:var(--ba-muted,var(--bs-secondary-color))}
+.ba-ass-insert .ba-ass-preview-target{font-weight:700;color:var(--ba-ink,var(--bs-body-color))}
+.ba-ass-insert .modal-footer .btn{min-height:44px}
+@media(max-width:600px){.ba-ass-insert .modal-body,.ba-ass-insert .modal-header,.ba-ass-insert .modal-footer{padding:14px}.ba-ass-insert .modal-footer{display:grid;grid-template-columns:1fr 1.5fr;gap:8px}.ba-ass-insert .modal-footer .btn{margin:0;white-space:normal}}
 </style>
 <div class="modal fade" id="ModalTabAssociative" tabindex="-1" aria-labelledby="baAssTitle" aria-hidden="true">
  <div class="modal-dialog modal-xl modal-dialog-scrollable"><div class="modal-content">
@@ -44,7 +64,7 @@
     <div class="ba-ass-tabs" role="group" aria-label="Tipo di associazione"><button type="button" class="btn btn-outline-secondary" data-ass-tab="desc" aria-selected="true">Descrizioni</button><button type="button" class="btn btn-outline-secondary" data-ass-tab="cat" aria-selected="false">Categorie</button></div>
     <div class="ba-ass-tabs" role="group" aria-label="Visualizzazione"><button type="button" class="btn btn-outline-secondary" data-ass-view="list" aria-selected="true">Elenco</button><button type="button" class="btn btn-outline-secondary" data-ass-view="group" aria-selected="false">Raggruppate</button></div>
     <label for="baAssSearch" class="visually-hidden">Cerca associazioni</label><input id="baAssSearch" class="form-control" type="search" placeholder="Cerca descrizione o categoria…">
-    <small id="baAssCount" class="text-secondary" aria-live="polite"></small>
+    <div class="ba-ass-new"><small id="baAssCount" class="text-secondary" aria-live="polite"></small><button type="button" class="btn btn-primary" id="baAssNew"><i class="fa-solid fa-plus me-1" aria-hidden="true"></i> <span>Nuova descrizione associativa</span></button></div>
    </div>
    <section class="ba-ass-panel" id="tabelladescassociative" aria-label="Associazioni descrizioni"></section>
    <section class="ba-ass-panel" id="tabellacatassociative" aria-label="Associazioni categorie" hidden></section>
@@ -60,6 +80,13 @@ $(function(){
  const search=document.getElementById('baAssSearch');
  let active='desc', view='list';
  const expanded={desc:new Set(),cat:new Set()};
+ const newButton=document.getElementById('baAssNew');
+ newButton.addEventListener('click',()=>{
+  const target=document.getElementById(active==='desc'?'ModalNewDesAssociativa':'ModalNewCatAssociativa');
+  if(!target)return;
+  modal.addEventListener('hidden.bs.modal',()=>bootstrap.Modal.getOrCreateInstance(target).show(),{once:true});
+  bootstrap.Modal.getOrCreateInstance(modal).hide();
+ });
  function renderGroups(panel,rows){
   let container=panel.querySelector('.ba-ass-groups');
   if(!container){container=document.createElement('div');container.className='ba-ass-groups';(panel.querySelector('.table-responsive')||panel).append(container);}
@@ -112,6 +139,7 @@ $(function(){
  }
  modal.querySelectorAll('[data-ass-tab]').forEach(button=>button.addEventListener('click',()=>{
   active=button.dataset.assTab;
+  newButton.querySelector('span').textContent=active==='desc'?'Nuova descrizione associativa':'Nuova categoria associativa';
   Object.keys(panels).forEach(key=>panels[key].hidden=key!==active);
   modal.querySelectorAll('[data-ass-tab]').forEach(b=>b.setAttribute('aria-selected',String(b===button)));
   filter();
