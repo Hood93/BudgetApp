@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 
 <head>
     <meta charset="UTF-8">
@@ -19,221 +19,160 @@
 </head>
 
 <body>
-    <div class="container-fluid">
-        <?php
-        include "gvariable.php"; // File Variabili
-        include "componenti/navbar.php"; // File Navbar
-        include "php/utility.php"; //File Utility
-
-        ?>
+    <?php
+    include "gvariable.php"; // File Variabili
+    include "php/utility.php"; // File Utility
+    include "componenti/navbar.php"; // File Navbar
+    ?>
+    <main class="container-fluid ba-transactions-page">
         <div class="container-fluid">
             <?php include "componenti/Modal/ModalEditOperazione.php"; // File Modal Edit 
             include "componenti/Modal/ModalInsertOperazione.php"; // File Modal Edit 
             ?>
-            <div class="row mb-3" style="padding-left: 10px !important;">
-                <div class="col-10" style="padding-top: 80px !important;">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text bg-light"><i class="fa-solid fa-magnifying-glass text-primary py-2"></i></span>
-                        </div>
-                        <input type="text" class="form-control" onkeyup="cercacontrollo(this)" placeholder="Ricerca Generica">
-                    </div>
+            <section class="ba-welcome"><div class="ba-eyebrow">MOVIMENTI</div><h2>Tutte le transazioni</h2><p>Consulta, cerca e filtra i movimenti registrati.</p></section>
+            <section class="row g-3 ba-transactions-summary mb-3" aria-label="Riepilogo transazioni filtrate">
+                <div class="col-4"><div class="ba-panel ba-summary-tile"><span>Entrate</span><strong id="baIncome">—</strong></div></div>
+                <div class="col-4"><div class="ba-panel ba-summary-tile"><span>Uscite</span><strong id="baExpense">—</strong></div></div>
+                <div class="col-4"><div class="ba-panel ba-summary-tile"><span>Saldo</span><strong id="baBalance">—</strong></div></div>
+            </section>
+            <section class="ba-panel ba-filter-panel mb-4">
+              <div class="row g-3 align-items-end">
+                <div class="col-12 col-lg-8"><label class="form-label" for="baSearch">Ricerca transazioni</label><div class="input-group"><span class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></span><input id="baSearch" type="search" class="form-control" placeholder="Cerca descrizione, importo o categoria..."></div></div>
+                <div class="col-12 col-lg-4"><button class="btn btn-primary w-100" name="add" id="add"><i class="fa-solid fa-plus me-2"></i>Aggiungi transazione</button></div>
+                <div class="col-12"><div class="d-flex gap-2 align-items-center flex-wrap"><button type="button" class="btn btn-outline-secondary btn-sm" id="baToggleFilters" aria-expanded="false" aria-controls="baAdvancedFilters"><i class="fa-solid fa-sliders me-1"></i> Filtri avanzati</button><button type="button" class="btn btn-link btn-sm" id="baClearFilters">Azzera filtri</button><span class="ms-auto text-secondary small" id="baResultCount" aria-live="polite"></span></div></div>
+                <div class="col-12" id="baAdvancedFilters" hidden>
+                  <div class="row g-3">
+                    <div class="col-6 col-lg-3"><label class="form-label" for="filtroanno">Anno</label><select class="form-select" id="filtroanno"><option value="">Tutti</option><?php foreach ($tableanno as $anno): ?><option value="<?php echo htmlspecialchars((string)$anno, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars((string)$anno, ENT_QUOTES, 'UTF-8'); ?></option><?php endforeach; ?></select></div>
+                    <div class="col-6 col-lg-3"><label class="form-label" for="filtromese">Mese</label><select class="form-select" id="filtromese"><option value="">Tutti</option><?php foreach ($mesi as $mese): ?><option value="<?php echo htmlspecialchars((string)$mese, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars((string)$mese, ENT_QUOTES, 'UTF-8'); ?></option><?php endforeach; ?></select></div>
+                    <div class="col-6 col-lg-3"><label class="form-label" for="filtrotag1">Tag</label><input type="text" id="filtrotag1" class="form-control" placeholder="Filtra per tag"></div>
+                    <div class="col-6 col-lg-3"><label class="form-label" for="filtrocategoria">Categoria</label><select class="form-select" id="filtrocategoria"><option value="">Tutte</option><?php foreach ($catarray as $categoria): ?><option value="<?php echo htmlspecialchars((string)$categoria, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars((string)$categoria, ENT_QUOTES, 'UTF-8'); ?></option><?php endforeach; ?></select></div>
+                    <div class="col-12"><label class="form-label" for="filtrotipo">Tipo movimento</label><select class="form-select" id="filtrotipo"><option value="">Entrate e uscite</option><option value="Entrata">Solo entrate</option><option value="Uscita">Solo uscite</option></select></div>
+                  </div>
                 </div>
-                <div class="col-2" style="padding-top: 80px !important;">
-                    <button class="btn btn-dark py-2 btn-sm" name="add" id="add">
-                        Aggiungi Transazione
-                    </button>
-                </div>
-            </div>
-            <div class="row mb-3">
-                <div class="col">
-                    Filtro Per Anno <select name="filtroanno" id="filtroanno" onchange='filtraanno(this)'>
-                        <?php
-                        echo "<option value=''></option>";
-                        foreach ($tableanno as $anno) {
-                            echo "<option value='" . $anno . "'>" . $anno . "</option>";
-                        }
-                        ?>
-                    </select>
-                </div>
-                <div class="col">
-                    Filtro Per Mese <select name="filtromese" id="filtromese" onchange='filtramese(this)'>
-                        <?php
-                        echo "<option value=''></option>";
-                        foreach ($mesi as $mese) {
-                            echo "<option value='" . $mese . "'>" . $mese . "</option>";
-                        }
-                        ?>
-                    </select>
-                </div>
-                <div class="col">
-                    Filtro Per Tag1 <input type="text" name="filtrotag1" id="filtrotag1" class="form-control" onkeyup="filtratag1(this)" placeholder="Ricerca Tag1">
-                </div>
-                <div class="col">
-                    Filtro Per Categoria <select name="filtrocategoria" id="filtrocategoria" onchange='filtracategoria(this)'>
-                        <?php
-                        echo "<option value=''></option>";
-                        foreach ($catarray as $categoria) {
-                            echo "<option value='" . $categoria . "'>" . $categoria . "</option>";
-                        }
-                        ?>
-                    </select>
-                </div>
-            </div>
+              </div>
+            </section>
         </div>
-        <div class="container-fluid" id="transazionitotali" style="padding-top: 10px !important;">
+        <div class="ba-results-panel" id="transazionitotali" aria-live="polite"><div class="ba-transaction-list" id="baTransactionList"></div></div>
+        <div class="ba-load-footer" id="baLoadFooter">
+            <div id="baLoadStatus" class="text-secondary small" role="status"></div>
+            <button type="button" class="btn btn-outline-secondary" id="baLoadMore" hidden>Carica altre transazioni</button>
+            <div id="baLoadSentinel" aria-hidden="true"></div>
         </div>
-    </div>
+    </main>
 
-    <!-- Jquery CDN -->
-    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
-    <!-- End of Jquery CDN -->
-    <!-- Script funzioni -->
     <script>
-        $(document).ready(function() {
-            preleva_dati();
-
-            //Funzione Display Modal Insert
-            $('#add').click(function() {
-                $('#ModalNewOperazione').modal('show');
-            });
-
-            //Funzione Prelievo dati
-            function preleva_dati() {
-                $.ajax({
-                    type: 'POST',
-                    url: './php/preleva_dati_budget.php',
-                    data: {
-                        ajax: 1,
-                    },
-                    success: function(response) {
-                        $("#transazionitotali").html(response);
-                    }
-                });
-            }
+    (function () {
+        let request = null, timer = null, sequence = 0, cursor = null, hasMore = true, busy = false, lastPeriod = '';
+        const months = ['Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'];
+        const money = value => new Intl.NumberFormat('it-IT',{style:'currency',currency:'EUR'}).format(value);
+        const filters = () => ({
+            ajax: 1, cerca: $('#baSearch').val() || '', anno: $('#filtroanno').val() || '',
+            mese: $('#filtromese').val() || '', tag1: $('#filtrotag1').val() || '',
+            categoria: $('#filtrocategoria').val() || '', tipo: $('#filtrotipo').val() || ''
         });
-
-
-
-        //Funzione Ricerca Transazioni
-        function cercacontrollo(_this) {
-            var cerca = $(_this).val();
-            console.log(cerca);
-            $.ajax({
-                type: 'POST',
-                url: './php/preleva_dati_budget.php',
-                data: {
-                    ajax: 1,
-                    cerca: cerca
-                },
-                success: function(response) {
-                    $("#transazionitotali").html(response);
+        function addRows(html) {
+            const $rows = $($.parseHTML(html, document, false) || []);
+            $rows.each(function () {
+                const period = this.getAttribute('data-period');
+                if (period && period !== lastPeriod) {
+                    const parts = period.split('-');
+                    const heading = document.createElement('h3');
+                    heading.className = 'ba-period-heading';
+                    heading.textContent = (months[Number(parts[1])-1] || period) + ' ' + parts[0];
+                    $('#baTransactionList').append(heading);
+                    lastPeriod = period;
                 }
+                $('#baTransactionList').append(this);
             });
-        };
-
-        //Funzione Ricerca per anno
-        function filtraanno(_this) {
-            var anno = $(_this).val();
-            var mese = document.getElementById('filtromese');
-            var tag1 = document.getElementById('filtrotag1');
-            var categoria = document.getElementById('filtrocategoria');
-            mese = mese.value;
-            categoria = categoria.value;
-            tag1 = tag1.value;
-            $.ajax({
-                type: 'POST',
-                url: './php/preleva_dati_budget.php',
-                data: {
-                    ajax: 1,
-                    anno: anno,
-                    mese: mese,
-                    tag1:tag1,
-                    categoria: categoria
-                },
-                success: function(response) {
-                    $("#transazionitotali").html(response);
-                }
+        }
+        function load(reset) {
+            if (busy && !reset) return;
+            if (!reset && !hasMore) return;
+            if (reset) {
+                sequence++;
+                if (request) request.abort();
+                cursor = null; hasMore = true; lastPeriod = '';
+                $('#baTransactionList').empty();
+                $('#baIncome,#baExpense,#baBalance').text('—');
+                $('#baResultCount').text('');
+            }
+            const current = sequence;
+            busy = true;
+            $('#baLoadMore').prop('disabled',true).attr('hidden',true);
+            $('#baLoadStatus').text('Caricamento transazioni...');
+            $('#transazionitotali').attr('aria-busy','true');
+            request = $.ajax({
+                type:'POST',url:'./php/preleva_dati_budget.php',dataType:'json',
+                data:Object.assign(filters(),{cursor:cursor || ''})
+            }).done(function (data) {
+                if (current !== sequence) return;
+                if (!data || !data.ok) throw Error('Invalid transaction response');
+                addRows(data.html);
+                cursor = data.nextCursor;
+                hasMore = !!data.hasMore;
+                $('#baIncome').text(money(data.income));
+                $('#baExpense').text(money(data.expense));
+                $('#baBalance').text(money(data.income-data.expense));
+                $('#baResultCount').text(data.count + ' movimenti');
+                if (!data.count) $('#baTransactionList').html('<div class="ba-empty-state">Nessuna transazione trovata.</div>');
+                $('#baLoadStatus').text(hasMore ? 'Scorri per visualizzare altre transazioni' : 'Tutte le transazioni caricate');
+                $('#baLoadMore').attr('hidden',!hasMore);
+            }).fail(function (xhr,status) {
+                if (current !== sequence || status === 'abort') return;
+                $('#baLoadStatus').text('Impossibile caricare le transazioni. Riprova.');
+                $('#baLoadMore').attr('hidden',false);
+            }).always(function () {
+                if (current !== sequence) return;
+                busy = false;
+                $('#baLoadMore').prop('disabled',false);
+                $('#transazionitotali').removeAttr('aria-busy');
             });
+        }
+        function refresh() { clearTimeout(timer); load(true); }
+        function schedule() { clearTimeout(timer); timer=setTimeout(refresh,250); }
+        window.cercacontrollo = schedule;
+        window.filtratag1 = schedule;
+        window.filtraanno = refresh;
+        window.filtramese = refresh;
+        window.filtracategoria = refresh;
+        window.EditOperazione = function (button) {
+            let data;
+            try { data=JSON.parse(button.getAttribute('data-edit')); } catch(e) { return; }
+            if (!Array.isArray(data) || data.length < 7) return;
+            $('#editidoperazione').val(data[0]);
+            $('#editdataoperazione').val(String(data[1]||'').replaceAll('/','-'));
+            $('#editdescrizione').val(data[2]);
+            $('#editentrate').val(data[3]);
+            $('#edituscite').val(data[4]);
+            $('#edittag1').val(data[5]);
+            $('#editcategoria').val(data[6]);
         };
-
-        //Funzione Ricerca per Mese
-        function filtramese(_this) {
-            var mese = $(_this).val();
-            var anno = document.getElementById('filtroanno');
-            var tag1 = document.getElementById('filtrotag1');
-            var categoria = document.getElementById('filtrocategoria');
-            anno = anno.value;
-            categoria = categoria.value;
-            tag1 = tag1.value;
-            $.ajax({
-                type: 'POST',
-                url: './php/preleva_dati_budget.php',
-                data: {
-                    ajax: 1,
-                    mese: mese,
-                    anno: anno,
-                    tag1:tag1,
-                    categoria: categoria
-                },
-                success: function(response) {
-                    $("#transazionitotali").html(response);
-                }
+        $(function () {
+            $('#baSearch,#filtrotag1').on('input',schedule);
+            $('#filtroanno,#filtromese,#filtrocategoria,#filtrotipo').on('change',refresh);
+            $('#baClearFilters').on('click',function () {
+                $('#baSearch,#filtrotag1').val('');
+                $('#filtroanno,#filtromese,#filtrocategoria,#filtrotipo').val('');
+                refresh();
             });
-        };
-
-        //Funzione Ricerca per Categoria
-        function filtracategoria(_this) {
-            var categoria = $(_this).val();
-            var anno = document.getElementById('filtroanno');
-            var mese = document.getElementById('filtromese');
-            var tag1 = document.getElementById('filtrotag1');
-            anno = anno.value;
-            mese = mese.value;
-            tag1 = tag1.value;
-            $.ajax({
-                type: 'POST',
-                url: './php/preleva_dati_budget.php',
-                data: {
-                    ajax:1,
-                    categoria:categoria,
-                    anno:anno,
-                    mese:mese,
-                    tag1:tag1
-                },
-                success: function(response){
-                    $('#transazionitotali').html(response);
-                }
+            $('#baToggleFilters').on('click',function () {
+                const panel=document.getElementById('baAdvancedFilters');
+                panel.hidden=!panel.hidden;
+                $(this).attr('aria-expanded',String(!panel.hidden));
             });
-        };
-
-        //Funzione Ricerca Tag1
-        function filtratag1(_this) {
-            var tag1 = $(_this).val();
-            var anno = document.getElementById('filtroanno');
-            var mese = document.getElementById('filtromese');
-            var categoria = document.getElementById('filtrocategoria');
-            anno = anno.value;
-            mese = mese.value;
-            categoria = categoria.value;
-            $.ajax({
-                type: 'POST',
-                url: './php/preleva_dati_budget.php',
-                data: {
-                    ajax:1,
-                    tag1:tag1,
-                    anno:anno,
-                    mese:mese,
-                    categoria:categoria
-                },
-                success: function(response){
-                    $('#transazionitotali').html(response);
-                }
-            });
-        };
+            $('#add').on('click',function () { $('#ModalNewOperazione').modal('show'); });
+            $('#baLoadMore').on('click',function () { load(false); });
+            $('#baTransactionList').on('click','.editbtn',function () { window.EditOperazione(this); });
+            if ('IntersectionObserver' in window) {
+                const observer=new IntersectionObserver(entries=>{
+                    if (entries.some(entry=>entry.isIntersecting) && !busy && hasMore) load(false);
+                },{rootMargin:'350px'});
+                observer.observe(document.getElementById('baLoadSentinel'));
+            }
+            refresh();
+        });
+    })();
     </script>
-
-    <!-- End of Script Funzioni -->
 </body>
 
 </html>

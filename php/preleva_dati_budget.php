@@ -1,222 +1,108 @@
-<div class="table-responsive">
-    <table class="table table-bordered table-striped table-hover" id="table_TransazioniTotali">
-        <thead class="bg-light text-dark">
-            <tr>
-                <!--<th scope="col">Data Operazione</th>
-                <th scope="col">Causale</th>
-                <th scope="col">Descrizione</th>
-                <th scope="col">Entrate</th>
-                <th scope="col">Uscite</th>
-                <th scope="col">Tag1</th>
-                <th scope="col">Categorie</th>
-                <th scope="col">Tag3</th>
-                <th scope="col">Tag4</th>
-                <th scope="col">Azioni</th>-->
-            </tr>
-        </thead>
-        <tbody>
-            <?php
-            //ini_set('display_errors', 1);
-            include "db.php";
+<?php
+require_once __DIR__ . '/db.php';
+header('Content-Type: application/json; charset=utf-8');
 
-            $datadioggi = date("d-m-Y");
-
-
-
-
-            //$query = "SELECT * FROM budgettable ";
-            $query = "select  * from budget.budgettable left join budget.categoriebudget on budget.budgettable.categorie = budget.categoriebudget.categoria";
-
-
-
-
-            if (isset($_POST["cerca"])) {
-                $query .=
-                    " WHERE data_operazione LIKE '%" . $_POST["cerca"] . "%' 
-                            OR causale LIKE '%" . $_POST["cerca"] . "%' 
-                            OR descrizione LIKE '%" . $_POST["cerca"] . "%' 
-                            OR entrate LIKE '%" . $_POST["cerca"] . "%' 
-                            OR uscite LIKE '%" . $_POST["cerca"] . "%'
-                            OR tag1 LIKE '%" . $_POST["cerca"] . "%'
-                            OR categorie LIKE '%" . $_POST["cerca"] . "%'
-                            OR tag3 LIKE '%" . $_POST["cerca"] . "%'
-                            OR tag4 LIKE '%" . $_POST["cerca"] . "%'";
-            }
-            if (isset($_POST["anno"])) {
-                $query .=
-                    " WHERE anno LIKE '%" . $_POST["anno"] . "%'
-                AND mese LIKE '%" . $_POST["mese"] . "%'
-                AND tag1 LIKE '%" . $_POST["tag1"] . "%'
-                    AND categoria LIKE '%" . $_POST["categoria"] . "%'";
-            } else if (isset($_POST["mese"])) {
-                $query .=
-                    " WHERE mese LIKE '%" . $_POST["mese"] . "%'
-                AND anno LIKE '%" . $_POST["anno"] . "%'
-                AND tag1 LIKE '%" . $_POST["tag1"] . "%'
-                AND categoria LIKE '%" . $_POST["categoria"] . "%'";
-            } elseif (isset($_POST["categoria"])) {
-                " WHERE categoria LIKE '%" . $_POST["categoria"] . "%'
-                AND anno LIKE '%" . $_POST["anno"] . "%'
-                AND tag1 LIKE '%" . $_POST["tag1"] . "%'
-                AND mese LIKE '%" . $_POST["mese"] . "%'";
-            } elseif (isset($_POST["tag1"])) {
-                " WHERE tag1 LIKE '%" . $_POST["tag1"] . "%'
-                AND anno LIKE '%" . $_POST["anno"] . "%'
-                AND categoria LIKE '%" . $_POST["categoria"] . "%'
-                AND mese LIKE '%" . $_POST["mese"] . "%'";
-            }
-
-            $query .= " order by data_operazione desc";
-
-
-
-            //Ciclo il risultato
-            $result = mysqli_query($conn, $query);
-            if (!$result) {
-                echo "An error occurred.\n";
-                exit;
-            }
-
-
-            while ($row = mysqli_fetch_assoc($result)) {
-                if ($row['tag1'] == "Uscita"){
-                    $cardcolor = " text-bg-danger ";
-                    $valore€ = $row["uscite"];
-                } else {
-                    $cardcolor = " text-bg-success ";
-                    $valore€ = $row["entrate"];
-                }
-
-                if ($row['causale'] == "Iniziale") {
-                } elseif (strtotime($datadioggi) < strtotime($row['data_operazione'])) {
-                } else {
-                    $datojson = $row["idBudgetTable"] . "," . $row["data_operazione"] . "," . $row["descrizione"] .",". $row['entrate'] . ",". $row['uscite'] . "," . $row["tag1"] . "," .$row["categorie"];
-                     echo "<tr>";
-                        //echo "<td style='display:none;'>" . $row["idBudgetTable"] . "</td>";
-                        //echo "<td>" . $row["data_operazione"] . "</td>";
-                    //echo "<td>" . $row["causale"] . "</td>";
-                        //echo "<td>" . $row["descrizione"] . "</td>";
-                        //echo "<td> € " . $row["entrate"] . "</td>";
-                        //echo "<td> € " . $row["uscite"] . "</td>";
-                        //echo "<td>" . $row["tag1"] . "</td>";
-                        //echo "<td>" . $row["icona"] . " " . $row["categorie"] . "</td>";
-                    //echo "<td>" . $row["tag3"] . "</td>";
-                    //echo "<td>" . $row["tag4"] . "</td>";
-                        //echo "<td>" . "<button type='button' data-bs-toggle='modal' data-bs-target='#ModalEditOperazione' class='btn btn-success editbtn'><span><i class='fa-solid fa-pen-to-square'></i></span></button>" . "</td>";
-
-                    echo "<div class='card h-25".$cardcolor." mb-3'>";
-                        echo "<div class='row g-0'>";
-                            echo "<div class='col immcat text-center'>";
-                            echo "<h5 class='card-title icocard'>". $row["icona"] ."</h5>";
-                            echo "</div>";
-                            echo "<div class='col'>";
-                               echo "<div class='card-body'>";
-                                    echo "<h5 class='card-title catecard'>". $row["categorie"] ."</h5>";
-                                    echo "<p class='card-text'>";
-                                    echo "<div class='scroll'><h5 class='desccard'>".$row["descrizione"]."</h5></div>";
-                                    echo "</p>";
-                                    echo "<p class='card-text'><small class='text-body-secondary'>".$row["data_operazione"]."</small></p>";
-                                echo "</div>";
-                            echo "</div>";
-                            echo "<div class='col valorecard text-center'> € ".$valore€."</div>";
-                            echo "<div class='row'>";
-                            echo "<div class='col bottcard text-center'><button type='button' data-bs-toggle='modal' data-bs-target='#ModalEditOperazione' class='btn btn-dark editbtn' onclick=EditOperazione(this) data='".$datojson."'><span><i class='fa-solid fa-pen-to-square'></i></span></button></div>";
-                            echo "</div>";
-                            echo "</div>";
-                    echo "</div>";
-                    echo "</tr>";
-                }
-            }
-            ?>
-        </tbody>
-    </table>
-</div>
-
-
-
-
-
-<script>
-    $(document).ready(function() {
-
-        /*$('.editbtn').on('click', function() {
-
-            $('#editmodal').modal('show');
-
-            //$tr = $(this).closest('tr');
-            //var data = $tr.children("td").map(function() {
-            //    return $(this).text();
-            //}).get();
-            var data = $('#btnedit').attr('data')
-            console.log(data)
-            data = data.split(',')
-
- 
-            editidoperazione = data[0];
-            editdataoperazione = data[1].replaceAll('/', '-');
-            //editcausale = data[2];
-            editdescrizione = data[2];
-            editentrate = data[3];
-            edituscite = data[4];
-            //editentrate = editentrate.replace("€", "");
-            //edituscite = edituscite.replace("€", "");
-            //editentrate = editentrate.replace(/\s+/g, '');
-            //edituscite = edituscite.replace(/\s+/g, '');
-            edittag1 = data[5];
-            editcategoria = data[6];
-            //edittag3 = data[8];
-            //edittag4 = data[9];
-
-            $('#editidoperazione').val(editidoperazione);
-            $('#editdataoperazione').val(editdataoperazione);
-            //$('#editcausale').val(editcausale);
-            $('#editdescrizione').val(editdescrizione);
-            $('#editentrate').val(editentrate);
-            $('#edituscite').val(edituscite);
-            $('#edittag1').val(edittag1);
-            $('#editcategoria').val(editcategoria);
-            //$('#edittag3').val(edittag3);
-            //$('#edittag4').val(edittag4);
-        });*/
-    });
-
-
-    function EditOperazione(_this){
-        $('#editmodal').modal('show');
-
-            //$tr = $(this).closest('tr');
-            //var data = $tr.children("td").map(function() {
-            //    return $(this).text();
-            //}).get();
-            var data = $(_this).attr('data')
-            console.log(data)
-            data = data.split(',')
-
- 
-            editidoperazione = data[0];
-            editdataoperazione = data[1].replaceAll('/', '-');
-            //editcausale = data[2];
-            editdescrizione = data[2];
-            editentrate = data[3];
-            edituscite = data[4];
-            //editentrate = editentrate.replace("€", "");
-            //edituscite = edituscite.replace("€", "");
-            //editentrate = editentrate.replace(/\s+/g, '');
-            //edituscite = edituscite.replace(/\s+/g, '');
-            edittag1 = data[5];
-            editcategoria = data[6];
-            //edittag3 = data[8];
-            //edittag4 = data[9];
-
-            $('#editidoperazione').val(editidoperazione);
-            $('#editdataoperazione').val(editdataoperazione);
-            //$('#editcausale').val(editcausale);
-            $('#editdescrizione').val(editdescrizione);
-            $('#editentrate').val(editentrate);
-            $('#edituscite').val(edituscite);
-            $('#edittag1').val(edittag1);
-            $('#editcategoria').val(editcategoria);
-            //$('#edittag3').val(edittag3);
-            //$('#edittag4').val(edittag4);
+function baFail(int $status, string $message): void {
+    http_response_code($status);
+    echo json_encode(['ok'=>false, 'error'=>$message], JSON_UNESCAPED_UNICODE);
+    exit;
+}
+if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') baFail(405, 'Metodo non consentito');
+$search = trim((string)($_POST['cerca'] ?? ''));
+$year = trim((string)($_POST['anno'] ?? ''));
+$month = trim((string)($_POST['mese'] ?? ''));
+$tag = trim((string)($_POST['tag1'] ?? ''));
+$category = trim((string)($_POST['categoria'] ?? ''));
+$type = trim((string)($_POST['tipo'] ?? ''));
+$cursor = trim((string)($_POST['cursor'] ?? ''));
+$months = ['Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'];
+if (($year !== '' && !preg_match('/^[0-9]{4}$/', $year)) ||
+    ($month !== '' && !in_array($month, $months, true)) ||
+    ($type !== '' && !in_array($type, ['Entrata','Uscita'], true)) ||
+    strlen($search)>200 || strlen($tag)>100 || strlen($category)>200 || strlen($cursor)>200) {
+    baFail(400, 'Filtri non validi');
+}
+// Use the application calendar date, not the MySQL server clock: a database host
+// with an outdated date would otherwise hide every newer transaction.
+$today = (new DateTimeImmutable('now', new DateTimeZone('Europe/Rome')))->format('Y-m-d');
+$where = " WHERE (b.causale IS NULL OR b.causale <> 'Iniziale') AND b.data_operazione <= ?";
+$params = [$today];
+$types = 's';
+if ($search !== '') {
+    $where .= " AND (b.data_operazione LIKE ? OR b.causale LIKE ? OR b.descrizione LIKE ? OR b.entrate LIKE ? OR b.uscite LIKE ? OR b.tag1 LIKE ? OR b.categorie LIKE ? OR b.tag3 LIKE ? OR b.tag4 LIKE ?)";
+    for ($i=0;$i<9;$i++) { $params[]='%'.$search.'%'; $types.='s'; }
+}
+foreach (['anno'=>$year,'mese'=>$month,'tag1'=>$tag,'categorie'=>$category] as $column=>$value) {
+    if ($value !== '') { $where .= ' AND b.'.$column.' = ?'; $params[]=$value; $types.='s'; }
+}
+if ($type !== '') { $where .= ' AND b.tag1 = ?'; $params[]=$type; $types.='s'; }
+function baQuery(mysqli $conn, string $sql, string $types, array $params): mysqli_result {
+    $stmt = mysqli_prepare($conn, $sql);
+    if (!$stmt) throw new RuntimeException('Prepare failed: '.mysqli_error($conn));
+    if ($params && !mysqli_stmt_bind_param($stmt, $types, ...$params)) throw new RuntimeException('Bind failed');
+    if (!mysqli_stmt_execute($stmt)) throw new RuntimeException('Execute failed: '.mysqli_stmt_error($stmt));
+    $result = mysqli_stmt_get_result($stmt);
+    if (!$result) throw new RuntimeException('Result failed: '.mysqli_stmt_error($stmt));
+    mysqli_stmt_close($stmt);
+    return $result;
+}
+try {
+    $summary = mysqli_fetch_assoc(baQuery($conn,
+        'SELECT COUNT(*) AS totale, COALESCE(SUM(b.entrate),0) AS entrate, COALESCE(SUM(b.uscite),0) AS uscite FROM budgettable b'.$where,
+        $types, $params));
+    $pageWhere=$where;
+    $pageParams=$params;
+    $pageTypes=$types;
+    if ($cursor !== '') {
+        $decoded=base64_decode($cursor,true);
+        $parts=$decoded===false?[]:explode('|',$decoded);
+        if (count($parts)!==2 || !preg_match('/^\\d{4}-\\d{2}-\\d{2}$/',$parts[0]) ||
+            !ctype_digit($parts[1]) || (int)$parts[1]<1) baFail(400,'Cursore non valido');
+        $pageWhere.=' AND (b.data_operazione < ? OR (b.data_operazione = ? AND b.idBudgetTable < ?))';
+        array_push($pageParams,$parts[0],$parts[0],(int)$parts[1]);
+        $pageTypes.='ssi';
     }
-</script>
+    $pageParams[]=31;
+    $pageTypes.='i';
+    $result=baQuery($conn,
+        'SELECT b.idBudgetTable,b.data_operazione,b.descrizione,b.entrate,b.uscite,b.tag1,b.categorie,c.icona
+         FROM budgettable b LEFT JOIN categoriebudget c ON b.categorie=c.categoria'.$pageWhere.
+        ' ORDER BY b.data_operazione DESC,b.idBudgetTable DESC LIMIT ?',
+        $pageTypes,$pageParams);
+    $rows=[];
+    while ($row=mysqli_fetch_assoc($result)) $rows[]=$row;
+    mysqli_free_result($result);
+    $hasMore=count($rows)>30;
+    if ($hasMore) array_pop($rows);
+    $last=$rows?end($rows):null;
+    $next=$hasMore&&$last?base64_encode($last['data_operazione'].'|'.$last['idBudgetTable']):null;
+    $escape=static fn($v):string=>htmlspecialchars((string)($v??''),ENT_QUOTES,'UTF-8');
+    $money=static fn($v):string=>number_format((float)$v,2,',','.').' €';
+    $html='';
+    foreach ($rows as $row) {
+        $expense=$row['tag1']==='Uscita';
+        $amount=$expense?$row['uscite']:$row['entrate'];
+        $iconClass='fa-solid fa-receipt';
+        $icon=(string)($row['icona']??'');
+        if (preg_match('~<i\\b[^>]*class\\s*=\\s*["\\x27]([^"\\x27]+)["\\x27]~i',$icon,$match)) {
+            $tokens=preg_split('/\\s+/',trim($match[1]));
+            if ($tokens && count(array_filter($tokens,static fn($t)=>preg_match('/^(?:fa|fas|far|fab|fa-solid|fa-regular|fa-brands|fa-[a-z0-9-]+)$/',$t)))===count($tokens)) $iconClass=implode(' ',$tokens);
+        }
+        $edit=[$row['idBudgetTable'],$row['data_operazione'],$row['descrizione'],$row['entrate'],$row['uscite'],$row['tag1'],$row['categorie']];
+        $editJson=json_encode($edit,JSON_UNESCAPED_UNICODE|JSON_HEX_APOS|JSON_HEX_QUOT|JSON_HEX_AMP|JSON_HEX_TAG);
+        $period=substr($row['data_operazione'],0,7);
+        $html.='<article class="ba-transaction-item '.($expense?'ba-expense':'ba-income').'" data-period="'.$escape($period).'">';
+        $html.='<div class="ba-transaction-icon" aria-hidden="true"><i class="'.$escape($iconClass).'"></i></div>';
+        $html.='<div class="ba-transaction-details"><div class="ba-transaction-category">'.$escape($row['categorie']).'</div>';
+        $html.='<div class="ba-transaction-description">'.$escape($row['descrizione']).'</div>';
+        $html.='<div class="ba-transaction-date"><i class="fa-regular fa-calendar me-1"></i>'.$escape($row['data_operazione']).'</div></div>';
+        $html.='<div class="ba-transaction-actions"><div class="ba-transaction-amount">'.($expense?'− ':'+ ').$money($amount).'</div>';
+        $html.='<button type="button" data-bs-toggle="modal" data-bs-target="#ModalEditOperazione" class="btn btn-outline-secondary editbtn" data-edit="'.$escape($editJson).'" aria-label="Modifica transazione"><i class="fa-solid fa-pen-to-square"></i></button></div></article>';
+    }
+    echo json_encode(['ok'=>true,'html'=>$html,'nextCursor'=>$next,'hasMore'=>$hasMore,
+        'count'=>(int)$summary['totale'],'income'=>(float)$summary['entrate'],'expense'=>(float)$summary['uscite']],
+        JSON_UNESCAPED_UNICODE|JSON_INVALID_UTF8_SUBSTITUTE);
+} catch (Throwable $e) {
+    error_log('BudgetApp transaction pagination failed: '.$e->getMessage());
+    baFail(500,'Impossibile caricare le transazioni');
+}

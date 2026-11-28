@@ -1,80 +1,34 @@
 <?php
-//ini_set('display_errors', 1);
-include "db.php";
-
-
-
-
-$query = "SELECT ordinemese,mese, ROUND(SUM(uscite),2) as Uscite,ROUND(SUM(entrate),2) as Entrate FROM budget.budgettable";
-$querytotann = "SELECT ROUND(SUM(uscite),2) as Uscite,ROUND(SUM(entrate),2) as Entrate FROM budget.budgettable";
-
-
-if (isset($_POST["cerca"])) {
-    $query .=
-        " WHERE anno LIKE '%" . $_POST["cerca"] . "%' ";
-    $querytotann .=
-        " WHERE anno LIKE '%" . $_POST["cerca"] . "%' ";
-} else {
-    $annoatt = date('Y');
-    $query .=
-        " WHERE anno LIKE '%" . $annoatt . "%' ";
-    $querytotann .=
-        " WHERE anno LIKE '%" . $annoatt . "%' ";
+require_once __DIR__ . '/db.php';
+$year = trim((string)($_POST['cerca'] ?? date('Y')));
+if (!preg_match('/^[0-9]{4}$/', $year)) {
+    http_response_code(400);
+    exit('Anno non valido');
 }
-
-$query .= " group by mese, ordinemese order by ordinemese desc";
-
-//Ciclo il risultato
-$result = mysqli_query($conn, $query);
-$resulttotann = mysqli_query($conn, $querytotann);
-if (!$result) {
-    echo "An error occurred.\n";
-    exit;
-}
-echo "<div class='table table-responsive'>";
-echo "<table class= 'table table-bordered border-black rounded-pill'>
-<thead>
-<tr>";
-echo "<th scope='col'>Mese</th>";
-echo "<th scope='col'>Entrate</th>";
-echo "<th scope='col'>Uscite</th>";
-echo "<th scope='col'>Differenza</th>";
-echo "</tr>";
-echo "</thead>";
-echo "<tbody>";
+$stmt = mysqli_prepare($conn, 'SELECT ordinemese, mese, COALESCE(SUM(entrate),0) AS Entrate, COALESCE(SUM(uscite),0) AS Uscite FROM budgettable WHERE anno = ? GROUP BY ordinemese, mese ORDER BY ordinemese ASC');
+if (!$stmt) { http_response_code(500); exit('Impossibile caricare il report'); }
+mysqli_stmt_bind_param($stmt, 's', $year);
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
+if (!$result) { mysqli_stmt_close($stmt); http_response_code(500); exit('Impossibile caricare il report'); }
+$money = static fn($value): string => number_format((float)$value, 2, ',', '.') . ' €';
+$escape = static fn($value): string => htmlspecialchars((string)$value, ENT_QUOTES, 'UTF-8');
+$totalIncome = 0.0;
+$totalExpense = 0.0;
+echo '<div class="table-responsive ba-annual-report-scroll"><table class="table ba-annual-report-table"><thead><tr><th scope="col">Mese</th><th scope="col">Entrate</th><th scope="col">Uscite</th><th scope="col">Differenza</th></tr></thead><tbody>';
 while ($row = mysqli_fetch_assoc($result)) {
-    echo "<tr>";
-    $ris = $row['Entrate'] - $row['Uscite'];
-    echo "<td class='text-start'>" . $row['mese'] . "</td>";
-    echo "<td class='text-start'>" . $row['Entrate'] . " " . "<i class='fa-solid fa-euro-sign fa-xs' style='color: #000000;'></i></td>";
-    echo "<td class='text-start'>" . $row['Uscite'] . " " . "<i class='fa-solid fa-euro-sign fa-xs' style='color: #000000;'></i></td>";
-    if ($ris >= '0') {
-        $color = "text-success";
-    } else {
-        $color = "text-danger";
-    }
-    echo "<td class='text-start ".$color."'>" . round($ris , 2) . " " . "<i class='fa-solid fa-euro-sign fa-xs' style='color: #000000;'></i></td>";
-    echo "</tr>";
-
+    $income = (float)$row['Entrate'];
+    $expense = (float)$row['Uscite'];
+    $balance = $income - $expense;
+    $totalIncome += $income;
+    $totalExpense += $expense;
+    $balanceClass = $balance < 0 ? 'ba-amount-negative' : 'ba-amount-positive';
+    echo '<tr><th scope="row" data-label="Mese">' . $escape($row['mese']) . '</th>';
+    echo '<td data-label="Entrate">' . $money($income) . '</td>';
+    echo '<td data-label="Uscite">' . $money($expense) . '</td>';
+    echo '<td data-label="Differenza" class="' . $balanceClass . '">' . $money($balance) . '</td></tr>';
 }
-
-echo "<td class='text-start'>Totale</td>";
-while ($rowtotann = mysqli_fetch_assoc($resulttotann)) {
-    $entratetotann = floatval($rowtotann['Entrate']);
-    $uscitetotann = floatval($rowtotann['Uscite']);
-    $ristotann = $entratetotann - $uscitetotann;
-    if ($ristotann >= '0') {
-        $color = "text-success";
-    } else {
-        $color = "text-danger";
-    }
-    echo "<td class='text-start'>" . $entratetotann . " " . "<i class='fa-solid fa-euro-sign fa-xs' style='color: #000000;'></i></td>";
-    echo "<td class='text-start'>" . $uscitetotann . " " . "<i class='fa-solid fa-euro-sign fa-xs' style='color: #000000;'></i></td>";
-    echo "<td class='text-start ".$color."'>" . round($ristotann,2) . " " . "<i class='fa-solid fa-euro-sign fa-xs' style='color: #000000;'></i></td>";
-}
-echo "</tbody>";
-echo "</table>";
-echo "</div>";
-?>
-</tbody>
-</table>
+mysqli_stmt_close($stmt);
+$balance = $totalIncome - $totalExpense;
+$balanceClass = $balance < 0 ? 'ba-amount-negative' : 'ba-amount-positive';
+echo '</tbody><tfoot><tr><th scope="row" data-label="Mese">Totale</th><td data-label="Entrate">' . $money($totalIncome) . '</td><td data-label="Uscite">' . $money($totalExpense) . '</td><td data-label="Differenza" class="' . $balanceClass . '">' . $money($balance) . '</td></tr></tfoot></table></div>';

@@ -1,73 +1,185 @@
-            <!-- Modal -->
-            <div class="modal fade modal-xl" id="ModalTabAssociative" role="dialog">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Tabelle Associative</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-
-                        <div class="modal-body">
-                            <div class="container text-center">
-                                <div class="row">
-                                    <div class="col" id="tabelladescassociative">
-                                        Column
-                                    </div>
-                                    <div class="col" id="tabellacatassociative">
-                                        Column
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" id="closebtn" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Modal -->
-
-            <!-- Jquery CDN -->
-            <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
-            <!-- End of Jquery CDN -->
-            <script>
-
-                $(document).ready(function() {
-                const myModalEl = document.getElementById('ModalTabAssociative')
-                myModalEl.addEventListener('shown.bs.modal', event => {
-                    gettabassdescrizione()
-                    gettabasscategoria()
-                })
-
-                    function gettabassdescrizione() {
-                        $.ajax({
-                            type: 'POST',
-                            url: './php/preleva_dati_descassociative.php',
-                            data: {
-                                ajax: 1,
-
-                            },
-                            success: function(response) {
-                                $("#tabelladescassociative").html(response);
-                            }
-                        });
-
-                    }
-
-                    function gettabasscategoria() {
-                        $.ajax({
-                            type: 'POST',
-                            url: './php/preleva_dati_catassociative.php',
-                            data: {
-                                ajax: 1,
-
-                            },
-                            success: function(response) {
-                                $("#tabellacatassociative").html(response);
-                            }
-                        });
-
-                    }
-                })
-            </script>
+<style>
+#ModalTabAssociative .modal-dialog{max-width:min(1100px,calc(100% - 24px));margin-inline:auto}
+#ModalTabAssociative .modal-body{min-width:0;padding:20px;overflow-y:auto;text-align:left}
+#ModalTabAssociative .ba-ass-toolbar{display:grid;gap:12px;margin-bottom:16px}
+#ModalTabAssociative .ba-ass-tabs{display:flex;gap:8px;flex-wrap:wrap}
+#ModalTabAssociative .ba-ass-tabs button[aria-selected=true]{background:var(--bs-primary);color:white;border-color:var(--bs-primary)}
+#ModalTabAssociative .ba-ass-panel{min-width:0;max-width:100%}
+#ModalTabAssociative .ba-ass-panel[hidden],#ModalTabAssociative tr[hidden]{display:none!important}
+#ModalTabAssociative .ba-ass-panel .table-responsive{border:1px solid var(--ba-border,#40516a);border-radius:14px;max-width:100%;padding:12px;overflow-x:auto}
+#ModalTabAssociative .ba-ass-panel table{width:100%;min-width:0!important;margin:12px 0 0;table-layout:fixed;border-collapse:separate;border-spacing:0 6px;border:0!important}
+#ModalTabAssociative .ba-ass-panel th,#ModalTabAssociative .ba-ass-panel td{border:0!important;padding:12px;overflow-wrap:anywhere;vertical-align:middle}
+#ModalTabAssociative .ba-ass-panel th:last-child,#ModalTabAssociative .ba-ass-panel td:last-child{width:76px;text-align:center}
+#ModalTabAssociative .ba-ass-panel tbody td:nth-child(2){color:var(--ba-muted,inherit)}
+#ModalTabAssociative .ba-ass-panel tbody td:nth-child(3){font-weight:650}
+#ModalTabAssociative .ba-ass-panel tbody td:nth-child(2){border-radius:10px 0 0 10px}
+#ModalTabAssociative .ba-ass-panel tbody td:last-child{border-radius:0 10px 10px 0}
+#ModalTabAssociative .ba-ass-panel tbody button{min-width:44px;min-height:44px}
+#ModalTabAssociative .ba-ass-panel .addbtndesass,#ModalTabAssociative .ba-ass-panel .addbtndcatass{display:inline-flex;align-items:center;gap:8px;padding:9px 14px}
+@media(max-width:600px){
+#ModalTabAssociative .modal-body{padding:12px}
+#ModalTabAssociative .ba-ass-panel .table-responsive{padding:8px;overflow-x:visible}
+#ModalTabAssociative .ba-ass-panel table,#ModalTabAssociative .ba-ass-panel tbody{display:block;width:100%;min-width:0!important}
+#ModalTabAssociative .ba-ass-panel thead{display:none}
+#ModalTabAssociative .ba-ass-panel tbody tr{display:grid;grid-template-columns:minmax(0,1fr) 48px;gap:4px 8px;padding:12px;margin-bottom:8px;border:1px solid var(--ba-border,#40516a);border-radius:12px;min-width:0}
+#ModalTabAssociative .ba-ass-panel tbody td{display:block;width:auto!important;min-width:0;padding:4px!important;background:transparent!important;box-shadow:none!important}
+#ModalTabAssociative .ba-ass-panel tbody td:first-child{display:none!important}
+#ModalTabAssociative .ba-ass-panel tbody td:nth-child(2){grid-column:1;grid-row:1;font-size:.85rem}
+#ModalTabAssociative .ba-ass-panel tbody td:nth-child(3){grid-column:1;grid-row:2}
+#ModalTabAssociative .ba-ass-panel tbody td:last-child{grid-column:2;grid-row:1 / span 2;align-self:center}
+}
+#ModalTabAssociative .ba-ass-groups{display:grid;gap:10px;margin-top:12px}
+#ModalTabAssociative .ba-ass-groups[hidden],#ModalTabAssociative table[hidden]{display:none!important}
+#ModalTabAssociative .ba-ass-group{border:1px solid var(--ba-border,#40516a);border-radius:12px;padding:12px;min-width:0}
+#ModalTabAssociative .ba-ass-group summary{cursor:pointer;overflow-wrap:anywhere;font-weight:650}
+#ModalTabAssociative .ba-ass-group-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid var(--ba-border,#40516a)}
+#ModalTabAssociative .ba-ass-group-row span{min-width:0;overflow-wrap:anywhere}
+#ModalTabAssociative .ba-ass-group-row button{flex-shrink:0;min-width:44px;min-height:44px}
+#ModalTabAssociative .ba-ass-toolbar{position:sticky;top:0;z-index:3;background:var(--ba-surface,var(--bs-body-bg));padding:0 0 12px}
+#ModalTabAssociative .ba-ass-new{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+#ModalTabAssociative .ba-ass-new button{min-height:44px}
+#ModalTabAssociative .ba-ass-panel .addbtndesass,#ModalTabAssociative .ba-ass-panel .addbtndcatass{display:none!important}
+.ba-ass-insert .modal-dialog{max-width:min(560px,calc(100% - 24px));margin-inline:auto}
+.ba-ass-insert .modal-content{background:var(--ba-surface,var(--bs-body-bg));color:var(--ba-ink,var(--bs-body-color));border:1px solid var(--ba-border,var(--bs-border-color));border-radius:18px}
+.ba-ass-insert .modal-header{align-items:flex-start;gap:12px}
+.ba-ass-insert .modal-header,.ba-ass-insert .modal-footer{border-color:var(--ba-border,var(--bs-border-color));padding:16px 20px}
+.ba-ass-insert .modal-header .btn-close{flex-shrink:0;margin:0 0 0 auto}
+.ba-ass-insert .ba-ass-help{color:var(--ba-muted,var(--bs-secondary-color));font-size:.83rem;line-height:1.45}
+.ba-ass-insert .modal-body{display:grid;gap:18px;padding:20px;min-width:0}
+.ba-ass-insert .ba-ass-form{display:flex;flex-direction:column;min-height:0;overflow:hidden}
+.ba-ass-insert .ba-ass-field{display:grid;gap:5px;min-width:0}
+.ba-ass-insert .ba-ass-field label{font-weight:650;margin:0}
+.ba-ass-insert .form-control{min-height:44px;border-radius:10px}
+.ba-ass-insert .ba-ass-preview{display:grid;gap:10px;padding:16px;border:1px solid var(--ba-border,var(--bs-border-color));border-radius:14px;background:var(--ba-surface-alt,var(--bs-tertiary-bg));overflow-wrap:anywhere}
+.ba-ass-insert .ba-ass-preview-source{color:var(--ba-muted,var(--bs-secondary-color))}
+.ba-ass-insert .ba-ass-preview-target{font-weight:700;color:var(--ba-ink,var(--bs-body-color))}
+.ba-ass-insert .modal-footer .btn{min-height:44px}
+@media(max-width:600px){.ba-ass-insert .modal-body,.ba-ass-insert .modal-header,.ba-ass-insert .modal-footer{padding:14px}.ba-ass-insert .modal-footer{display:grid;grid-template-columns:1fr 1.5fr;gap:8px}.ba-ass-insert .modal-footer .btn{margin:0;white-space:normal}}
+#ModalTabAssociative .ba-ass-group-card{position:relative;min-width:0}
+#ModalTabAssociative .ba-ass-group-card summary{min-height:44px;padding-inline-end:52px;align-content:center}
+#ModalTabAssociative .ba-ass-group-add{position:absolute;top:12px;right:12px;min-width:44px;min-height:44px}
+.ba-ass-insert [hidden]{display:none!important}
+.ba-ass-picker{display:grid;gap:8px;min-width:0}
+.ba-ass-picker-tabs{display:flex;flex-wrap:wrap;gap:6px}
+.ba-ass-picker-tabs button[aria-pressed=true]{background:var(--bs-primary);color:white;border-color:var(--bs-primary)}
+.ba-ass-suggestions{max-height:250px;overflow-y:auto;overscroll-behavior:contain;border:1px solid var(--ba-border,var(--bs-border-color));border-radius:12px;padding:8px;margin-top:8px}
+.ba-ass-suggestion-group+ .ba-ass-suggestion-group{margin-top:12px}
+.ba-ass-suggestion-title{display:flex;align-items:center;gap:8px;padding:6px 8px;font-size:.82rem;font-weight:700;color:var(--ba-muted,var(--bs-secondary-color));overflow-wrap:anywhere}
+.ba-ass-suggestion{display:flex;justify-content:space-between;align-items:center;gap:10px;width:100%;min-height:44px;text-align:left;background:transparent;color:inherit;border:1px solid transparent;border-radius:8px;padding:8px}
+.ba-ass-suggestion span{min-width:0;overflow-wrap:anywhere}
+.ba-ass-suggestion small{display:block}
+.ba-ass-suggestion i{flex-shrink:0}
+.ba-ass-suggestion[aria-pressed=true]{border-color:var(--bs-primary);background:var(--ba-surface-alt,var(--bs-tertiary-bg))}
+.ba-ass-suggestion:hover{background:var(--ba-surface-alt,var(--bs-tertiary-bg))}
+</style>
+<div class="modal fade" id="ModalTabAssociative" tabindex="-1" aria-labelledby="baAssTitle" aria-hidden="true">
+ <div class="modal-dialog modal-xl modal-dialog-scrollable"><div class="modal-content">
+  <div class="modal-header"><div><h5 class="modal-title" id="baAssTitle">Regole di associazione</h5><small class="text-secondary">Normalizza e categorizza le transazioni bancarie</small></div><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Chiudi"></button></div>
+  <div class="modal-body">
+   <div class="ba-ass-toolbar">
+    <div class="ba-ass-tabs" role="group" aria-label="Tipo di associazione"><button type="button" class="btn btn-outline-secondary" data-ass-tab="desc" aria-selected="true">Descrizioni</button><button type="button" class="btn btn-outline-secondary" data-ass-tab="cat" aria-selected="false">Categorie</button></div>
+    <div class="ba-ass-tabs" role="group" aria-label="Visualizzazione"><button type="button" class="btn btn-outline-secondary" data-ass-view="list" aria-selected="true">Elenco</button><button type="button" class="btn btn-outline-secondary" data-ass-view="group" aria-selected="false">Raggruppate</button></div>
+    <label for="baAssSearch" class="visually-hidden">Cerca associazioni</label><input id="baAssSearch" class="form-control" type="search" placeholder="Cerca descrizione o categoria…">
+    <div class="ba-ass-new"><small id="baAssCount" class="text-secondary" aria-live="polite"></small><button type="button" class="btn btn-primary" id="baAssNew"><i class="fa-solid fa-plus me-1" aria-hidden="true"></i> <span>Nuova descrizione associativa</span></button></div>
+   </div>
+   <section class="ba-ass-panel" id="tabelladescassociative" aria-label="Associazioni descrizioni"></section>
+   <section class="ba-ass-panel" id="tabellacatassociative" aria-label="Associazioni categorie" hidden></section>
+  </div>
+  <div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button></div>
+ </div></div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+<script>
+$(function(){
+ const modal=document.getElementById('ModalTabAssociative');
+ const panels={desc:document.getElementById('tabelladescassociative'),cat:document.getElementById('tabellacatassociative')};
+ const search=document.getElementById('baAssSearch');
+ let active='desc', view='list';
+ const expanded={desc:new Set(),cat:new Set()};
+ const newButton=document.getElementById('baAssNew');
+ let opening=false;
+ function openNew(tab,prefill=null){
+  if(opening||!modal.classList.contains('show'))return;
+  const target=document.getElementById(tab==='desc'?'ModalNewDesAssociativa':'ModalNewCatAssociativa');
+  if(!target)return;
+  if(prefill!==null){
+   const source=target.querySelector(tab==='desc'?'#newolddescrizione':'#newdescrizioneass');
+   const destination=target.querySelector(tab==='desc'?'#newnewdescrizione':'#newcategoriaassociata');
+   source.value='';destination.value=prefill;
+  }
+  opening=true;
+  modal.addEventListener('hidden.bs.modal',()=>{opening=false;bootstrap.Modal.getOrCreateInstance(target).show();},{once:true});
+  bootstrap.Modal.getOrCreateInstance(modal).hide();
+ }
+ newButton.addEventListener('click',()=>openNew(active));
+ function renderGroups(panel,rows){
+  let container=panel.querySelector('.ba-ass-groups');
+  if(!container){container=document.createElement('div');container.className='ba-ass-groups';(panel.querySelector('.table-responsive')||panel).append(container);}
+  container.replaceChildren();
+  container.hidden=view!=='group';
+  const table=panel.querySelector('table');
+  if(table)table.hidden=view==='group';
+  if(view!=='group')return;
+  const groups=new Map();
+  rows.filter(row=>!row.hidden&&row.cells.length>=4).forEach(row=>{
+   const key=row.cells[2].textContent;
+   if(!groups.has(key))groups.set(key,[]);
+   groups.get(key).push(row);
+  });
+  for(const [key,items] of groups){
+   const details=document.createElement('details');details.className='ba-ass-group';details.open=expanded[active].has(key);
+   const tab=active;
+   details.addEventListener('toggle',()=>{if(details.open)expanded[tab].add(key);else expanded[tab].delete(key);});
+   const summary=document.createElement('summary');summary.textContent=key+' · '+items.length+' associazioni';details.append(summary);
+   for(const row of items){
+    const line=document.createElement('div');line.className='ba-ass-group-row';
+    const label=document.createElement('span');label.textContent=row.cells[1].textContent;line.append(label);
+    const original=row.querySelector('.editbtndesass,.editbtncatassociativa');
+    if(original){const button=document.createElement('button');button.type='button';button.className='btn btn-outline-secondary btn-sm';button.setAttribute('aria-label','Modifica '+label.textContent);button.innerHTML='<i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>';button.addEventListener('click',()=>original.click());line.append(button);}
+    details.append(line);
+   }
+   const card=document.createElement('div');card.className='ba-ass-group-card';
+   const add=document.createElement('button');add.type='button';add.className='btn btn-outline-primary btn-sm ba-ass-group-add';
+   add.setAttribute('aria-label','Aggiungi associazione a '+key);add.title='Aggiungi associazione a '+key;
+   add.innerHTML='<i class="fa-solid fa-plus" aria-hidden="true"></i>';
+   add.addEventListener('click',()=>openNew(tab,key));
+   card.append(details,add);container.append(card);
+  }
+  if(!groups.size)container.textContent='Nessuna associazione trovata.';
+ }
+ function filter(){
+  const rows=Array.from(panels[active].querySelectorAll('tbody tr'));
+  const term=search.value.trim().toLocaleLowerCase('it');
+  let count=0;
+  rows.forEach(row=>{const cells=row.cells;const value=[cells[1]?.textContent,cells[2]?.textContent].join(' ').toLocaleLowerCase('it');row.hidden=!value.includes(term);if(!row.hidden)count++;});
+  document.getElementById('baAssCount').textContent=count+' / '+rows.length+' associazioni';
+  renderGroups(panels[active],rows);
+ }
+ function decorate(panel){
+  const add=panel.querySelector('.addbtndesass,.addbtndcatass');
+  if(add){add.innerHTML='<i class="fa-solid fa-plus" aria-hidden="true"></i> Nuova associazione';}
+  panel.querySelectorAll('.editbtndesass,.editbtncatassociativa').forEach(b=>b.setAttribute('aria-label','Modifica associazione'));
+  const headers=panel.querySelectorAll('thead th');
+  if(panel===panels.desc&&headers.length>=2){headers[0].textContent='Descrizione bancaria';headers[1].textContent='Descrizione registrata';}
+  filter();
+ }
+ function load(key,url){
+  const panel=panels[key];panel.textContent='Caricamento…';
+  $.ajax({type:'POST',url:url,data:{ajax:1},success:function(response){$(panel).html(response);decorate(panel);},error:function(){panel.textContent='Impossibile caricare le associazioni. Riapri la finestra per riprovare.';filter();}});
+ }
+ modal.querySelectorAll('[data-ass-tab]').forEach(button=>button.addEventListener('click',()=>{
+  active=button.dataset.assTab;
+  newButton.querySelector('span').textContent=active==='desc'?'Nuova descrizione associativa':'Nuova categoria associativa';
+  Object.keys(panels).forEach(key=>panels[key].hidden=key!==active);
+  modal.querySelectorAll('[data-ass-tab]').forEach(b=>b.setAttribute('aria-selected',String(b===button)));
+  filter();
+ }));
+ modal.querySelectorAll('[data-ass-view]').forEach(button=>button.addEventListener('click',()=>{
+  view=button.dataset.assView;
+  modal.querySelectorAll('[data-ass-view]').forEach(b=>b.setAttribute('aria-selected',String(b===button)));
+  filter();
+ }));
+ search.addEventListener('input',filter);
+ modal.addEventListener('shown.bs.modal',()=>{load('desc','./php/preleva_dati_descassociative.php');load('cat','./php/preleva_dati_catassociative.php');});
+});
+</script>

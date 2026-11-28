@@ -13,8 +13,8 @@ if (!$result) {
   echo "An error occurred.\n";
   exit;
 }
-echo "<div class='table-responsive'>";
-echo "<table class='table table-responsive table-bordered border-black'>
+echo "<section class='ba-recurring-section'><div class='ba-report-heading'><div><h3>Spese ricorrenti</h3><p>Verde: attive · Grigio: scadute</p></div></div><div class='table-responsive ba-recurring-scroll'>";
+echo "<table class='table table-hover align-middle'>
 <thead>
 <tr>";
 echo "<th scope='col'>Descrizione</th>";
@@ -33,38 +33,35 @@ echo "<tbody>";
 while ($row = mysqli_fetch_assoc($result)) {
   switch($row['stato']){
     case "Attiva":
-      echo "<tr class='tractive'>";
+      echo "<tr class='ba-recurring-active'>";
       break;
     case "Disattiva":
-      echo "<tr class='trdisable'>";
+      echo "<tr class='ba-recurring-expired'>";
       break;
   }
   echo "<td style='display:none;'>" . $row["idtransazioniricorrenti"] . "</td>";
-  echo "<td class='text-start'>" . $row['descrizione'] . "</td>";
-  echo "<td class='text-start'>" . $mesi[$row['meseiniziale']] . "</td>";
-  echo "<td class='text-start'>" . $row['annoiniziale'] . "</td>";
-  echo "<td class='text-start'>" . $mesi[$row['mesefinale']] . "</td>";
-  echo "<td class='text-start'>" . $row['annofinale'] . "</td>";
-  echo "<td class='text-start'>" . $row['categoria'] . "</td>";
-  echo "<td class='text-start'>" . $row['entrata'] . "</td>";
-  echo "<td class='text-start'>" . $row['uscita'] . "</td>";
+  echo "<td data-label='Descrizione' class='text-start'>" . htmlspecialchars((string)$row['descrizione'], ENT_QUOTES, 'UTF-8') . "</td>";
+  echo "<td data-label='Mese iniziale' class='text-start'>" . $mesi[$row['meseiniziale']] . "</td>";
+  echo "<td data-label='Anno iniziale' class='text-start'>" . $row['annoiniziale'] . "</td>";
+  echo "<td data-label='Mese finale' class='text-start'>" . $mesi[$row['mesefinale']] . "</td>";
+  echo "<td data-label='Anno finale' class='text-start'>" . $row['annofinale'] . "</td>";
+  echo "<td data-label='Categoria' class='text-start'>" . htmlspecialchars((string)$row['categoria'], ENT_QUOTES, 'UTF-8') . "</td>";
+  echo "<td data-label='Entrata' class='text-start'>" . number_format((float)$row['entrata'], 2, ',', '.') . " €</td>";
+  echo "<td data-label='Uscita' class='text-start'>" . number_format((float)$row['uscita'], 2, ',', '.') . " €</td>";
   switch($row['stato']){
     case "Attiva":
-      echo "<td class='text-start'><button type='button' class='btn text-start viewbtn'><i class='fa-solid fa-circle-info fa-lg pe-2' style='color: #000000;'></i></button><button type='button' class='btn text-start delbtn'><i class='fa-sharp fa-solid fa-trash fa-lg ps-2' style='color: #000000;'></i></button></td>";
+      echo "<td data-label='Azioni' class='text-start'><button type='button' class='btn text-start viewbtn'><i class='fa-solid fa-circle-info fa-lg pe-2' style='color: #000000;'></i></button><button type='button' class='btn text-start delbtn'><i class='fa-sharp fa-solid fa-trash fa-lg ps-2' style='color: #000000;'></i></button></td>";
       break;
     case "Disattiva":
-      echo "<td class='text-start'><button type='button' class='btn text-start viewbtn'><i class='fa-solid fa-circle-info fa-lg pe-2' style='color: #000000;'></i></button></td>";
+      echo "<td data-label='Azioni' class='text-start'><button type='button' class='btn text-start viewbtn'><i class='fa-solid fa-circle-info fa-lg pe-2' style='color: #000000;'></i></button></td>";
       break;
   }
   echo "</tr>";
 }
 echo "</tbody>";
 echo "</table>";
-echo "</div>";
+echo "</div></section>";
 ?>
-</tbody>
-</table>
-
 <script>
     $(document).ready(function() {
         $('.viewbtn').click(function() {
@@ -106,7 +103,7 @@ echo "</div>";
             var risp = confirm("Verranno eliminate le transazioni ricorrenti successive e uguali alla data di oggi")
 
             
-            if (risp = true){
+            if (risp === true){
             $.ajax({
                     type: 'POST',
                     url: 'php/updoperazioneric.php',

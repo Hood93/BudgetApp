@@ -1,44 +1,44 @@
-<div class="table-responsive">
-    <table class="table table-bordered table-striped table-hover" id="table_DettaglioTransRicorrenti">
-        <thead class="bg-light text-dark">
-            <tr>
-                <th scope="col">Data Operazione</th>
-                <th scope="col">Descrizione</th>
-                <th scope="col">Entrate</th>
-                <th scope="col">Uscite</th>
-                <th scope="col">Tag1</th>
-                <th scope="col">Categoria</th>
-            </tr>
+<?php
+require_once __DIR__ . '/db.php';
+$id = filter_input(INPUT_POST, 'viewidtransricorrenti', FILTER_VALIDATE_INT);
+if (!$id || $id < 1) {
+    http_response_code(400);
+    exit('<p class="ba-detail-empty">Transazione ricorrente non valida.</p>');
+}
+$sql = 'SELECT b.idBudgetTable, b.data_operazione, b.descrizione, b.entrate, b.uscite, b.tag1, b.categorie, c.icona
+        FROM budgettable AS b
+        LEFT JOIN categoriebudget AS c ON b.categorie = c.categoria
+        WHERE b.idtransazioniricorrenti = ?
+        ORDER BY b.data_operazione ASC';
+$stmt = mysqli_prepare($conn, $sql);
+if (!$stmt) { http_response_code(500); exit('<p class="ba-detail-empty">Impossibile caricare i dettagli.</p>'); }
+mysqli_stmt_bind_param($stmt, 'i', $id);
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
+if (!$result) { mysqli_stmt_close($stmt); http_response_code(500); exit('<p class="ba-detail-empty">Impossibile caricare i dettagli.</p>'); }
+$escape = static fn($value): string => htmlspecialchars((string)($value ?? ''), ENT_QUOTES, 'UTF-8');
+$money = static fn($value): string => number_format((float)$value, 2, ',', '.') . ' €';
+?>
+<div class="table-responsive ba-recurring-detail-scroll">
+    <table class="table ba-recurring-detail-table" id="table_DettaglioTransRicorrenti">
+        <thead>
+            <tr><th scope="col">Data Operazione</th><th scope="col">Descrizione</th><th scope="col">Entrate</th><th scope="col">Uscite</th><th scope="col">Tag1</th><th scope="col">Categoria</th></tr>
         </thead>
         <tbody>
-            <?php
-            //ini_set('display_errors', 1);
-            include "db.php";
-            $viewidtransricorrenti = $_POST['viewidtransricorrenti'];
-
-            $query = "select  * from budget.budgettable left join budget.categoriebudget on budget.budgettable.categorie = budget.categoriebudget.categoria WHERE idtransazioniricorrenti = '".$viewidtransricorrenti."' order by data_operazione asc";
-
-
-            //Ciclo il risultato
-            $result = mysqli_query($conn, $query);
-            if (!$result) {
-                echo "An error occurred.\n";
-                exit;
-            }
-
-            while ($row = mysqli_fetch_assoc($result)) {
-                    echo "<tr>";
-                    echo "<td style='display:none;'>" . $row["idBudgetTable"] . "</td>";
-                    echo "<td>" . $row["data_operazione"] . "</td>";
-                    echo "<td>" . $row["descrizione"] . "</td>";
-                    echo "<td> € " . $row["entrate"] . "</td>";
-                    echo "<td> € " . $row["uscite"] . "</td>";
-                    echo "<td>" . $row["tag1"] . "</td>";
-                    echo "<td>" . $row["icona"] . " " . $row["categorie"] . "</td>";
-                    echo "</tr>";
-                }
-            ?>
+        <?php while ($row = mysqli_fetch_assoc($result)):
+            $income = (float)$row['entrate'];
+            $expense = (float)$row['uscite'];
+        ?>
+            <tr>
+                <td style="display:none;"><?= $escape($row['idBudgetTable']) ?></td>
+                <td data-label="Data"><?= $escape($row['data_operazione']) ?></td>
+                <td data-label="Descrizione"><?= $escape($row['descrizione']) ?></td>
+                <td data-label="Entrate" class="<?= $income > 0 ? 'ba-amount-positive' : '' ?>"><?= $money($income) ?></td>
+                <td data-label="Uscite" class="<?= $expense > 0 ? 'ba-amount-negative' : '' ?>"><?= $money($expense) ?></td>
+                <td data-label="Tag"><?= $escape($row['tag1']) ?></td>
+                <td data-label="Categoria"><?= $row['icona'] ?? '' ?> <?= $escape($row['categorie']) ?></td>
+            </tr>
+        <?php endwhile; mysqli_stmt_close($stmt); ?>
         </tbody>
     </table>
 </div>
-

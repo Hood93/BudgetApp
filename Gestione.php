@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 
 <head>
     <meta charset="UTF-8">
@@ -38,11 +38,11 @@
     
 
     ?>
-    <div class="container text-center">
-        <h1>prova</h1>
-        <div class="row" style="padding-top: 20px !important; padding-bottom: 20px !important;">
-            <div class="col">
-                Selezione Anno Report
+    <main class="container ba-management">
+        <section class="ba-welcome"><div class="ba-eyebrow">CENTRO DI CONTROLLO</div><h2>Gestione del budget</h2><p>Amministra categorie, operazioni ricorrenti, crediti e importazioni.</p></section>
+        <section class="ba-panel ba-management-toolbar mb-4"><div class="row g-3 align-items-stretch" style="padding-top: 12px !important; padding-bottom: 12px !important;">
+            <div class="col-12 col-md-6 col-xl-3 ba-management-year">
+                <label class="form-label" for="anno">Selezione Anno Report</label>
                 <?php echo "<select class='form-select' onchange='selanno(this)' name='anno' id='anno'>";
                 echo "<option value=''></option>";
                 foreach ($tableanno as $anno) {
@@ -50,44 +50,37 @@
                 }
                 echo "</select>"; ?>
             </div>
-            <div class="col" id="resmensile">
+            <div class="col-12 col-xl-9 ba-management-month" id="resmensile">
             </div>
-            <div class="col">
-                <div class="d-grid gap-2">
-                    <button class="btn btn-dark py-2 btn-sm text-start" name="addtranric" id="addtranric"><i class="fa-solid fa-circle-plus fa-sm" style="color: #77bb41;"></i>
+            <div class="col-12 ba-management-actions">
+                <div class="ba-management-action-grid">
+                    <button class="btn btn-dark py-2 btn-sm text-start ba-action-tile" name="addtranric" id="addtranric"><i class="fa-solid fa-circle-plus fa-sm" style="color: #77bb41;"></i>
                         Aggiungi Transazione Ricorrente
                     </button>
-                    <button class="btn btn-dark py-2 btn-sm text-start insnuovoanno" name="insnuovoanno" id="insnuovoanno"><i class="fa-solid fa-circle-plus fa-sm" style="color: #77bb41;"></i>
-                        Inserisci Nuovo Anno
-                    </button>
-                </div>
-            </div>
-            <div class="col">
-                <div class="d-grid gap-2">
-                    <button class="btn btn-dark py-2 btn-sm text-start" name="addcat" id="addcat"><i class="fa-solid fa-circle-plus fa-sm" style="color: #77bb41;"></i>
+                    <button class="btn btn-dark py-2 btn-sm text-start ba-action-tile" name="addcat" id="addcat"><i class="fa-solid fa-circle-plus fa-sm" style="color: #77bb41;"></i>
                         Aggiungi Categoria
                     </button>
-                    <button class="btn btn-dark py-2 btn-sm text-start uploadfile" name="uploadfile" id="uploadfile"><i class="fa-solid fa-circle-plus fa-sm" style="color: #77bb41;"></i>
-                        Carica File Transazioni
-                    </button>
-                </div>
-            </div>
-            <div class="col">
-                <div class="d-grid gap-2">
-                    <button class="btn btn-dark py-2 btn-sm text-start" name="addcredito" id="addcredito"><i class="fa-solid fa-circle-plus fa-sm" style="color: #77bb41;"></i>
+                    <button class="btn btn-dark py-2 btn-sm text-start ba-action-tile" name="addcredito" id="addcredito"><i class="fa-solid fa-circle-plus fa-sm" style="color: #77bb41;"></i>
                         Aggiungi Credito
                     </button>
-                    <button class="btn btn-dark py-2 btn-sm text-start" name="tabelleassociative" id="tabelleassociative"><i class="fa-solid fa-circle-plus fa-sm" style="color: #77bb41;"></i>
+                    <button class="btn btn-dark py-2 btn-sm text-start ba-action-tile insnuovoanno" name="insnuovoanno" id="insnuovoanno"><i class="fa-solid fa-circle-plus fa-sm" style="color: #77bb41;"></i>
+                        Inserisci Nuovo Anno
+                    </button>
+                    <button class="btn btn-dark py-2 btn-sm text-start ba-action-tile uploadfile" name="uploadfile" id="uploadfile"><i class="fa-solid fa-circle-plus fa-sm" style="color: #77bb41;"></i>
+                        Carica File Transazioni
+                    </button>
+                    <button class="btn btn-dark py-2 btn-sm text-start ba-action-tile" name="tabelleassociative" id="tabelleassociative"><i class="fa-solid fa-circle-plus fa-sm" style="color: #77bb41;"></i>
                         Visualizza Tabelle Associative
                     </button>
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-8" id="resannuale">
+        </section>
+        <div class="row g-4 ba-management-reports">
+            <div class="col-12 col-xl-8" id="resannuale">
             </div>
 
-            <div class="col-4" id="categorie" style="width: 420px; height: 574px; overflow-y: scroll;">
+            <div class="col-12 col-xl-4" id="categorie">
             </div>
         </div>
         <div class="row">
@@ -102,8 +95,7 @@
             <div class="col-xxl" id="rescrediti">
             </div>
         </div>
-    </div>
-    </div>
+    </main>
     <!-- Jquery CDN -->
     <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
     <!-- End of Jquery CDN -->
@@ -114,6 +106,8 @@
 
 <script>
     $(document).ready(function() {
+        const currentYear = String(new Date().getFullYear());
+        if ($('#anno option[value="' + currentYear + '"]').length) $('#anno').val(currentYear);
         getcategorie();
         getresocontoannuale();
         getresocontoannualecategorie();
@@ -140,9 +134,22 @@
                     data: {
                         ajax: 1,
                     },
+                    dataType: 'json',
                     success: function(response) {
-                        alert('Nuovo Anno Inserito');
-                    }
+                        if (!response || !response.ok) {
+                            alert('Impossibile inizializzare l’anno.');
+                            return;
+                        }
+                        alert(response.inserite > 0
+                            ? 'Anno ' + response.anno + ': ' + response.inserite + ' righe iniziali create.'
+                            : 'Anno ' + response.anno + ': dati iniziali già presenti, nessun duplicato creato.');
+                        getresocontomensile();
+                        const currentYear = String(response.anno);
+                        if (!$('#anno option[value="' + currentYear + '"]').length) {
+                            $('#anno').append($('<option></option>').val(currentYear).text(currentYear));
+                        }
+                    },
+                    error: function() { alert('Impossibile inizializzare l’anno. Riprova.'); }
                 });
             }
         })
@@ -193,7 +200,7 @@
             url: './php/preleva_dati_reportannuale.php',
             data: {
                 ajax: 1,
-
+                cerca: $('#anno').val() || String(new Date().getFullYear())
             },
             success: function(response) {
                 $("#resannuale").html(response);
@@ -302,22 +309,29 @@
 
 
     function apriCollapse(_this) {
-        var idcreditore = $(_this).attr("idcreditore")
-
-        $('#showdettagliocredito').collapse('toggle');
+        var idcreditore = $(_this).attr("idcreditore");
+        var $panel = $('#showdettagliocredito');
+        var $button = $(_this);
+        if ($panel.hasClass('show') && $panel.attr('data-creditore') === idcreditore) {
+            $panel.collapse('hide');
+            $button.attr('aria-expanded', 'false');
+            return;
+        }
+        $('.ba-credit-detail').attr('aria-expanded', 'false');
+        $button.attr('aria-expanded', 'true');
+        $panel.attr('data-creditore', idcreditore).html('<div class="ba-credit-loading">Caricamento rate...</div>');
+        $panel.collapse('show');
         $.ajax({
             type: 'POST',
             url: './php/preleva_dati_dettagliocreditore.php',
-            data: {
-                ajax: 1,
-                idcreditore: idcreditore
-
-            },
+            data: { ajax: 1, idcreditore: idcreditore },
             success: function(response) {
-                $("#showdettagliocredito").html(response);
+                if ($panel.attr('data-creditore') === idcreditore) $panel.html(response);
+            },
+            error: function() {
+                if ($panel.attr('data-creditore') === idcreditore) $panel.text('Impossibile caricare le rate.');
             }
         });
-
     }
 
     function gettabassdescrizione() {
